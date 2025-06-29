@@ -9,6 +9,7 @@ import ReportModal from './ReportModal';
 import TranslateButton from './TranslateButton';
 import TranslatableText from './TranslatableText';
 import { useTranslation } from './TranslationProvider';
+import { messageService } from '../lib/database';
 
 interface GameChatProps {
   taskId: string;
@@ -33,6 +34,7 @@ interface Message {
   reactions?: { [userId: string]: string };
   message_type?: 'text' | 'image' | 'file';
   translated_content?: string;
+  task_id?: string;
 }
 
 interface UserProfile {
@@ -170,16 +172,10 @@ const GameChat: React.FC<GameChatProps> = ({
       return () => {};
     }
 
-    const messagesRef = collection(db, 'chats', taskId, 'messages');
-    const q = query(messagesRef, orderBy('created_at', 'asc'));
-
-    const unsubscribe = onSnapshot(q, (snapshot) => {
-      const messageData = snapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data(),
-        created_at: doc.data().created_at?.toDate() || new Date()
-      })) as Message[];
-      
+    setLoading(true);
+    
+    // Use the messageService to get messages for this task
+    const unsubscribe = messageService.subscribeToMessages(taskId, (messageData) => {
       setMessages(messageData);
       
       // Mark messages as read and delivered
@@ -187,10 +183,7 @@ const GameChat: React.FC<GameChatProps> = ({
       
       scrollToBottom();
       setConnectionStatus('connected');
-    }, (error) => {
-      console.error('Error loading messages:', error);
-      toast.error('Error loading messages');
-      setConnectionStatus('disconnected');
+      setLoading(false);
     });
 
     return unsubscribe;
@@ -205,11 +198,7 @@ const GameChat: React.FC<GameChatProps> = ({
     
     for (const message of unreadMessages) {
       try {
-        const messageRef = doc(db, 'chats', taskId, 'messages', message.id);
-        await updateDoc(messageRef, {
-          is_read: true,
-          is_delivered: true
-        });
+        await messageService.markAsRead(taskId, message.id);
       } catch (error) {
         console.error('Error marking message as read:', error);
       }
@@ -339,7 +328,8 @@ const GameChat: React.FC<GameChatProps> = ({
       is_delivered: false,
       created_at: new Date(),
       reactions: {},
-      message_type: filePreview?.type === 'image' ? 'image' : filePreview?.type === 'file' ? 'file' : 'text'
+      message_type: filePreview?.type === 'image' ? 'image' : filePreview?.type === 'file' ? 'file' : 'text',
+      task_id: taskId
     };
 
     setMessages(prev => [...prev, optimisticMessage]);
@@ -358,11 +348,12 @@ const GameChat: React.FC<GameChatProps> = ({
 
       const messageData: any = {
         sender_id: currentUser.uid,
+        recipient_id: otherUser.id,
         content: newMessage.trim() || (fileData ? `Sent ${fileData.name}` : ''),
         is_read: false,
         is_delivered: true,
         reactions: {},
-        created_at: serverTimestamp()
+        task_id: taskId
       };
 
       // Add file data if present
@@ -380,8 +371,8 @@ const GameChat: React.FC<GameChatProps> = ({
         messageData.message_type = 'text';
       }
 
-      const messagesRef = collection(db, 'chats', taskId, 'messages');
-      await addDoc(messagesRef, messageData);
+      // Send the message using the messageService
+      await messageService.sendMessage(taskId, messageData);
 
       // Remove optimistic message since real one will come through subscription
       setMessages(prev => prev.filter(msg => msg.id !== optimisticId));
@@ -399,31 +390,7 @@ const GameChat: React.FC<GameChatProps> = ({
 
   const addReaction = async (messageId: string, emoji: string) => {
     try {
-      const messageRef = doc(db, 'chats', taskId, 'messages', messageId);
-      const message = messages.find(m => m.id === messageId);
-      
-      if (!message) return;
-
-      const currentReactions = message.reactions || {};
-      const userReaction = currentReactions[currentUser.uid];
-
-      let newReactions;
-      if (userReaction === emoji) {
-        // Remove reaction if same emoji clicked
-        const { [currentUser.uid]: removed, ...rest } = currentReactions;
-        newReactions = rest;
-      } else {
-        // Add or change reaction
-        newReactions = {
-          ...currentReactions,
-          [currentUser.uid]: emoji
-        };
-      }
-
-      await updateDoc(messageRef, {
-        reactions: newReactions
-      });
-
+      await messageService.addReaction(taskId, messageId, currentUser.uid, emoji);
       setShowReactions(null);
     } catch (error) {
       console.error('Error adding reaction:', error);
@@ -630,7 +597,11 @@ const GameChat: React.FC<GameChatProps> = ({
 
       {/* Messages */}
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
-        {messages.length === 0 ? (
+        {loading ? (
+          <div className="flex items-center justify-center h-full">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#0038FF]"></div>
+          </div>
+        ) : messages.length === 0 ? (
           <div className="text-center text-gray-500 py-8">
             <div className="w-20 h-20 bg-gradient-to-br from-[#0038FF] to-[#FF5A1F] rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
               <MessageSquare className="w-10 h-10 text-white" />

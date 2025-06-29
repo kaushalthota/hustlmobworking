@@ -4,7 +4,7 @@ import Chat from './Chat';
 import GameChat from './GameChat';
 import { collection, query, where, getDocs, orderBy, onSnapshot, doc, getDoc } from 'firebase/firestore';
 import { db } from '../lib/firebase';
-import { taskService, messageService } from '../lib/database';
+import { taskService, messageService, profileService } from '../lib/database';
 import UserProfileModal from './UserProfileModal';
 import ReportModal from './ReportModal';
 import toast from 'react-hot-toast';
@@ -16,11 +16,7 @@ interface ChatListProps {
 
 interface ChatItem {
   id: string;
-  task_id: string;
-  task: {
-    title: string;
-    status: string;
-  };
+  task_id?: string;
   other_user: {
     id: string;
     full_name: string;
@@ -48,7 +44,6 @@ const ChatList: React.FC<ChatListProps> = ({ userId, currentUser }) => {
 
   useEffect(() => {
     loadChats();
-    subscribeToMessages();
     
     // Handle clicks outside the menu
     const handleClickOutside = (event: MouseEvent) => {
@@ -77,62 +72,34 @@ const ChatList: React.FC<ChatListProps> = ({ userId, currentUser }) => {
     try {
       setLoading(true);
       
-      // Get all tasks where the user is either creator or acceptor
-      const allTasks = await taskService.getTasks();
+      // Get all user chat threads
+      const userChatThreads = await messageService.getUserChatThreads(userId);
       
-      // Filter tasks where user is involved and task is not open
-      const userTasks = allTasks.filter(task => 
-        (task.created_by === userId || task.accepted_by === userId) && 
-        task.status !== 'open'
-      );
-
-      const chatDataPromises = userTasks.map(async (task) => {
-        const otherUserId = task.created_by === userId ? task.accepted_by : task.created_by;
-        
-        // Skip if otherUserId is null
-        if (!otherUserId) {
-          return null;
-        }
-        
-        // Get other user's profile
-        const otherUserProfile = await getOtherUserProfile(otherUserId);
-        
-        // Skip if we couldn't get the other user's profile
-        if (!otherUserProfile) {
-          return null;
-        }
-        
-        // Get last message for this task
-        const messages = await messageService.getMessages(task.id);
-        const lastMessage = messages && messages.length > 0 ? messages[messages.length - 1] : null;
-
+      // If there are no chat threads, check for tasks to create chat threads
+      if (userChatThreads.length === 0) {
+        await createChatThreadsFromTasks();
+        return; // The function above will call loadChats again
+      }
+      
+      // Process chat threads to get the right format
+      const chatItems: ChatItem[] = userChatThreads.map(thread => {
         return {
-          id: task.id,
-          task_id: task.id,
-          task: {
-            title: task.title,
-            status: task.status,
-          },
+          id: thread.id,
+          task_id: thread.last_task_id, // Use the last task ID if available
           other_user: {
-            id: otherUserId,
-            full_name: otherUserProfile.full_name || 'Unknown User',
-            avatar_url: otherUserProfile.avatar_url,
+            id: thread.other_user.id,
+            full_name: thread.other_user.full_name || 'Unknown User',
+            avatar_url: thread.other_user.avatar_url
           },
-          last_message: lastMessage ? {
-            content: lastMessage.content,
-            created_at: lastMessage.created_at,
-            image_url: lastMessage.image_url
-          } : undefined,
+          last_message: thread.last_message ? {
+            content: thread.last_message,
+            created_at: thread.last_message_time
+          } : undefined
         };
       });
-
-      const chatDataResults = await Promise.all(chatDataPromises);
       
-      // Filter out null entries
-      const chatData = chatDataResults.filter((chat): chat is ChatItem => chat !== null);
-
       // Sort by last message time (most recent first)
-      chatData.sort((a, b) => {
+      chatItems.sort((a, b) => {
         if (!a.last_message && !b.last_message) return 0;
         if (!a.last_message) return 1;
         if (!b.last_message) return -1;
@@ -142,46 +109,43 @@ const ChatList: React.FC<ChatListProps> = ({ userId, currentUser }) => {
         
         return bTime - aTime;
       });
-
-      setChats(chatData);
+      
+      setChats(chatItems);
     } catch (error) {
       console.error('Error loading chats:', error);
+      toast.error('Error loading chat list');
     } finally {
       setLoading(false);
     }
   };
 
-  const getOtherUserProfile = async (userId: string) => {
+  const createChatThreadsFromTasks = async () => {
     try {
-      const userDoc = await getDocs(query(
-        collection(db, 'profiles'),
-        where('id', '==', userId)
-      ));
+      // Get all tasks where the user is either creator or acceptor
+      const allTasks = await taskService.getTasks();
       
-      if (userDoc.empty) return null;
+      // Filter tasks where user is involved and task is not open
+      const userTasks = allTasks.filter(task => 
+        (task.created_by === userId || task.accepted_by === userId) && 
+        task.status !== 'open' && task.accepted_by
+      );
       
-      return {
-        id: userDoc.docs[0].id,
-        ...userDoc.docs[0].data()
-      };
+      // Create chat threads for each task if they don't exist
+      for (const task of userTasks) {
+        const otherUserId = task.created_by === userId ? task.accepted_by : task.created_by;
+        
+        // Skip if otherUserId is null
+        if (!otherUserId) continue;
+        
+        // Create a chat thread between the users
+        await messageService.findOrCreateChatThread(userId, otherUserId);
+      }
+      
+      // Reload chats after creating threads
+      loadChats();
     } catch (error) {
-      console.error('Error getting user profile:', error);
-      return null;
+      console.error('Error creating chat threads from tasks:', error);
     }
-  };
-
-  const subscribeToMessages = () => {
-    // Subscribe to all message changes to update last messages
-    const q = query(
-      collection(db, 'messages'),
-      orderBy('created_at', 'desc')
-    );
-    
-    const unsubscribe = onSnapshot(q, () => {
-      loadChats(); // Reload chats when any message changes
-    });
-
-    return unsubscribe;
   };
 
   const handleViewProfile = (chat: ChatItem) => {
@@ -192,13 +156,12 @@ const ChatList: React.FC<ChatListProps> = ({ userId, currentUser }) => {
 
   const handleReportIssue = (chat: ChatItem) => {
     setSelectedUser(chat.other_user);
-    setSelectedTaskId(chat.task_id);
+    setSelectedTaskId(chat.task_id || null);
     setShowReportModal(true);
     setShowMenu(null);
   };
 
   const filteredChats = chats.filter(chat =>
-    chat.task.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
     chat.other_user.full_name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
@@ -300,7 +263,6 @@ const ChatList: React.FC<ChatListProps> = ({ userId, currentUser }) => {
                         </span>
                       )}
                     </div>
-                    <p className="text-sm text-gray-600 truncate">{chat.task.title}</p>
                     <p className="text-xs text-gray-500 truncate">{getMessagePreview(chat.last_message)}</p>
                   </div>
                   <ChevronRight className="w-4 h-4 text-gray-400 ml-2 flex-shrink-0" />
@@ -363,7 +325,7 @@ const ChatList: React.FC<ChatListProps> = ({ userId, currentUser }) => {
               </div>
             )}
             <GameChat
-              taskId={selectedChat}
+              taskId={selectedChatData.task_id || selectedChat}
               otherUser={selectedChatData.other_user}
               currentUser={currentUser}
             />
@@ -397,9 +359,9 @@ const ChatList: React.FC<ChatListProps> = ({ userId, currentUser }) => {
       )}
 
       {/* Report Modal */}
-      {showReportModal && selectedUser && selectedTaskId && (
+      {showReportModal && selectedUser && (
         <ReportModal
-          taskId={selectedTaskId}
+          taskId={selectedTaskId || ''}
           userId={selectedUser.id}
           onClose={() => setShowReportModal(false)}
         />

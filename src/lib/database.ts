@@ -759,15 +759,16 @@ export const paymentMethodService = {
       const querySnapshot = await getDocs(q);
       const isDefault = querySnapshot.empty;
 
-      const docRef = await addDoc(collection(db, 'payment_methods'), {
+      const paymentMethodRef = await addDoc(collection(db, 'payment_methods'), {
         user_id: userId,
         ...methodData,
         is_default: isDefault,
+        is_verified: false,
         created_at: serverTimestamp(),
         updated_at: serverTimestamp()
       });
-      
-      return docRef.id;
+
+      return paymentMethodRef.id;
     } catch (error) {
       captureException(error, {
         tags: { action: 'add_payment_method' },
@@ -785,10 +786,14 @@ export const paymentMethodService = {
       );
       
       const querySnapshot = await getDocs(q);
-      return querySnapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      }));
+      
+      return querySnapshot.docs.map(doc => {
+        const data = doc.data();
+        return {
+          id: doc.id,
+          ...data
+        };
+      }) as any[];
     } catch (error) {
       captureException(error, {
         tags: { action: 'get_user_payment_methods' },
@@ -818,8 +823,7 @@ export const paymentMethodService = {
       await Promise.all(updatePromises);
 
       // Then set the selected method as default
-      const docRef = doc(db, 'payment_methods', methodId);
-      await updateDoc(docRef, {
+      await updateDoc(doc(db, 'payment_methods', methodId), {
         is_default: true,
         updated_at: serverTimestamp()
       });
@@ -834,8 +838,9 @@ export const paymentMethodService = {
 
   async deletePaymentMethod(methodId: string): Promise<void> {
     try {
-      const docRef = doc(db, 'payment_methods', methodId);
-      await deleteDoc(docRef);
+      await updateDoc(doc(db, 'payment_methods', methodId), {
+        deleted_at: serverTimestamp()
+      });
     } catch (error) {
       captureException(error, {
         tags: { action: 'delete_payment_method' },
@@ -871,33 +876,102 @@ export const taskTemplateService = {
 
 // Message service object
 export const messageService = {
+  // Find or create a chat thread between two users
+  async findOrCreateChatThread(user1Id: string, user2Id: string): Promise<string> {
+    try {
+      // Sort user IDs to ensure consistent chat ID regardless of who initiates
+      const participants = [user1Id, user2Id].sort();
+      
+      // Check if a chat thread already exists between these users
+      const q = query(
+        collection(db, 'user_chats'),
+        where('participants', '==', participants)
+      );
+      
+      const querySnapshot = await getDocs(q);
+      
+      // If a chat thread exists, return its ID
+      if (!querySnapshot.empty) {
+        return querySnapshot.docs[0].id;
+      }
+      
+      // Otherwise, create a new chat thread
+      const chatRef = await addDoc(collection(db, 'user_chats'), {
+        participants,
+        created_at: serverTimestamp(),
+        updated_at: serverTimestamp(),
+        last_message: null,
+        last_message_time: null
+      });
+      
+      return chatRef.id;
+    } catch (error) {
+      captureException(error, {
+        tags: { action: 'find_or_create_chat_thread' },
+        extra: { user1Id, user2Id }
+      });
+      throw error;
+    }
+  },
+
   async sendMessage(taskId: string, messageData: any): Promise<string> {
     try {
-      // Ensure the chat document exists
-      await setDoc(doc(db, 'chats', taskId), {
-        task_id: taskId,
-        updated_at: serverTimestamp()
-      }, { merge: true });
+      // Get task details to identify participants
+      const taskDoc = await getDoc(doc(db, 'tasks', taskId));
       
-      // Add the message to the subcollection
-      const messagesRef = collection(db, 'chats', taskId, 'messages');
+      if (!taskDoc.exists()) {
+        throw new Error('Task not found');
+      }
+      
+      const taskData = taskDoc.data();
+      const creatorId = taskData.created_by;
+      const performerId = taskData.accepted_by;
+      
+      // Ensure both creator and performer exist
+      if (!creatorId || !performerId) {
+        throw new Error('Task must have both creator and performer');
+      }
+      
+      // Find or create a chat thread between these users
+      const chatThreadId = await this.findOrCreateChatThread(creatorId, performerId);
+      
+      // Add the message to the chat thread
+      const messagesRef = collection(db, 'user_chats', chatThreadId, 'messages');
       const docRef = await addDoc(messagesRef, {
         ...messageData,
+        task_id: taskId, // Include task ID for reference
         created_at: serverTimestamp()
       });
       
-      // Update the chat document with latest message info
-      await updateDoc(doc(db, 'chats', taskId), {
+      // Update the chat thread with latest message info
+      await updateDoc(doc(db, 'user_chats', chatThreadId), {
+        last_message: messageData.content,
+        last_message_time: serverTimestamp(),
+        last_sender: messageData.sender_id,
+        updated_at: serverTimestamp()
+      });
+      
+      // Also update the task-specific chat for backward compatibility
+      await setDoc(doc(db, 'chats', taskId), {
+        task_id: taskId,
+        updated_at: serverTimestamp(),
         last_message: messageData.content,
         last_message_time: serverTimestamp(),
         last_sender: messageData.sender_id
+      }, { merge: true });
+      
+      // Add the message to the task-specific chat collection
+      const taskMessagesRef = collection(db, 'chats', taskId, 'messages');
+      await addDoc(taskMessagesRef, {
+        ...messageData,
+        created_at: serverTimestamp()
       });
       
       return docRef.id;
     } catch (error) {
       captureException(error, {
         tags: { action: 'send_message' },
-        extra: { taskId }
+        extra: { taskId, messageData }
       });
       throw error;
     }
@@ -909,12 +983,46 @@ export const messageService = {
       if (!taskId || taskId.trim() === '') {
         return [];
       }
-
-      const messagesRef = collection(db, 'chats', taskId, 'messages');
-      const q = query(messagesRef, orderBy('created_at', 'asc'));
+      
+      // Get task details to identify participants
+      const taskDoc = await getDoc(doc(db, 'tasks', taskId));
+      
+      if (!taskDoc.exists()) {
+        return [];
+      }
+      
+      const taskData = taskDoc.data();
+      const creatorId = taskData.created_by;
+      const performerId = taskData.accepted_by;
+      
+      // If task doesn't have a performer yet, return empty array
+      if (!performerId) {
+        return [];
+      }
+      
+      // Find the chat thread between these users
+      const participants = [creatorId, performerId].sort();
+      const q = query(
+        collection(db, 'user_chats'),
+        where('participants', '==', participants)
+      );
       
       const querySnapshot = await getDocs(q);
-      return querySnapshot.docs.map(doc => ({
+      
+      // If no chat thread exists, return empty array
+      if (querySnapshot.empty) {
+        return [];
+      }
+      
+      const chatThreadId = querySnapshot.docs[0].id;
+      
+      // Get messages from the chat thread
+      const messagesRef = collection(db, 'user_chats', chatThreadId, 'messages');
+      const messagesQuery = query(messagesRef, orderBy('created_at', 'asc'));
+      
+      const messagesSnapshot = await getDocs(messagesQuery);
+      
+      return messagesSnapshot.docs.map(doc => ({
         id: doc.id,
         ...doc.data(),
         created_at: doc.data().created_at?.toDate() || new Date()
@@ -930,8 +1038,47 @@ export const messageService = {
 
   async markAsRead(taskId: string, messageId: string): Promise<void> {
     try {
-      const messageRef = doc(db, 'chats', taskId, 'messages', messageId);
+      // Get task details to identify participants
+      const taskDoc = await getDoc(doc(db, 'tasks', taskId));
+      
+      if (!taskDoc.exists()) {
+        throw new Error('Task not found');
+      }
+      
+      const taskData = taskDoc.data();
+      const creatorId = taskData.created_by;
+      const performerId = taskData.accepted_by;
+      
+      // If task doesn't have a performer yet, return
+      if (!performerId) {
+        return;
+      }
+      
+      // Find the chat thread between these users
+      const participants = [creatorId, performerId].sort();
+      const q = query(
+        collection(db, 'user_chats'),
+        where('participants', '==', participants)
+      );
+      
+      const querySnapshot = await getDocs(q);
+      
+      // If no chat thread exists, return
+      if (querySnapshot.empty) {
+        return;
+      }
+      
+      const chatThreadId = querySnapshot.docs[0].id;
+      
+      // Mark the message as read in the chat thread
+      const messageRef = doc(db, 'user_chats', chatThreadId, 'messages', messageId);
       await updateDoc(messageRef, {
+        is_read: true
+      });
+      
+      // Also mark as read in the task-specific chat for backward compatibility
+      const taskMessageRef = doc(db, 'chats', taskId, 'messages', messageId);
+      await updateDoc(taskMessageRef, {
         is_read: true
       });
     } catch (error) {
@@ -950,25 +1097,77 @@ export const messageService = {
         callback([]);
         return () => {};
       }
-
-      const messagesRef = collection(db, 'chats', taskId, 'messages');
-      const q = query(messagesRef, orderBy('created_at', 'asc'));
       
-      const unsubscribe = onSnapshot(q, (querySnapshot) => {
-        const messages = querySnapshot.docs.map(doc => ({
-          id: doc.id,
-          ...doc.data(),
-          created_at: doc.data().created_at?.toDate() || new Date()
-        }));
-        callback(messages);
-      }, (error) => {
+      // First, get task details to identify participants
+      getDoc(doc(db, 'tasks', taskId)).then(taskDoc => {
+        if (!taskDoc.exists()) {
+          callback([]);
+          return;
+        }
+        
+        const taskData = taskDoc.data();
+        const creatorId = taskData.created_by;
+        const performerId = taskData.accepted_by;
+        
+        // If task doesn't have a performer yet, return empty array
+        if (!performerId) {
+          callback([]);
+          return;
+        }
+        
+        // Find the chat thread between these users
+        const participants = [creatorId, performerId].sort();
+        const q = query(
+          collection(db, 'user_chats'),
+          where('participants', '==', participants)
+        );
+        
+        getDocs(q).then(querySnapshot => {
+          // If no chat thread exists yet, return empty array
+          if (querySnapshot.empty) {
+            callback([]);
+            return;
+          }
+          
+          const chatThreadId = querySnapshot.docs[0].id;
+          
+          // Subscribe to messages from the chat thread
+          const messagesRef = collection(db, 'user_chats', chatThreadId, 'messages');
+          const messagesQuery = query(messagesRef, orderBy('created_at', 'asc'));
+          
+          const unsubscribe = onSnapshot(messagesQuery, (snapshot) => {
+            const messages = snapshot.docs.map(doc => ({
+              id: doc.id,
+              ...doc.data(),
+              created_at: doc.data().created_at?.toDate() || new Date()
+            }));
+            callback(messages);
+          }, (error) => {
+            captureException(error, {
+              tags: { action: 'subscribe_to_messages' },
+              extra: { taskId, chatThreadId }
+            });
+          });
+          
+          return unsubscribe;
+        }).catch(error => {
+          captureException(error, {
+            tags: { action: 'subscribe_to_messages_get_chat' },
+            extra: { taskId }
+          });
+          callback([]);
+        });
+      }).catch(error => {
         captureException(error, {
-          tags: { action: 'subscribe_to_messages' },
+          tags: { action: 'subscribe_to_messages_get_task' },
           extra: { taskId }
         });
+        callback([]);
       });
-
-      return unsubscribe;
+      
+      // Return a function that does nothing for now
+      // The real unsubscribe function will be called by the nested promises
+      return () => {};
     } catch (error) {
       captureException(error, {
         tags: { action: 'subscribe_to_messages_setup' },
@@ -980,13 +1179,73 @@ export const messageService = {
   
   async addReaction(taskId: string, messageId: string, userId: string, emoji: string): Promise<void> {
     try {
-      const messageRef = doc(db, 'chats', taskId, 'messages', messageId);
+      // Get task details to identify participants
+      const taskDoc = await getDoc(doc(db, 'tasks', taskId));
+      
+      if (!taskDoc.exists()) {
+        throw new Error('Task not found');
+      }
+      
+      const taskData = taskDoc.data();
+      const creatorId = taskData.created_by;
+      const performerId = taskData.accepted_by;
+      
+      // If task doesn't have a performer yet, return
+      if (!performerId) {
+        return;
+      }
+      
+      // Find the chat thread between these users
+      const participants = [creatorId, performerId].sort();
+      const q = query(
+        collection(db, 'user_chats'),
+        where('participants', '==', participants)
+      );
+      
+      const querySnapshot = await getDocs(q);
+      
+      // If no chat thread exists, return
+      if (querySnapshot.empty) {
+        return;
+      }
+      
+      const chatThreadId = querySnapshot.docs[0].id;
+      
+      // Find the message in the chat thread
+      const messageRef = doc(db, 'user_chats', chatThreadId, 'messages', messageId);
       const messageDoc = await getDoc(messageRef);
       
       if (!messageDoc.exists()) {
-        throw new Error('Message not found');
+        // Try to find the message in the task-specific chat
+        const taskMessageRef = doc(db, 'chats', taskId, 'messages', messageId);
+        const taskMessageDoc = await getDoc(taskMessageRef);
+        
+        if (!taskMessageDoc.exists()) {
+          throw new Error('Message not found');
+        }
+        
+        // Update reaction in task-specific chat
+        const reactions = taskMessageDoc.data().reactions || {};
+        
+        // Toggle reaction
+        if (reactions[userId] === emoji) {
+          // Remove reaction
+          const { [userId]: removed, ...rest } = reactions;
+          await updateDoc(taskMessageRef, { reactions: rest });
+        } else {
+          // Add or update reaction
+          await updateDoc(taskMessageRef, {
+            reactions: {
+              ...reactions,
+              [userId]: emoji
+            }
+          });
+        }
+        
+        return;
       }
       
+      // Update reaction in chat thread
       const reactions = messageDoc.data().reactions || {};
       
       // Toggle reaction
@@ -1007,6 +1266,54 @@ export const messageService = {
       captureException(error, {
         tags: { action: 'add_reaction' },
         extra: { taskId, messageId, userId, emoji }
+      });
+      throw error;
+    }
+  },
+  
+  // Get all chat threads for a user
+  async getUserChatThreads(userId: string): Promise<any[]> {
+    try {
+      // Query for chat threads where the user is a participant
+      const q = query(
+        collection(db, 'user_chats'),
+        where('participants', 'array-contains', userId),
+        orderBy('updated_at', 'desc')
+      );
+      
+      const querySnapshot = await getDocs(q);
+      
+      // Map the chat threads to a more usable format
+      const chatThreads = await Promise.all(querySnapshot.docs.map(async doc => {
+        const data = doc.data();
+        
+        // Get the other participant's ID
+        const otherUserId = data.participants.find((id: string) => id !== userId);
+        
+        // Get the other participant's profile
+        let otherUserProfile = null;
+        if (otherUserId) {
+          const profileDoc = await getDoc(doc(db, 'profiles', otherUserId));
+          if (profileDoc.exists()) {
+            otherUserProfile = {
+              id: otherUserId,
+              ...profileDoc.data()
+            };
+          }
+        }
+        
+        return {
+          id: doc.id,
+          ...data,
+          other_user: otherUserProfile
+        };
+      }));
+      
+      return chatThreads;
+    } catch (error) {
+      captureException(error, {
+        tags: { action: 'get_user_chat_threads' },
+        extra: { userId }
       });
       throw error;
     }

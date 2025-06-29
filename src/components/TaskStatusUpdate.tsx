@@ -74,7 +74,7 @@ const TaskStatusUpdate: React.FC<TaskStatusUpdateProps> = ({ task, onClose, onSt
   const [isPlayingAudio, setIsPlayingAudio] = useState(false);
   const [hasPlayedAudio, setHasPlayedAudio] = useState<{[key: string]: boolean}>({});
   const [openChatAfterUpdate, setOpenChatAfterUpdate] = useState(false);
-
+  
   useEffect(() => {
     const user = auth.currentUser;
     if (user) {

@@ -373,4 +373,6 @@ const SafeWalkRequestForm: React.FC<SafeWalkRequestFormProps> = ({ onClose }) =>
   );
 };
 
+// Export both default and named export to support different import styles
 export default SafeWalkRequestForm;
+export { SafeWalkRequestForm };

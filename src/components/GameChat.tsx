@@ -330,6 +330,7 @@ const GameChat: React.FC<GameChatProps> = ({
 
     // Optimistic UI - add message immediately
     const optimisticId = `temp-${Date.now()}`;
+    const now = new Date();
     const optimisticMessage: Message = {
       id: optimisticId,
       sender_id: currentUser.uid,
@@ -341,7 +342,7 @@ const GameChat: React.FC<GameChatProps> = ({
       file_type: filePreview?.type === 'file' ? 'file' : undefined,
       is_read: false,
       is_delivered: false,
-      created_at: new Date(),
+      created_at: now,
       reactions: {},
       message_type: filePreview?.type === 'image' ? 'image' : filePreview?.type === 'file' ? 'file' : 'text',
       task_id: taskId
@@ -368,7 +369,7 @@ const GameChat: React.FC<GameChatProps> = ({
         is_read: false,
         is_delivered: true,
         reactions: {},
-        task_id: taskId // Include task ID for reference
+        task_id: taskId
       };
 
       // Add file data if present
@@ -421,7 +422,22 @@ const GameChat: React.FC<GameChatProps> = ({
   const formatTimestamp = (timestamp: any) => {
     if (!timestamp) return '';
     
-    const date = new Date(timestamp);
+    let date;
+    if (timestamp instanceof Date) {
+      date = timestamp;
+    } else if (timestamp.toDate && typeof timestamp.toDate === 'function') {
+      date = timestamp.toDate();
+    } else {
+      // Try to parse as ISO string or timestamp
+      date = new Date(timestamp);
+    }
+    
+    // Check if date is valid
+    if (isNaN(date.getTime())) {
+      console.warn('Invalid date:', timestamp);
+      return 'Invalid date';
+    }
+    
     const now = new Date();
     const diffInHours = (now.getTime() - date.getTime()) / (1000 * 60 * 60);
     

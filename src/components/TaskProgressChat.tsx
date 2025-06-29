@@ -277,7 +277,22 @@ const TaskProgressChat: React.FC<TaskProgressChatProps> = ({ taskId, currentUser
   const formatTimestamp = (timestamp: any) => {
     if (!timestamp) return '';
     
-    const date = new Date(timestamp);
+    let date;
+    if (timestamp instanceof Date) {
+      date = timestamp;
+    } else if (timestamp.toDate && typeof timestamp.toDate === 'function') {
+      date = timestamp.toDate();
+    } else {
+      // Try to parse as ISO string or timestamp
+      date = new Date(timestamp);
+    }
+    
+    // Check if date is valid
+    if (isNaN(date.getTime())) {
+      console.warn('Invalid date:', timestamp);
+      return 'Unknown time';
+    }
+    
     const now = new Date();
     const diffInHours = (now.getTime() - date.getTime()) / (1000 * 60 * 60);
     
@@ -339,7 +354,7 @@ const TaskProgressChat: React.FC<TaskProgressChatProps> = ({ taskId, currentUser
     return statusFlow[currentIndex + 1];
   };
 
-  const isTaskPerformer = currentUser && taskData && taskData.accepted_by === currentUser.id;
+  const isTaskPerformer = currentUser && taskData && taskData.accepted_by === currentUser.uid;
 
   // Combine messages and progress updates into a single timeline
   const getCombinedTimeline = () => {

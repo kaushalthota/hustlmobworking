@@ -14,6 +14,12 @@ const TaskStatusMessage: React.FC<TaskStatusMessageProps> = ({ status, notes, ti
   };
 
   const formatTimestamp = (date: Date) => {
+    // Check if date is valid
+    if (isNaN(date.getTime())) {
+      console.warn('Invalid date:', date);
+      return 'Unknown time';
+    }
+    
     return date.toLocaleTimeString([], {
       hour: '2-digit',
       minute: '2-digit'

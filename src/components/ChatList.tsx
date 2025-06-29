@@ -143,7 +143,22 @@ const ChatList: React.FC<ChatListProps> = ({ userId, currentUser }) => {
   const formatTimestamp = (timestamp: any) => {
     if (!timestamp) return '';
     
-    const date = new Date(timestamp);
+    let date;
+    if (timestamp instanceof Date) {
+      date = timestamp;
+    } else if (timestamp.toDate && typeof timestamp.toDate === 'function') {
+      date = timestamp.toDate();
+    } else {
+      // Try to parse as ISO string or timestamp
+      date = new Date(timestamp);
+    }
+    
+    // Check if date is valid
+    if (isNaN(date.getTime())) {
+      console.warn('Invalid date:', timestamp);
+      return 'Unknown';
+    }
+    
     const now = new Date();
     const diff = now.getTime() - date.getTime();
     const days = Math.floor(diff / (1000 * 60 * 60 * 24));
@@ -300,7 +315,7 @@ const ChatList: React.FC<ChatListProps> = ({ userId, currentUser }) => {
               </div>
             )}
             <GameChat
-              taskId={selectedChat}
+              taskId={selectedChatData.task_id || selectedChat}
               otherUser={selectedChatData.other_user}
               currentUser={currentUser}
             />

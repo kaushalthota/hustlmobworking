@@ -19,7 +19,7 @@ const UserProfile: React.FC = () => {
   const [editedProfile, setEditedProfile] = useState<any>({});
   const [uploadingImage, setUploadingImage] = useState(false);
   const [activeTab, setActiveTab] = useState<'profile' | 'tasks' | 'stats' | 'history' | 'premium' | 'messages'>('profile');
-  const fileInputRef = React.useRef<HTMLInputElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [isMobile, setIsMobile] = useState(false);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [subscription, setSubscription] = useState<any>(null);

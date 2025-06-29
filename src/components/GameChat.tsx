@@ -83,12 +83,12 @@ const GameChat: React.FC<GameChatProps> = ({
   const [otherUserTyping, setOtherUserTyping] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
   const [translatedMessages, setTranslatedMessages] = useState<{[key: string]: string}>({});
+  const [chatThreadId, setChatThreadId] = useState<string>(taskId);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const menuRef = useRef<HTMLDivElement>(null);
   const { currentLanguage } = useTranslation();
-  const [chatThreadId, setChatThreadId] = useState<string>(taskId);
   
   useEffect(() => {
     if (!currentUser?.uid || !otherUser?.id) {
@@ -109,6 +109,12 @@ const GameChat: React.FC<GameChatProps> = ({
         // Now load messages from this thread
         const unsubscribe = messageService.subscribeToMessages(threadId, (messageData) => {
           setMessages(messageData);
+          
+          // Mark messages as read and delivered
+          markMessagesAsReadAndDelivered(messageData);
+          
+          scrollToBottom();
+          setConnectionStatus('connected');
           setLoading(false);
         });
         
@@ -360,7 +366,7 @@ const GameChat: React.FC<GameChatProps> = ({
         is_read: false,
         is_delivered: true,
         reactions: {},
-        task_id: taskId
+        task_id: taskId // Include task ID for reference
       };
 
       // Add file data if present
@@ -592,11 +598,7 @@ const GameChat: React.FC<GameChatProps> = ({
 
       {/* Messages */}
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
-        {loading ? (
-          <div className="flex items-center justify-center h-full">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#0038FF]"></div>
-          </div>
-        ) : messages.length === 0 ? (
+        {messages.length === 0 ? (
           <div className="text-center text-gray-500 py-8">
             <div className="w-20 h-20 bg-gradient-to-br from-[#0038FF] to-[#FF5A1F] rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
               <MessageSquare className="w-10 h-10 text-white" />

@@ -238,7 +238,7 @@ const POPULAR_CATEGORIES = [
   },
   {
     id: 'workout-partner',
-    title: '💪 Workout Partner',
+    title: 'Workout Partner',
     description: 'Find a gym or sports buddy for your next workout or pickup game',
     icon: <Dumbbell className="w-10 h-10 text-[#FF4D23]" />,
     category: 'other',

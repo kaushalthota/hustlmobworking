@@ -177,21 +177,6 @@
   }
 }
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.animate-fadeIn {
-  animation: fadeIn 0.3s ease-out forwards;
-}
-
 .pulse-effect {
   animation: pulse-glow 2s infinite;
 }
@@ -485,95 +470,4 @@
 
 .subscription-btn:hover::after {
   transform: rotate(30deg) translate(100%, 100%);
-}
-
-/* Message bubble animations */
-@keyframes messageAppear {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.message-appear {
-  animation: messageAppear 0.3s ease-out forwards;
-}
-
-/* Typing indicator animation */
-@keyframes typingBounce {
-  0%, 80%, 100% {
-    transform: translateY(0);
-  }
-  40% {
-    transform: translateY(-5px);
-  }
-}
-
-.typing-dot {
-  animation: typingBounce 1.4s infinite ease-in-out both;
-}
-
-.typing-dot:nth-child(1) {
-  animation-delay: 0s;
-}
-
-.typing-dot:nth-child(2) {
-  animation-delay: 0.2s;
-}
-
-.typing-dot:nth-child(3) {
-  animation-delay: 0.4s;
-}
-
-/* Message status animation */
-@keyframes statusPulse {
-  0% {
-    opacity: 0.6;
-  }
-  50% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0.6;
-  }
-}
-
-.status-pulse {
-  animation: statusPulse 2s infinite;
-}
-
-/* Chat container background pattern */
-.chat-pattern-bg {
-  background-color: #f8faff;
-  background-image: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%230038ff' fill-opacity='0.03' fill-rule='evenodd'%3E%3Ccircle cx='3' cy='3' r='3'/%3E%3Ccircle cx='13' cy='13' r='3'/%3E%3C/g%3E%3C/svg%3E");
-}
-
-/* Message bubble hover effects */
-.message-bubble {
-  transition: transform 0.2s ease;
-}
-
-.message-bubble:hover {
-  transform: translateY(-2px);
-}
-
-/* Reaction button animation */
-@keyframes reactionPop {
-  0% {
-    transform: scale(0);
-  }
-  70% {
-    transform: scale(1.2);
-  }
-  100% {
-    transform: scale(1);
-  }
-}
-
-.reaction-pop {
-  animation: reactionPop 0.3s forwards;
 }

@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Send, User, X, Paperclip, Loader, MessageSquare, ArrowRight, CheckCircle, Package, Clock, Truck, Flag, AlertTriangle, Smile } from 'lucide-react';
+import { Send, User, X, Paperclip, Loader, MessageSquare, ArrowRight, CheckCircle, Package, Clock, Truck, Flag, AlertTriangle } from 'lucide-react';
 import toast from 'react-hot-toast';
+import { collection, query, orderBy, onSnapshot, addDoc, serverTimestamp, updateDoc, doc, getDoc } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { db, storage } from '../lib/firebase';
-import { taskService, taskProgressService, messageService, notificationService } from '../lib/database';
+import { taskService, taskProgressService, messageService } from '../lib/database';
 import TaskStatusMessage from './TaskStatusMessage';
 import { StarBorder } from './ui/star-border';
 
@@ -27,10 +28,7 @@ interface Message {
     status: string;
     notes?: string;
   };
-  reactions?: { [userId: string]: string };
 }
-
-const EMOJI_REACTIONS = ['❤️', '👍', '😂', '😮', '😢', '😡'];
 
 const TaskProgressChat: React.FC<TaskProgressChatProps> = ({ taskId, currentUser, otherUser, onStatusUpdate }) => {
   const [messages, setMessages] = useState<Message[]>([]);
@@ -43,10 +41,8 @@ const TaskProgressChat: React.FC<TaskProgressChatProps> = ({ taskId, currentUser
   const [progressUpdates, setProgressUpdates] = useState<any[]>([]);
   const [showStatusOptions, setShowStatusOptions] = useState(false);
   const [statusNote, setStatusNote] = useState('');
-  const [showReactions, setShowReactions] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const chatContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!taskId || !currentUser?.uid || !otherUser?.id) {
@@ -63,14 +59,8 @@ const TaskProgressChat: React.FC<TaskProgressChatProps> = ({ taskId, currentUser
       setProgressUpdates(progress);
     });
     
-    // Subscribe to message updates
-    const messageUnsubscribe = messageService.subscribeToMessages(taskId, (messageData) => {
-      setMessages(messageData);
-    });
-    
     return () => {
       if (progressUnsubscribe) progressUnsubscribe();
-      if (messageUnsubscribe) messageUnsubscribe();
     };
   }, [taskId, currentUser, otherUser]);
 
@@ -178,24 +168,6 @@ const TaskProgressChat: React.FC<TaskProgressChatProps> = ({ taskId, currentUser
       return;
     }
 
-    // Optimistic UI - add message immediately
-    const optimisticId = `temp-${Date.now()}`;
-    const optimisticMessage: Message = {
-      id: optimisticId,
-      content: newMessage.trim() || (imageFile ? 'Sending image...' : ''),
-      created_at: new Date(),
-      sender_id: currentUser.uid,
-      recipient_id: otherUser.id,
-      image_url: imagePreview,
-      is_read: false,
-      reactions: {}
-    };
-
-    setMessages(prev => [...prev, optimisticMessage]);
-    setNewMessage('');
-    removeImagePreview();
-    scrollToBottom();
-
     setLoading(true);
     try {
       let imageUrl = null;
@@ -212,32 +184,23 @@ const TaskProgressChat: React.FC<TaskProgressChatProps> = ({ taskId, currentUser
         content: newMessage.trim() || (imageUrl ? 'Sent an image' : ''),
         image_url: imageUrl || null,
         message_type: imageUrl ? 'image' : 'text',
-        is_read: false,
-        reactions: {}
+        is_read: false
       };
 
       // Use messageService to send the message
       await messageService.sendMessage(taskId, messageData);
       
-      // Remove optimistic message since real one will come through subscription
-      setMessages(prev => prev.filter(msg => msg.id !== optimisticId));
+      setNewMessage('');
+      removeImagePreview();
       
-      // Show success feedback with subtle animation
-      toast.success('Message sent', { 
-        duration: 1000,
-        style: {
-          background: '#0038FF',
-          color: '#fff',
-          borderRadius: '10px'
-        },
-        icon: '✓'
-      });
+      // Reload messages to include the new one
+      loadChatMessages();
+      
+      // Show success feedback
+      toast.success('Message sent', { duration: 1000 });
     } catch (error) {
       console.error('Error sending message:', error);
       toast.error('Error sending message. Please try again.');
-      
-      // Remove optimistic message on error
-      setMessages(prev => prev.filter(msg => msg.id !== optimisticId));
     } finally {
       setLoading(false);
       setUploadingImage(false);
@@ -289,44 +252,6 @@ const TaskProgressChat: React.FC<TaskProgressChatProps> = ({ taskId, currentUser
     } finally {
       setLoading(false);
     }
-  };
-
-  const addReaction = async (messageId: string, emoji: string) => {
-    try {
-      await messageService.addReaction(taskId, messageId, currentUser.uid, emoji);
-      setShowReactions(null);
-    } catch (error) {
-      console.error('Error adding reaction:', error);
-      toast.error('Error adding reaction');
-    }
-  };
-
-  const renderReactions = (reactions: { [userId: string]: string } = {}) => {
-    const reactionCounts: { [emoji: string]: number } = {};
-    Object.values(reactions).forEach(emoji => {
-      reactionCounts[emoji] = (reactionCounts[emoji] || 0) + 1;
-    });
-
-    if (Object.keys(reactionCounts).length === 0) return null;
-
-    return (
-      <div className="flex flex-wrap gap-1 mt-2">
-        {Object.entries(reactionCounts).map(([emoji, count]) => (
-          <button
-            key={emoji}
-            onClick={() => addReaction(messages.find(m => m.reactions === reactions)?.id || '', emoji)}
-            className={`px-2 py-1 rounded-full text-xs flex items-center space-x-1 transition-colors ${
-              reactions[currentUser.uid] === emoji
-                ? 'bg-[#0038FF] text-white'
-                : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
-            }`}
-          >
-            <span>{emoji}</span>
-            <span>{count}</span>
-          </button>
-        ))}
-      </div>
-    );
   };
 
   const isImage = (url: string) => {
@@ -449,10 +374,10 @@ const TaskProgressChat: React.FC<TaskProgressChatProps> = ({ taskId, currentUser
   const timeline = getCombinedTimeline();
 
   return (
-    <div className="flex flex-col h-full bg-gradient-to-br from-blue-50 to-indigo-50" ref={chatContainerRef}>
+    <div className="flex flex-col h-full bg-gray-50">
       {/* Status Update Bar - Only for task performer */}
       {isTaskPerformer && taskData && taskData.status !== 'completed' && taskData.status !== 'cancelled' && (
-        <div className="bg-blue-50 p-3 border-b shadow-sm">
+        <div className="bg-blue-50 p-3 border-b">
           <div className="flex items-center justify-between">
             <div className="flex items-center">
               {getStatusIcon(taskData.status)}
@@ -464,7 +389,7 @@ const TaskProgressChat: React.FC<TaskProgressChatProps> = ({ taskId, currentUser
             {!showStatusOptions ? (
               <button
                 onClick={() => setShowStatusOptions(true)}
-                className="bg-blue-500 text-white px-3 py-1 rounded-lg text-sm hover:bg-blue-600 transition-colors flex items-center shadow-sm"
+                className="bg-blue-500 text-white px-3 py-1 rounded-lg text-sm hover:bg-blue-600 transition-colors flex items-center"
               >
                 <ArrowRight className="w-4 h-4 mr-1" />
                 Update Status
@@ -480,7 +405,7 @@ const TaskProgressChat: React.FC<TaskProgressChatProps> = ({ taskId, currentUser
           </div>
           
           {showStatusOptions && (
-            <div className="mt-3 space-y-3 bg-white p-3 rounded-lg shadow-md border border-blue-100">
+            <div className="mt-3 space-y-3">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Add a note (optional)
@@ -512,7 +437,7 @@ const TaskProgressChat: React.FC<TaskProgressChatProps> = ({ taskId, currentUser
                   <button
                     onClick={() => updateTaskStatus('completed')}
                     disabled={loading}
-                    className="bg-green-500 text-white px-3 py-2 rounded-lg text-sm font-medium flex items-center justify-center shadow-sm hover:bg-green-600 transition-colors"
+                    className="bg-green-500 text-white px-3 py-2 rounded-lg text-sm font-medium flex items-center justify-center"
                   >
                     <CheckCircle className="w-4 h-4 mr-2" />
                     Complete Task
@@ -528,10 +453,10 @@ const TaskProgressChat: React.FC<TaskProgressChatProps> = ({ taskId, currentUser
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
         {timeline.length === 0 ? (
           <div className="text-center text-gray-500 py-8">
-            <div className="w-20 h-20 bg-gradient-to-br from-[#0038FF] to-[#0021A5] rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
-              <MessageSquare className="w-10 h-10 text-white" />
+            <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <MessageSquare className="w-8 h-8 text-gray-400" />
             </div>
-            <p className="text-lg font-bold mb-2">Start the conversation!</p>
+            <p className="text-lg font-medium mb-2">Start the conversation!</p>
             <p className="text-sm">Send a message to {otherUser.full_name} about the task.</p>
           </div>
         ) : (
@@ -557,12 +482,12 @@ const TaskProgressChat: React.FC<TaskProgressChatProps> = ({ taskId, currentUser
               <div
                 key={item.id}
                 className={`flex ${isOwn ? 'justify-end' : 'justify-start'} ${
-                  showAvatar ? 'mt-6' : 'mt-2'
-                } animate-fadeIn`}
+                  showAvatar ? 'mt-4' : 'mt-1'
+                }`}
               >
-                <div className={`flex ${isOwn ? 'flex-row-reverse' : 'flex-row'} items-end max-w-[75%] group`}>
+                <div className={`flex ${isOwn ? 'flex-row-reverse' : 'flex-row'} items-end max-w-[70%]`}>
                   {showAvatar && !isOwn && (
-                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#0038FF] to-[#0021A5] flex items-center justify-center mr-2 flex-shrink-0 shadow-md">
+                    <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center mr-2 flex-shrink-0">
                       {otherUser.avatar_url ? (
                         <img
                           src={otherUser.avatar_url}
@@ -570,78 +495,49 @@ const TaskProgressChat: React.FC<TaskProgressChatProps> = ({ taskId, currentUser
                           className="w-8 h-8 rounded-full object-cover"
                         />
                       ) : (
-                        <User className="w-4 h-4 text-white" />
+                        <User className="w-4 h-4 text-gray-400" />
                       )}
                     </div>
                   )}
                   
-                  <div className="relative">
-                    <div
-                      className={`rounded-2xl px-4 py-3 max-w-full ${
-                        isOwn
-                          ? 'bg-gradient-to-r from-[#0038FF] to-[#0021A5] text-white rounded-br-md shadow-lg'
-                          : 'bg-white text-gray-900 border border-gray-200 rounded-bl-md shadow-md'
-                      }`}
-                    >
-                      {item.image_url && isImage(item.image_url) && (
-                        <div className="mb-2">
-                          <img 
-                            src={item.image_url} 
-                            alt="Shared image" 
-                            className="rounded-lg max-h-60 w-auto cursor-pointer hover:opacity-90 transition-opacity shadow-sm"
-                            onClick={() => window.open(item.image_url, '_blank')}
-                          />
-                        </div>
-                      )}
-                      {item.content && (
-                        <p className="text-sm break-words">{item.content}</p>
-                      )}
-                      
-                      {/* Reactions */}
-                      {renderReactions(item.reactions)}
-                      
-                      <div className="flex items-center justify-between mt-1">
-                        <span className={`text-xs opacity-0 group-hover:opacity-100 transition-opacity ${
-                          isOwn ? 'text-blue-200' : 'text-gray-500'
-                        }`}>
-                          {formatTimestamp(item.created_at)}
-                        </span>
-                        {isOwn && (
-                          <span className={`text-xs ml-2 ${
-                            item.is_read ? 'text-blue-200' : 'text-blue-300'
-                          }`}>
-                            {item.is_read ? '✓✓' : '✓'}
-                          </span>
-                        )}
-                      </div>
-                    </div>
-                    
-                    {/* Reaction Button */}
-                    <button
-                      onClick={() => setShowReactions(showReactions === item.id ? null : item.id)}
-                      className="absolute -top-2 -right-2 opacity-0 group-hover:opacity-100 bg-white border border-gray-200 rounded-full p-1 shadow-lg hover:bg-gray-50 transition-all"
-                    >
-                      <Smile className="w-4 h-4 text-gray-600" />
-                    </button>
-                    
-                    {/* Reaction Picker */}
-                    {showReactions === item.id && (
-                      <div className="absolute top-8 right-0 bg-white border border-gray-200 rounded-2xl shadow-xl p-2 flex space-x-1 z-10">
-                        {EMOJI_REACTIONS.map(emoji => (
-                          <button
-                            key={emoji}
-                            onClick={() => addReaction(item.id, emoji)}
-                            className="p-2 hover:bg-gray-100 rounded-xl transition-colors text-lg"
-                          >
-                            {emoji}
-                          </button>
-                        ))}
+                  <div
+                    className={`rounded-2xl px-4 py-2 max-w-full ${
+                      isOwn
+                        ? 'bg-[#0038FF] text-white rounded-br-md'
+                        : 'bg-white text-gray-900 border border-gray-200 rounded-bl-md shadow-sm'
+                    }`}
+                  >
+                    {item.image_url && isImage(item.image_url) && (
+                      <div className="mb-2">
+                        <img 
+                          src={item.image_url} 
+                          alt="Shared image" 
+                          className="rounded-lg max-h-60 w-auto cursor-pointer hover:opacity-90 transition-opacity"
+                          onClick={() => window.open(item.image_url, '_blank')}
+                        />
                       </div>
                     )}
+                    {item.content && (
+                      <p className="text-sm break-words">{item.content}</p>
+                    )}
+                    <div className="flex items-center justify-between mt-1">
+                      <span className={`text-xs ${
+                        isOwn ? 'text-blue-200' : 'text-gray-500'
+                      }`}>
+                        {formatTimestamp(item.created_at)}
+                      </span>
+                      {isOwn && (
+                        <span className={`text-xs ml-2 ${
+                          item.is_read ? 'text-blue-200' : 'text-blue-300'
+                        }`}>
+                          {item.is_read ? '✓✓' : '✓'}
+                        </span>
+                      )}
+                    </div>
                   </div>
                   
                   {showAvatar && isOwn && (
-                    <div className="w-8 h-8 rounded-full bg-gradient-to-r from-[#0038FF] to-[#0021A5] flex items-center justify-center ml-2 flex-shrink-0 shadow-md">
+                    <div className="w-8 h-8 rounded-full bg-[#0038FF] flex items-center justify-center ml-2 flex-shrink-0">
                       <User className="w-4 h-4 text-white" />
                     </div>
                   )}
@@ -661,11 +557,11 @@ const TaskProgressChat: React.FC<TaskProgressChatProps> = ({ taskId, currentUser
             <img 
               src={imagePreview} 
               alt="Upload preview" 
-              className="h-20 w-auto rounded-lg border border-gray-200 shadow-md"
+              className="h-20 w-auto rounded-lg border border-gray-200"
             />
             <button 
               onClick={removeImagePreview}
-              className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600 transition-colors shadow-md"
+              className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600 transition-colors"
             >
               <X className="w-4 h-4" />
             </button>
@@ -680,7 +576,7 @@ const TaskProgressChat: React.FC<TaskProgressChatProps> = ({ taskId, currentUser
             type="button"
             onClick={handleImageClick}
             disabled={loading || uploadingImage}
-            className="p-2 text-[#0038FF] hover:text-[#0021A5] hover:bg-blue-50 rounded-full transition-colors disabled:opacity-50 shadow-sm"
+            className="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-full transition-colors disabled:opacity-50"
           >
             <Paperclip className="w-5 h-5" />
           </button>
@@ -696,11 +592,11 @@ const TaskProgressChat: React.FC<TaskProgressChatProps> = ({ taskId, currentUser
                 }
               }}
               placeholder="Type a message..."
-              className="w-full resize-none rounded-2xl border-2 border-gray-200 px-4 py-3 pr-12 focus:border-[#0038FF] focus:ring-2 focus:ring-[#0038FF] focus:ring-opacity-20 focus:outline-none max-h-32 shadow-sm"
+              className="w-full resize-none rounded-2xl border border-gray-300 px-4 py-2 pr-12 focus:border-[#0038FF] focus:ring-1 focus:ring-[#0038FF] focus:outline-none max-h-32"
               rows={1}
               disabled={loading || uploadingImage}
               style={{
-                minHeight: '48px',
+                minHeight: '40px',
                 height: 'auto'
               }}
               onInput={(e) => {
@@ -722,7 +618,7 @@ const TaskProgressChat: React.FC<TaskProgressChatProps> = ({ taskId, currentUser
           <button
             type="submit"
             disabled={loading || uploadingImage || (!newMessage.trim() && !imageFile)}
-            className="p-3 bg-gradient-to-r from-[#0038FF] to-[#0021A5] text-white rounded-full hover:opacity-90 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center shadow-lg transform hover:scale-105 active:scale-95"
+            className="p-2 bg-[#0038FF] text-white rounded-full hover:bg-[#0021A5] transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
           >
             {loading || uploadingImage ? (
               <Loader className="w-5 h-5 animate-spin" />

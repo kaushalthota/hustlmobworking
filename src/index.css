@@ -428,3 +428,46 @@
   object-fit: contain;
   max-width: 100%;
 }
+
+/* Subscription plan card animation */
+.plan-card {
+  transition: all 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.plan-card.animate-in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Hover effect for subscription buttons */
+.subscription-btn {
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.subscription-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 7px 14px rgba(0, 0, 0, 0.1), 0 3px 6px rgba(0, 0, 0, 0.08);
+}
+
+.subscription-btn::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.3) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  transform: rotate(30deg);
+  transition: transform 0.5s;
+}
+
+.subscription-btn:hover::after {
+  transform: rotate(30deg) translate(100%, 100%);
+}

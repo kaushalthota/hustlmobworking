@@ -41,6 +41,7 @@ const TaskProgressChat: React.FC<TaskProgressChatProps> = ({ taskId, currentUser
   const [progressUpdates, setProgressUpdates] = useState<any[]>([]);
   const [showStatusOptions, setShowStatusOptions] = useState(false);
   const [statusNote, setStatusNote] = useState('');
+  const [chatThreadId, setChatThreadId] = useState<string>('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -51,7 +52,7 @@ const TaskProgressChat: React.FC<TaskProgressChatProps> = ({ taskId, currentUser
     }
     
     loadTaskData();
-    loadChatMessages();
+    initializeChat();
     loadProgressUpdates();
     
     // Subscribe to task progress updates
@@ -68,21 +69,39 @@ const TaskProgressChat: React.FC<TaskProgressChatProps> = ({ taskId, currentUser
     scrollToBottom();
   }, [messages]);
 
+  const initializeChat = async () => {
+    try {
+      // Find or create a chat thread between the users
+      const threadId = await messageService.findOrCreateChatThread(
+        currentUser.uid,
+        otherUser.id,
+        taskId
+      );
+      setChatThreadId(threadId);
+      
+      // Now load messages from this thread
+      const chatMessages = await messageService.getMessages(threadId);
+      setMessages(chatMessages);
+      
+      // Subscribe to new messages
+      const unsubscribe = messageService.subscribeToMessages(threadId, (messageData) => {
+        setMessages(messageData);
+        scrollToBottom();
+      });
+      
+      return unsubscribe;
+    } catch (error) {
+      console.error('Error initializing chat:', error);
+      return () => {};
+    }
+  };
+
   const loadTaskData = async () => {
     try {
       const task = await taskService.getTaskById(taskId);
       setTaskData(task);
     } catch (error) {
       console.error('Error loading task data:', error);
-    }
-  };
-
-  const loadChatMessages = async () => {
-    try {
-      const chatMessages = await messageService.getMessages(taskId);
-      setMessages(chatMessages);
-    } catch (error) {
-      console.error('Error loading chat messages:', error);
     }
   };
 
@@ -143,7 +162,7 @@ const TaskProgressChat: React.FC<TaskProgressChatProps> = ({ taskId, currentUser
 
       const fileExt = file.name.split('.').pop();
       const fileName = `${Math.random().toString(36).substring(2, 15)}.${fileExt}`;
-      const filePath = `chat/${taskId}/${fileName}`;
+      const filePath = `chat/${chatThreadId}/${fileName}`;
 
       const storageRef = ref(storage, filePath);
       await uploadBytes(storageRef, file);
@@ -163,7 +182,7 @@ const TaskProgressChat: React.FC<TaskProgressChatProps> = ({ taskId, currentUser
       return;
     }
     
-    if (!currentUser?.uid || !otherUser?.id || !taskId) {
+    if (!currentUser?.uid || !otherUser?.id || !chatThreadId) {
       toast.error('Missing required information to send message');
       return;
     }
@@ -178,7 +197,7 @@ const TaskProgressChat: React.FC<TaskProgressChatProps> = ({ taskId, currentUser
       }
 
       const messageData = {
-        task_id: taskId,
+        task_id: taskId, // Include task ID for reference
         sender_id: currentUser.uid,
         recipient_id: otherUser.id,
         content: newMessage.trim() || (imageUrl ? 'Sent an image' : ''),
@@ -188,13 +207,10 @@ const TaskProgressChat: React.FC<TaskProgressChatProps> = ({ taskId, currentUser
       };
 
       // Use messageService to send the message
-      await messageService.sendMessage(taskId, messageData);
+      await messageService.sendMessage(chatThreadId, messageData);
       
       setNewMessage('');
       removeImagePreview();
-      
-      // Reload messages to include the new one
-      loadChatMessages();
       
       // Show success feedback
       toast.success('Message sent', { duration: 1000 });

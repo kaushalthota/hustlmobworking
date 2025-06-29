@@ -47,7 +47,7 @@ const DirectMessageModal: React.FC<DirectMessageModalProps> = ({ onClose }) => {
       // Extract unique user IDs from chat threads
       const contactIds = new Set<string>();
       chatThreads.forEach(thread => {
-        // Get the other user's ID from the participants array
+        // Get the other user's ID
         const otherUserId = thread.other_user.id;
         if (otherUserId) {
           contactIds.add(otherUserId);

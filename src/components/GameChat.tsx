@@ -342,7 +342,7 @@ const GameChat: React.FC<GameChatProps> = ({
       created_at: new Date(),
       reactions: {},
       message_type: filePreview?.type === 'image' ? 'image' : filePreview?.type === 'file' ? 'file' : 'text',
-      task_id: taskId
+      task_id: taskId // Include task ID for reference
     };
 
     setMessages(prev => [...prev, optimisticMessage]);

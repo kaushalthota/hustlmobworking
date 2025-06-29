@@ -29,26 +29,44 @@ class TranslationService {
   }
   
   /**
-   * Translate text using dictionary-based approach
-   * This avoids API calls to prevent hitting rate limits
+   * Translate text using Lingo.dev API
    */
   async translateText(text: string, options: TranslationOptions): Promise<string> {
+    if (!this.apiKey) {
+      throw new Error('Translation API key not configured');
+    }
+    
     if (!text || text.trim() === '') {
       return text;
     }
     
     try {
-      // Use the dictionary-based translation
-      const dictionary = await import('../lingo/dictionary.js').then(module => module.default);
-      if (dictionary && dictionary[options.targetLanguage] && dictionary[options.targetLanguage][text]) {
-        return dictionary[options.targetLanguage][text];
+      // Call the Lingo.dev API through our Firebase function
+      const functionUrl = `${import.meta.env.VITE_FIREBASE_FUNCTIONS_URL}/translateText`;
+      
+      const response = await fetch(functionUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${auth.currentUser?.uid || 'anonymous'}`
+        },
+        body: JSON.stringify({
+          text,
+          targetLanguage: options.targetLanguage,
+          sourceLanguage: options.sourceLanguage || 'auto'
+        })
+      });
+      
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Translation failed');
       }
       
-      // If not found in dictionary, return the original text
-      return text;
+      const data = await response.json();
+      return data.translatedText;
     } catch (error) {
       console.error('Translation error:', error);
-      return text; // Return original text on error
+      throw error;
     }
   }
   
@@ -56,57 +74,70 @@ class TranslationService {
    * Get available languages for translation
    */
   async getAvailableLanguages(): Promise<{ code: string, name: string }[]> {
-    // Return hardcoded languages to avoid API calls
-    return [
-      { code: 'en', name: 'English' },
-      { code: 'es', name: 'Spanish' },
-      { code: 'fr', name: 'French' },
-      { code: 'de', name: 'German' },
-      { code: 'ja', name: 'Japanese' }
-    ];
+    if (!this.apiKey) {
+      throw new Error('Translation API key not configured');
+    }
+    
+    try {
+      // Call the Lingo.dev API through our Firebase function
+      const functionUrl = `${import.meta.env.VITE_FIREBASE_FUNCTIONS_URL}/getLanguages`;
+      
+      const response = await fetch(functionUrl, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${auth.currentUser?.uid || 'anonymous'}`
+        }
+      });
+      
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to fetch languages');
+      }
+      
+      const data = await response.json();
+      return data.languages;
+    } catch (error) {
+      console.error('Error fetching languages:', error);
+      throw error;
+    }
   }
   
   /**
    * Detect language of text
    */
   async detectLanguage(text: string): Promise<string> {
+    if (!this.apiKey) {
+      throw new Error('Translation API key not configured');
+    }
+    
     if (!text || text.trim() === '') {
       return 'en'; // Default to English for empty text
     }
     
-    // Simple language detection based on common words
-    const lowerText = text.toLowerCase();
-    
-    // Spanish detection
-    if (lowerText.includes('el ') || lowerText.includes('la ') || 
-        lowerText.includes(' y ') || lowerText.includes(' de ') ||
-        lowerText.includes('hola') || lowerText.includes('gracias')) {
-      return 'es';
+    try {
+      // Call the Lingo.dev API through our Firebase function
+      const functionUrl = `${import.meta.env.VITE_FIREBASE_FUNCTIONS_URL}/detectLanguage`;
+      
+      const response = await fetch(functionUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${auth.currentUser?.uid || 'anonymous'}`
+        },
+        body: JSON.stringify({ text })
+      });
+      
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Language detection failed');
+      }
+      
+      const data = await response.json();
+      return data.languageCode;
+    } catch (error) {
+      console.error('Language detection error:', error);
+      throw error;
     }
-    
-    // French detection
-    if (lowerText.includes('le ') || lowerText.includes('la ') || 
-        lowerText.includes(' et ') || lowerText.includes(' de ') ||
-        lowerText.includes('bonjour') || lowerText.includes('merci')) {
-      return 'fr';
-    }
-    
-    // German detection
-    if (lowerText.includes('der ') || lowerText.includes('die ') || 
-        lowerText.includes('das ') || lowerText.includes(' und ') ||
-        lowerText.includes('hallo') || lowerText.includes('danke')) {
-      return 'de';
-    }
-    
-    // Japanese detection
-    if (lowerText.includes('は') || lowerText.includes('の') || 
-        lowerText.includes('に') || lowerText.includes('を') ||
-        lowerText.includes('こんにちは') || lowerText.includes('ありがとう')) {
-      return 'ja';
-    }
-    
-    // Default to English
-    return 'en';
   }
 }
 

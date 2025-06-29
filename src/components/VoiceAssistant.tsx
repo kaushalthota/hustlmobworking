@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Mic, MicOff, Volume2, VolumeX, MessageCircle, X, Zap, Package, Search, Wallet, User, HelpCircle, Shield } from 'lucide-react';
 import { elevenLabsService } from '../lib/elevenLabsService';
 import { toast } from 'react-hot-toast';
@@ -10,7 +10,7 @@ interface VoiceAssistantProps {
   userLocation?: Location | null;
 }
 
-// Audio manager singleton for VoiceAssistant
+// Create a singleton pattern to ensure only one instance can play audio
 const audioManager = {
   isPlaying: false,
   currentAudio: null as HTMLAudioElement | null,
@@ -82,6 +82,7 @@ export default function VoiceAssistant({ onClose, userLocation }: VoiceAssistant
   const [transcript, setTranscript] = useState('');
   const [response, setResponse] = useState('');
   const [error, setError] = useState<string | null>(null);
+  const [voiceError, setVoiceError] = useState<string | null>(null);
   const [isAudioEnabled, setIsAudioEnabled] = useState(true);
   
   const recognitionRef = useRef<SpeechRecognition | null>(null);
@@ -222,12 +223,14 @@ export default function VoiceAssistant({ onClose, userLocation }: VoiceAssistant
     if (!isAudioEnabled || isSpeaking) return;
     
     setIsSpeaking(true);
+    setVoiceError(null);
     
     try {
       // Use the modified ElevenLabs service that uses the audio manager
       await elevenLabsService.speakText(text, undefined, audioManager);
     } catch (error: any) {
       console.warn('Voice synthesis failed:', error.message);
+      setVoiceError(error.message);
       // Don't show error to user, just disable audio silently
       setIsAudioEnabled(false);
     } finally {
@@ -237,6 +240,7 @@ export default function VoiceAssistant({ onClose, userLocation }: VoiceAssistant
 
   const toggleAudio = () => {
     setIsAudioEnabled(!isAudioEnabled);
+    setVoiceError(null);
     
     // If turning off audio, stop any playing audio
     if (isAudioEnabled) {
@@ -281,6 +285,15 @@ export default function VoiceAssistant({ onClose, userLocation }: VoiceAssistant
           {error && (
             <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg">
               <p className="text-sm text-red-800">{error}</p>
+            </div>
+          )}
+
+          {/* Voice error message (only shown in development) */}
+          {voiceError && process.env.NODE_ENV === 'development' && (
+            <div className="mb-4 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
+              <p className="text-sm text-yellow-800">
+                <strong>Voice Note:</strong> {voiceError}
+              </p>
             </div>
           )}
 

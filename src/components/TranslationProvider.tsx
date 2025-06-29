@@ -29,25 +29,7 @@ interface TranslationProviderProps {
 export const TranslationProvider: React.FC<TranslationProviderProps> = ({ children }) => {
   const [currentLanguage, setCurrentLanguage] = useState<string>('en');
   const [isTranslating, setIsTranslating] = useState<boolean>(false);
-  const [dictionary, setDictionary] = useState<any>(null);
   const lingo = useLingo();
-  
-  useEffect(() => {
-    // Load dictionary asynchronously
-    const loadDictionary = async () => {
-      try {
-        const dictionaryModule = await import('../lingo/dictionary.js');
-        setDictionary(dictionaryModule.default);
-      } catch (error) {
-        console.warn('Could not load dictionary:', error);
-        captureException(error, {
-          tags: { component: "TranslationProvider", action: "loadDictionary" }
-        });
-      }
-    };
-    
-    loadDictionary();
-  }, []);
   
   useEffect(() => {
     // Load saved language preference from localStorage
@@ -100,12 +82,6 @@ export const TranslationProvider: React.FC<TranslationProviderProps> = ({ childr
     
     setIsTranslating(true);
     try {
-      // First try to use the dictionary
-      if (dictionary && dictionary[currentLanguage] && dictionary[currentLanguage][text]) {
-        return dictionary[currentLanguage][text];
-      }
-      
-      // Fall back to API translation if needed
       const translatedText = await translationService.translateText(text, {
         targetLanguage: currentLanguage
       });
@@ -140,25 +116,7 @@ export const TranslationProvider: React.FC<TranslationProviderProps> = ({ childr
       isTranslating,
       t: (text: string) => {
         try {
-          // First try to use the dictionary directly
-          if (dictionary && dictionary[currentLanguage] && dictionary[currentLanguage][text]) {
-            return dictionary[currentLanguage][text];
-          }
-          
-          // Fall back to lingo.t if available
-          if (lingo.t) {
-            try {
-              const translated = lingo.t(text);
-              if (translated !== text) {
-                return translated;
-              }
-            } catch (lingoError) {
-              // Silently fail and continue to next method
-            }
-          }
-          
-          // If all else fails, return original text
-          return text;
+          return lingo.t ? lingo.t(text) : text;
         } catch (e) {
           // Capture translation errors in Sentry
           captureException(e, {

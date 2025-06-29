@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Languages, Loader } from 'lucide-react';
-import { useTranslation } from './TranslationProvider';
+import { translationService } from '../lib/translationService';
+import toast from 'react-hot-toast';
+import { useLingo } from 'lingo.dev/react/client';
 import * as Sentry from "@sentry/react";
 import { captureException } from '../lib/sentryUtils';
 
@@ -17,10 +19,10 @@ const TranslateButton: React.FC<TranslateButtonProps> = ({
   onTranslated,
   className = '',
   size = 'md',
-  targetLanguage
+  targetLanguage = 'en'
 }) => {
   const [isTranslating, setIsTranslating] = useState(false);
-  const { t, currentLanguage } = useTranslation();
+  const lingo = useLingo();
   
   const sizeClasses = {
     sm: 'p-1 text-xs',
@@ -40,41 +42,78 @@ const TranslateButton: React.FC<TranslateButtonProps> = ({
     // Add a breadcrumb for debugging
     Sentry.addBreadcrumb({
       category: 'translation',
-      message: `Translation requested for language: ${targetLanguage || currentLanguage}`,
+      message: `Translation requested for language: ${targetLanguage}`,
       level: 'info'
     });
     
     setIsTranslating(true);
     try {
-      // Use the t function from context
-      const translated = t(text);
+      // First try to use Lingo.dev's built-in translation
+      try {
+        if (lingo.t) {
+          const translated = lingo.t(text);
+          if (translated !== text) {
+            onTranslated(translated);
+            toast.success('Translation complete');
+            return;
+          }
+        }
+      } catch (e) {
+        console.warn('Lingo.dev translation failed, falling back to API:', e);
+        
+        // Log the error to Sentry
+        captureException(e, {
+          tags: {
+            component: "TranslateButton",
+            action: "lingo_translate",
+            targetLanguage
+          }
+        });
+      }
       
-      // If translation is different from original, use it
-      if (translated !== text) {
-        onTranslated(translated);
+      // Fall back to API translation
+      const detectedLanguage = await translationService.detectLanguage(text);
+      
+      // If text is already in target language, show a message
+      if (detectedLanguage === targetLanguage) {
+        toast.info('Text is already in the target language');
         return;
       }
       
-      // If no translation found, use original text
-      onTranslated(text);
+      // Translate the text
+      const translatedText = await translationService.translateText(text, {
+        targetLanguage,
+        sourceLanguage: detectedLanguage
+      });
+      
+      // Call the callback with the translated text
+      onTranslated(translatedText);
+      
+      toast.success('Translation complete');
+      
+      // Log successful translation to Sentry
+      Sentry.addBreadcrumb({
+        category: 'translation',
+        message: `Translation successful: ${detectedLanguage} → ${targetLanguage}`,
+        level: 'info'
+      });
     } catch (error) {
       console.error('Translation error:', error);
+      toast.error('Translation failed. Please try again.');
       
       // Log the error to Sentry
       captureException(error, {
         tags: {
           component: "TranslateButton",
-          action: "translate",
-          targetLanguage: targetLanguage || currentLanguage
+          action: "api_translate",
+          sourceLanguage: "auto",
+          targetLanguage
         },
         extra: {
           textLength: text.length,
           textSample: text.substring(0, 50) // Only include first 50 chars for privacy
         }
       });
-      
-      // Return original text on error
-      onTranslated(text);
     } finally {
       setIsTranslating(false);
     }

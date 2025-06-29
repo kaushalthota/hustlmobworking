@@ -70,7 +70,7 @@ const GameChat: React.FC<GameChatProps> = ({
 }) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [uploadingFile, setUploadingFile] = useState(false);
   const [filePreview, setFilePreview] = useState<{ url: string; name: string; type: string } | null>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -88,10 +88,10 @@ const GameChat: React.FC<GameChatProps> = ({
   const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const menuRef = useRef<HTMLDivElement>(null);
   const { currentLanguage } = useTranslation();
-
+  
   useEffect(() => {
     if (!taskId || !currentUser?.uid || !otherUser?.id) {
-      console.warn('GameChat missing required props:', { taskId, currentUserUid: currentUser?.uid, otherUserId: otherUser?.id });
+      console.warn('GameChat component missing required props:', { taskId, currentUserUid: currentUser?.uid, otherUserId: otherUser?.id });
       return;
     }
     

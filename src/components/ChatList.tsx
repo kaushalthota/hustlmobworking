@@ -137,8 +137,8 @@ const ChatList: React.FC<ChatListProps> = ({ userId, currentUser }) => {
         // Skip if otherUserId is null
         if (!otherUserId) continue;
         
-        // Create a chat thread between the users
-        await messageService.findOrCreateChatThread(userId, otherUserId);
+        // Create a chat thread between the users, passing the task ID
+        await messageService.findOrCreateChatThread(userId, otherUserId, task.id);
       }
       
       // Reload chats after creating threads

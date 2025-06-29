@@ -877,7 +877,7 @@ export const taskTemplateService = {
 // Message service object
 export const messageService = {
   // Find or create a chat thread between two users
-  async findOrCreateChatThread(user1Id: string, user2Id: string): Promise<string> {
+  async findOrCreateChatThread(user1Id: string, user2Id: string, taskId?: string): Promise<string> {
     try {
       // Sort user IDs to ensure consistent chat ID regardless of who initiates
       const participants = [user1Id, user2Id].sort();
@@ -890,9 +890,22 @@ export const messageService = {
       
       const querySnapshot = await getDocs(q);
       
-      // If a chat thread exists, return its ID
+      // If a chat thread exists, update it with the task ID if provided
       if (!querySnapshot.empty) {
-        return querySnapshot.docs[0].id;
+        const chatThreadId = querySnapshot.docs[0].id;
+        
+        // If a taskId is provided and the chat thread doesn't have a last_task_id, update it
+        if (taskId) {
+          const chatData = querySnapshot.docs[0].data();
+          if (!chatData.last_task_id) {
+            await updateDoc(doc(db, 'user_chats', chatThreadId), {
+              last_task_id: taskId,
+              updated_at: serverTimestamp()
+            });
+          }
+        }
+        
+        return chatThreadId;
       }
       
       // Otherwise, create a new chat thread
@@ -901,14 +914,15 @@ export const messageService = {
         created_at: serverTimestamp(),
         updated_at: serverTimestamp(),
         last_message: null,
-        last_message_time: null
+        last_message_time: null,
+        last_task_id: taskId || null
       });
       
       return chatRef.id;
     } catch (error) {
       captureException(error, {
         tags: { action: 'find_or_create_chat_thread' },
-        extra: { user1Id, user2Id }
+        extra: { user1Id, user2Id, taskId }
       });
       throw error;
     }
@@ -933,7 +947,7 @@ export const messageService = {
       }
       
       // Find or create a chat thread between these users
-      const chatThreadId = await this.findOrCreateChatThread(creatorId, performerId);
+      const chatThreadId = await this.findOrCreateChatThread(creatorId, performerId, taskId);
       
       // Add the message to the chat thread
       const messagesRef = collection(db, 'user_chats', chatThreadId, 'messages');

@@ -10,7 +10,7 @@ import { revenueCatService } from '../lib/revenueCatService';
 import SubscriptionPlans from './SubscriptionPlans';
 import DirectMessageModal from './DirectMessageModal';
 
-interface UserProfile: React.FC = () => {
+const UserProfile: React.FC = () => {
   const [profile, setProfile] = useState<any>(null);
   const [stats, setStats] = useState<any>(null);
   const [tasks, setTasks] = useState<any[]>([]);

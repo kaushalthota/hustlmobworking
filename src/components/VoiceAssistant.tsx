@@ -10,7 +10,7 @@ interface VoiceAssistantProps {
   userLocation?: Location | null;
 }
 
-// Create a singleton pattern to ensure only one instance can play audio
+// Audio manager singleton for VoiceAssistant
 const audioManager = {
   isPlaying: false,
   currentAudio: null as HTMLAudioElement | null,

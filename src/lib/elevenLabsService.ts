@@ -1,5 +1,3 @@
-import { captureException } from './sentryUtils';
-
 interface ElevenLabsError {
   detail?: {
     status?: string;
@@ -106,9 +104,6 @@ class ElevenLabsService {
         audio.onerror = (e) => {
           URL.revokeObjectURL(audioUrl);
           reject(new Error('Failed to play audio'));
-          captureException(e, {
-            tags: { component: "ElevenLabsService", action: "playAudio" }
-          });
         };
         
         // Use a try-catch block for the play() call
@@ -121,9 +116,6 @@ class ElevenLabsService {
               console.warn('Audio playback error:', err.message);
               URL.revokeObjectURL(audioUrl);
               // Don't reject here, just log the error
-              captureException(err, {
-                tags: { component: "ElevenLabsService", action: "playAudio" }
-              });
               resolve(); // Resolve anyway to prevent blocking
             });
           }
@@ -131,9 +123,6 @@ class ElevenLabsService {
           console.warn('Audio playback error:', err);
           URL.revokeObjectURL(audioUrl);
           // Don't reject here, just log the error
-          captureException(err, {
-            tags: { component: "ElevenLabsService", action: "playAudio" }
-          });
           resolve(); // Resolve anyway to prevent blocking
         }
       });
@@ -145,9 +134,6 @@ class ElevenLabsService {
       
       // Handle network errors and other issues
       console.error('Error in speakText:', error);
-      captureException(error, {
-        tags: { component: "ElevenLabsService", action: "speakText" }
-      });
       throw new Error('Voice features are currently unavailable due to a network error.');
     }
   }
@@ -174,9 +160,6 @@ class ElevenLabsService {
       return data.voices || [];
     } catch (error: any) {
       console.error('Error fetching voices:', error);
-      captureException(error, {
-        tags: { component: "ElevenLabsService", action: "getVoices" }
-      });
       return []; // Return empty array on error
     }
   }

@@ -11,7 +11,7 @@ class TranslationService {
   
   constructor() {
     // Initialize with environment variable if available
-    this.apiKey = import.meta.env.VITE_LINGO_API_KEY || null;
+    this.apiKey = import.meta.env.LINGODOTDEV_API_KEY || 'api_wotifoo9qly46y78x0trbc8b';
   }
   
   /**
@@ -41,19 +41,17 @@ class TranslationService {
     }
     
     try {
-      // Call the Lingo.dev API through our Firebase function
-      const functionUrl = `${import.meta.env.VITE_FIREBASE_FUNCTIONS_URL}/translateText`;
-      
-      const response = await fetch(functionUrl, {
+      // Call the Lingo.dev API directly
+      const response = await fetch(`${this.baseUrl}/translate`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${auth.currentUser?.uid || 'anonymous'}`
+          'Authorization': `Bearer ${this.apiKey}`
         },
         body: JSON.stringify({
           text,
-          targetLanguage: options.targetLanguage,
-          sourceLanguage: options.sourceLanguage || 'auto'
+          source_language_code: options.sourceLanguage || 'auto',
+          target_language_code: options.targetLanguage
         })
       });
       
@@ -63,7 +61,7 @@ class TranslationService {
       }
       
       const data = await response.json();
-      return data.translatedText;
+      return data.translated_text;
     } catch (error) {
       console.error('Translation error:', error);
       throw error;
@@ -79,13 +77,11 @@ class TranslationService {
     }
     
     try {
-      // Call the Lingo.dev API through our Firebase function
-      const functionUrl = `${import.meta.env.VITE_FIREBASE_FUNCTIONS_URL}/getLanguages`;
-      
-      const response = await fetch(functionUrl, {
+      // Call the Lingo.dev API directly
+      const response = await fetch(`${this.baseUrl}/languages`, {
         method: 'GET',
         headers: {
-          'Authorization': `Bearer ${auth.currentUser?.uid || 'anonymous'}`
+          'Authorization': `Bearer ${this.apiKey}`
         }
       });
       
@@ -115,14 +111,12 @@ class TranslationService {
     }
     
     try {
-      // Call the Lingo.dev API through our Firebase function
-      const functionUrl = `${import.meta.env.VITE_FIREBASE_FUNCTIONS_URL}/detectLanguage`;
-      
-      const response = await fetch(functionUrl, {
+      // Call the Lingo.dev API directly
+      const response = await fetch(`${this.baseUrl}/detect`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${auth.currentUser?.uid || 'anonymous'}`
+          'Authorization': `Bearer ${this.apiKey}`
         },
         body: JSON.stringify({ text })
       });
@@ -133,7 +127,7 @@ class TranslationService {
       }
       
       const data = await response.json();
-      return data.languageCode;
+      return data.language_code;
     } catch (error) {
       console.error('Language detection error:', error);
       throw error;

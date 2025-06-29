@@ -1,6 +1,26 @@
 {
   "sourceLocale": "en",
-  "targetLocales": ["es", "fr", "de"],
+  "targetLocales": [
+    "es",
+    "fr",
+    "de"
+  ],
   "fallbackLocale": "en",
-  "namespaces": ["common"]
+  "namespaces": [
+    "common"
+  ],
+  "files": {
+    "main.tsx": {
+      "scopes": {
+        "9/expression/0/1/openingElement/0/value/expression": {
+          "type": "element",
+          "hash": "d90b5d0050e9caabf5cff9a854a3c7f2",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "An error has occurred. Our team has been notified."
+        }
+      }
+    }
+  }
 }

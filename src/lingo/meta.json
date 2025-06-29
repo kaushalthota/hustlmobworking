@@ -1818,6 +1818,82 @@
         }
       }
     },
+    "components/InteractiveCampusMap.tsx": {
+      "scopes": {
+        "11/0/init/body/28/argument/3/1/expression/right-title": {
+          "type": "attribute",
+          "hash": "0a93ee3152a1e7701270c13a59e73341",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Center on your location"
+        },
+        "11/0/init/body/28/argument/3/3-title": {
+          "type": "attribute",
+          "hash": "25744543e6ab31b6c27da8f37b9b3337",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Toggle fullscreen"
+        },
+        "11/0/init/body/28/argument/5/1": {
+          "type": "element",
+          "hash": "400a375fafaa45e1b7b35b0481362a69",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Map Legend"
+        },
+        "11/0/init/body/28/argument/5/3/1/3": {
+          "type": "element",
+          "hash": "981fc8e404b426aa6eeff4410b301354",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Your Location"
+        },
+        "11/0/init/body/28/argument/5/3/11/expression/right/3": {
+          "type": "element",
+          "hash": "c473338b48ee86439456780a05c54e9d",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Getting location..."
+        },
+        "11/0/init/body/28/argument/5/3/3/3": {
+          "type": "element",
+          "hash": "9fc063461268ad048868581668ed1cad",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Task Locations"
+        },
+        "11/0/init/body/28/argument/5/3/5/expression/right": {
+          "type": "element",
+          "hash": "6e3291247eb9faf1cd2b7add10791cb4",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Distance: <function:distance.toFixed/> miles"
+        },
+        "11/0/init/body/28/argument/5/3/7": {
+          "type": "element",
+          "hash": "c01f9bd643a902475476f2255e9fa0bb",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Click on markers to view task details"
+        },
+        "11/0/init/body/28/argument/5/3/9/expression/right": {
+          "type": "element",
+          "hash": "fbbd4ab26b49f52d2eebb3d6c30f1b72",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Get My Location"
+        }
+      }
+    },
     "components/LearnMoreModal.tsx": {
       "scopes": {
         "3/0/init/body/2/argument/1/1/1": {
@@ -2870,6 +2946,502 @@
         }
       }
     },
+    "components/TaskDetails.tsx": {
+      "scopes": {
+        "20/0/init/body/45/0/init/body/3/argument/3/1": {
+          "type": "element",
+          "hash": "40770b1b2b4df2e5870587c797444648",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "$<function:hourlyRate.toFixed/>/hr"
+        },
+        "20/0/init/body/45/0/init/body/3/argument/3/3": {
+          "type": "element",
+          "hash": "f71702a77ca097905f221a293c732003",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "× {estimatedHours} <expression/>"
+        },
+        "20/0/init/body/48/argument/1/expression/alternate/3/1/1/1": {
+          "type": "element",
+          "hash": "f760c4f52f6a02bc24379f11c33fd1cf",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Task Details"
+        },
+        "20/0/init/body/48/argument/1/expression/alternate/3/1/1/3/expression/right/1": {
+          "type": "element",
+          "hash": "c87d4cc46eceb303cd2cae37a03a6833",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Details"
+        },
+        "20/0/init/body/48/argument/1/expression/alternate/3/1/1/3/expression/right/3": {
+          "type": "element",
+          "hash": "579e4af95ea39e14b4a857b445a2a340",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Chat"
+        },
+        "20/0/init/body/48/argument/1/expression/alternate/3/3/expression/right/11/expression/right/1": {
+          "type": "element",
+          "hash": "dd42c6ed0d572d8cf561ee7b7b423d81",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Task Progress"
+        },
+        "20/0/init/body/48/argument/1/expression/alternate/3/3/expression/right/15/11/9/3": {
+          "type": "element",
+          "hash": "f73f89a14217629eaaafe0cb1d895770",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Verified User"
+        },
+        "20/0/init/body/48/argument/1/expression/alternate/3/3/expression/right/15/15/expression/right/1/1": {
+          "type": "element",
+          "hash": "b945ff543e940ebfe53e40be674c4d1a",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Choose Payment Method"
+        },
+        "20/0/init/body/48/argument/1/expression/alternate/3/3/expression/right/15/15/expression/right/1/3": {
+          "type": "element",
+          "hash": "a239140d8b72831e1b74e5096d9a4af3",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "This task costs ${taskData.price}. How would you like to pay?"
+        },
+        "20/0/init/body/48/argument/1/expression/alternate/3/3/expression/right/15/15/expression/right/1/5/1/1/3/1": {
+          "type": "element",
+          "hash": "9bb44a4bc0cff9af73d939e916b4a9cf",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Wallet Balance"
+        },
+        "20/0/init/body/48/argument/1/expression/alternate/3/3/expression/right/15/15/expression/right/1/5/1/1/3/3": {
+          "type": "element",
+          "hash": "6ee4a5292b8ba1a8d7decb5bc28386cf",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "$<function:walletBalance.toFixed/> available"
+        },
+        "20/0/init/body/48/argument/1/expression/alternate/3/3/expression/right/15/15/expression/right/1/5/1/3/expression/right": {
+          "type": "element",
+          "hash": "8607da62c6da8072839652c45406d3b7",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Insufficient"
+        },
+        "20/0/init/body/48/argument/1/expression/alternate/3/3/expression/right/15/15/expression/right/1/5/3/3/1": {
+          "type": "element",
+          "hash": "c610b89580bc6b98ca176d6a70c75beb",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Credit/Debit Card"
+        },
+        "20/0/init/body/48/argument/1/expression/alternate/3/3/expression/right/15/15/expression/right/1/5/3/3/3": {
+          "type": "element",
+          "hash": "a1d0c53b7064fff0366f2f0065e67491",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Pay with Stripe"
+        },
+        "20/0/init/body/48/argument/1/expression/alternate/3/3/expression/right/15/15/expression/right/1/7/1": {
+          "type": "element",
+          "hash": "b46dce13415b15bd9a014ba5847056c0",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Cancel"
+        },
+        "20/0/init/body/48/argument/1/expression/alternate/3/3/expression/right/15/19/expression/right/1": {
+          "type": "element",
+          "hash": "f75d1a2a9a1d3789789758aeac557dbe",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Update Task Status"
+        },
+        "20/0/init/body/48/argument/1/expression/alternate/3/3/expression/right/15/19/expression/right/3/1/1": {
+          "type": "element",
+          "hash": "306389a12238c49b117d154bce9bae7b",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Current Status: <element:span><expression/></element:span>"
+        },
+        "20/0/init/body/48/argument/1/expression/alternate/3/3/expression/right/15/19/expression/right/3/1/3": {
+          "type": "element",
+          "hash": "787b7ccbb85c991ce3f89b1484047c4c",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Add a note (optional)"
+        },
+        "20/0/init/body/48/argument/1/expression/alternate/3/3/expression/right/15/19/expression/right/3/1/5-placeholder": {
+          "type": "attribute",
+          "hash": "ee2881ab58174a40053962a7a392f827",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Add details about this status update..."
+        },
+        "20/0/init/body/48/argument/1/expression/alternate/3/3/expression/right/15/19/expression/right/3/5/1": {
+          "type": "element",
+          "hash": "b46dce13415b15bd9a014ba5847056c0",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Cancel"
+        },
+        "20/0/init/body/48/argument/1/expression/alternate/3/3/expression/right/15/23/1/3/1": {
+          "type": "element",
+          "hash": "1ee6839d5cc427288fc628a42f25d2a2",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Safety Tips"
+        },
+        "20/0/init/body/48/argument/1/expression/alternate/3/3/expression/right/15/23/1/3/3/1": {
+          "type": "element",
+          "hash": "65167d6f1c195cd5976eddb49e42bf2e",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "• Meet in a public place"
+        },
+        "20/0/init/body/48/argument/1/expression/alternate/3/3/expression/right/15/23/1/3/3/3": {
+          "type": "element",
+          "hash": "72d4c54d335f2b08e71441e5c008f9a7",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "• Share your task details with a friend"
+        },
+        "20/0/init/body/48/argument/1/expression/alternate/3/3/expression/right/15/23/1/3/3/5": {
+          "type": "element",
+          "hash": "b1ecde587f852175d70bc39f68468ea8",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "• Use our in-app chat for communication"
+        },
+        "20/0/init/body/48/argument/1/expression/alternate/3/3/expression/right/15/23/1/3/3/7": {
+          "type": "element",
+          "hash": "075d6f251190cfe210ef907c6586401a",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "• Report any suspicious behavior"
+        },
+        "20/0/init/body/48/argument/1/expression/alternate/3/3/expression/right/15/27/expression/right/1": {
+          "type": "element",
+          "hash": "0710df0fcedb1284aec6abe55f2b1987",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:CheckCircle></element:CheckCircle> Mark Task as Completed"
+        },
+        "20/0/init/body/48/argument/1/expression/alternate/3/3/expression/right/15/31/expression/right/1": {
+          "type": "element",
+          "hash": "1eade532106fc4612216797a0a733f94",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:ArrowRight></element:ArrowRight> Update Task Status"
+        },
+        "20/0/init/body/48/argument/1/expression/alternate/3/3/expression/right/15/35/expression/right/1/expression/right/1": {
+          "type": "element",
+          "hash": "e715e1ea3fb16ce56b0d66a98e1bf31a",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:Star></element:Star> Leave a Review"
+        },
+        "20/0/init/body/48/argument/1/expression/alternate/3/3/expression/right/15/35/expression/right/3": {
+          "type": "element",
+          "hash": "9662aea42e821527423b8ff7cfcf5d94",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:MessageSquare></element:MessageSquare> View Reviews"
+        },
+        "20/0/init/body/48/argument/1/expression/alternate/3/3/expression/right/15/39/expression/right/3/1/expression/alternate": {
+          "type": "element",
+          "hash": "f4e915f3e8f2bdca536b01627a4b9d7a",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:XCircle></element:XCircle> Decline"
+        },
+        "20/0/init/body/48/argument/1/expression/alternate/3/3/expression/right/15/43/expression/right": {
+          "type": "element",
+          "hash": "f3d86c964b09be04e7efda13f6c2a667",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:AlertTriangle></element:AlertTriangle> Report Task"
+        },
+        "20/0/init/body/48/argument/1/expression/alternate/3/3/expression/right/15/47/expression/right/1": {
+          "type": "element",
+          "hash": "93cd63784acc926417a216570235a95d",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:MessageSquare></element:MessageSquare> Open Chat"
+        },
+        "20/0/init/body/48/argument/1/expression/alternate/3/3/expression/right/15/5/1/1": {
+          "type": "element",
+          "hash": "e17686a22ffad04cc7bb70524ed4478b",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Description"
+        },
+        "20/0/init/body/48/argument/1/expression/alternate/3/3/expression/right/15/9/expression/right/1": {
+          "type": "element",
+          "hash": "493f63d0d0fc87bd39855ee0577db4cf",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:Navigation></element:Navigation> Live Location Tracker"
+        },
+        "20/0/init/body/48/argument/1/expression/alternate/3/3/expression/right/3/3/1": {
+          "type": "element",
+          "hash": "3807c13bbf8935747c3c3e99f4e2d8ca",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Task Creator"
+        },
+        "20/0/init/body/48/argument/1/expression/alternate/3/3/expression/right/3/3/3": {
+          "type": "element",
+          "hash": "e538c309571fb980449e55dc4764504d",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Posted <function:Date.toLocaleDateString/>"
+        },
+        "20/0/init/body/48/argument/1/expression/alternate/3/3/expression/right/7/expression/right/1/1/1": {
+          "type": "element",
+          "hash": "7ff71029284b48606b39059a4803fc8e",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Live Task Tracking"
+        },
+        "20/0/init/body/48/argument/1/expression/alternate/3/3/expression/right/7/expression/right/1/1/3": {
+          "type": "element",
+          "hash": "bd441241f8975568ce234db90065925c",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Track location, chat, and progress in real-time"
+        },
+        "20/0/init/body/48/argument/1/expression/alternate/3/3/expression/right/7/expression/right/1/3": {
+          "type": "element",
+          "hash": "0e806b6fb5bfde2f4dc087057197bbb1",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:Map></element:Map> Open Tracker"
+        },
+        "20/0/init/body/48/argument/1/expression/alternate/7/expression/right/1/1": {
+          "type": "element",
+          "hash": "4b27f2f7c7ab122af41247e834dd16af",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:MessageSquare></element:MessageSquare> Chat with {otherUserProfile.full_name}"
+        },
+        "20/0/init/body/48/argument/1/expression/consequent/1/1/1": {
+          "type": "element",
+          "hash": "852e2a5e14c228fb2cc799fc662564f1",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Task Tracker: {taskData.title}"
+        }
+      }
+    },
+    "components/TaskLiveTracker.tsx": {
+      "scopes": {
+        "8/0/init/body/20/consequent/0/argument/1": {
+          "type": "element",
+          "hash": "f1dbb173e21f3647e4c9edb6b4e4e01d",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Task not found"
+        },
+        "8/0/init/body/21/argument/3/11/expression/right/1": {
+          "type": "element",
+          "hash": "958a9159267ae2ee39de6613512182cc",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:Navigation></element:Navigation> Live Location"
+        },
+        "8/0/init/body/21/argument/3/11/expression/right/3": {
+          "type": "element",
+          "hash": "026dcedd712e9a139975e21e464ec933",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Task performer is sharing their live location"
+        },
+        "8/0/init/body/21/argument/3/11/expression/right/5": {
+          "type": "element",
+          "hash": "5bcc2688829cd1654e0059230988aeae",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Last updated: <function:Date.toLocaleTimeString/>"
+        },
+        "8/0/init/body/21/argument/3/19/1": {
+          "type": "element",
+          "hash": "cad76b1b09f27ae730e5266e544a963d",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Progress Timeline"
+        },
+        "8/0/init/body/21/argument/3/19/3/1/expression/alternate/1": {
+          "type": "element",
+          "hash": "1306ed67d94280f5ca664d5aed3d917a",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "No progress updates yet"
+        },
+        "8/0/init/body/21/argument/3/23/1": {
+          "type": "element",
+          "hash": "f760c4f52f6a02bc24379f11c33fd1cf",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Task Details"
+        },
+        "8/0/init/body/21/argument/3/23/3/1/1": {
+          "type": "element",
+          "hash": "6e3258d4cf5835177d174a5259a9cfd6",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Price"
+        },
+        "8/0/init/body/21/argument/3/23/3/3/1": {
+          "type": "element",
+          "hash": "dc599e0781bd46bedc5bd430659a6169",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Estimated Time"
+        },
+        "8/0/init/body/21/argument/3/23/3/5/1": {
+          "type": "element",
+          "hash": "1b0340cd175aa5a2be745a0d54908466",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Category"
+        },
+        "8/0/init/body/21/argument/3/23/3/7/1": {
+          "type": "element",
+          "hash": "6045b4ff97fb7dca19ebadfa2e34a700",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Created"
+        },
+        "8/0/init/body/21/argument/3/27/expression/right/1": {
+          "type": "element",
+          "hash": "9b101d59bff9f929ca1810b95e483a4e",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Task Performer"
+        },
+        "8/0/init/body/21/argument/3/27/expression/right/3/3/1": {
+          "type": "element",
+          "hash": "9b101d59bff9f929ca1810b95e483a4e",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Task Performer"
+        },
+        "8/0/init/body/21/argument/3/3/1/3/1": {
+          "type": "element",
+          "hash": "98c939c4e9968da636b6f13a562d7730",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Current Status: <expression/>"
+        },
+        "8/0/init/body/21/argument/3/3/1/3/3/expression/right": {
+          "type": "element",
+          "hash": "e10f20646561e2d4026023cce7e8476b",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Last updated: <function:formatTimestamp/>"
+        },
+        "8/0/init/body/21/argument/3/7/expression/right/1": {
+          "type": "element",
+          "hash": "bc48ad1e6495f92f37405666448b9408",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:Navigation></element:Navigation> Location Sharing"
+        },
+        "8/0/init/body/21/argument/3/7/expression/right/3/expression/alternate/1": {
+          "type": "element",
+          "hash": "ab3c15770d9342d1909e88eb4f3ed9ae",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:CheckCircle></element:CheckCircle> Location sharing is active"
+        },
+        "8/0/init/body/21/argument/3/7/expression/right/3/expression/alternate/3": {
+          "type": "element",
+          "hash": "7039af0d72fbab0d94aecc03ba367949",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Stop Location Sharing"
+        },
+        "8/0/init/body/21/argument/3/7/expression/right/3/expression/consequent/1": {
+          "type": "element",
+          "hash": "2569e906845aa9ad9add517ce12aac58",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Share your live location with the task creator so they can track your progress."
+        },
+        "8/0/init/body/21/argument/3/7/expression/right/3/expression/consequent/3": {
+          "type": "element",
+          "hash": "c58c6bf69c0a4dcbf32cc94d98eb0a52",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Start Location Sharing"
+        }
+      }
+    },
     "components/TaskMarketplace.tsx": {
       "scopes": {
         "13/0/init/body/37/0/init/body/3/argument/3": {
@@ -3187,6 +3759,138 @@
           "skip": false,
           "overrides": {},
           "content": "<expression/> miles away"
+        }
+      }
+    },
+    "components/TaskStatusUpdate.tsx": {
+      "scopes": {
+        "11/0/init/body/24/argument/1/1/expression/alternate/1/5/1": {
+          "type": "element",
+          "hash": "f75d1a2a9a1d3789789758aeac557dbe",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Update Task Status"
+        },
+        "11/0/init/body/24/argument/1/1/expression/alternate/1/7": {
+          "type": "element",
+          "hash": "8a13de2af10681fc8231246e43d15d42",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Keep the task creator updated on your progress"
+        },
+        "11/0/init/body/24/argument/1/1/expression/alternate/3/11/1": {
+          "type": "element",
+          "hash": "6d9a527f11e38447312bff0071caf000",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Current Status:"
+        },
+        "11/0/init/body/24/argument/1/1/expression/alternate/3/15/1": {
+          "type": "element",
+          "hash": "5e5f1302c58e5405bb79d382841d09e5",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:Zap></element:Zap> Next step:"
+        },
+        "11/0/init/body/24/argument/1/1/expression/alternate/3/15/3/11/3": {
+          "type": "element",
+          "hash": "03f7ced1b840f21cac8ba433fdfb0097",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Earn +<function:getXpForStatus/> XP for this update"
+        },
+        "11/0/init/body/24/argument/1/1/expression/alternate/3/15/3/3/1": {
+          "type": "element",
+          "hash": "0e2fb9b1902b591448942a8e44d36cd5",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Add a note (optional)"
+        },
+        "11/0/init/body/24/argument/1/1/expression/alternate/3/15/3/3/3-placeholder": {
+          "type": "attribute",
+          "hash": "ee2881ab58174a40053962a7a392f827",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Add details about this status update..."
+        },
+        "11/0/init/body/24/argument/1/1/expression/alternate/3/15/3/5/3": {
+          "type": "element",
+          "hash": "98b65b57c4b7f4cc50460dfcab350f8d",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Open chat after updating status"
+        },
+        "11/0/init/body/24/argument/1/1/expression/alternate/3/15/3/7/1/1/1/expression/alternate/3": {
+          "type": "element",
+          "hash": "bd37b2a0882f12e849d4d0278dd1c172",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Mark as {nextStatusLabel}"
+        },
+        "11/0/init/body/24/argument/1/1/expression/alternate/3/15/3/7/3-title": {
+          "type": "attribute",
+          "hash": "ec0a3913e7e5046dfbb2d39394eb132d",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Preview audio announcement"
+        },
+        "11/0/init/body/24/argument/1/1/expression/alternate/3/19/1": {
+          "type": "element",
+          "hash": "07f844f311e64f93eae1a77b894ce8b7",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:Trophy></element:Trophy> Or select a specific status:"
+        },
+        "11/0/init/body/24/argument/1/1/expression/alternate/3/19/3/1/expression/0/body/1/1/5": {
+          "type": "element",
+          "hash": "871912f01111c6136eb5621c360be42b",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:Star></element:Star> +<function:getXpForStatus/> XP"
+        },
+        "11/0/init/body/24/argument/1/1/expression/alternate/3/23/1/3": {
+          "type": "element",
+          "hash": "daf39cd7a4c60af4b27244184f5d02bf",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Remember to communicate with the task creator about any changes or delays. Clear communication leads to better ratings and more opportunities!"
+        },
+        "11/0/init/body/24/argument/1/1/expression/alternate/3/27/1": {
+          "type": "element",
+          "hash": "25b06367926e28e1cf86d51b92ed9802",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Cancel"
+        },
+        "11/0/init/body/24/argument/1/1/expression/alternate/3/7/expression/right": {
+          "type": "element",
+          "hash": "815be1d29cb59b85dc8b5caebc62798c",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:Star></element:Star> +{xpGained} XP"
+        },
+        "11/0/init/body/24/argument/1/1/expression/consequent/1/1": {
+          "type": "element",
+          "hash": "d29a1c2fbfdd16669ab47346b29d15b5",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:MessageSquare></element:MessageSquare> Chat with Task <expression/>"
         }
       }
     },

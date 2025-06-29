@@ -2,6 +2,7 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import path from 'path';
 import dotenv from 'dotenv';
+import lingoCompiler from "lingo.dev/compiler";
 
 // Load environment variables from .env file
 dotenv.config();
@@ -18,4 +19,10 @@ const viteConfig = {
   },
 };
 
-export default defineConfig(viteConfig);
+export default defineConfig(() =>
+  lingoCompiler.vite({
+    sourceRoot: "src",
+    targetLocales: ["es", "fr", "de"],
+    models: "lingo.dev", // Using Lingo.dev Engine
+  })(viteConfig),
+);

@@ -1,0 +1,33 @@
+import React, { useEffect, useState, useRef } from 'react';
+import { Zap, ArrowRight, BookOpen, Coffee, Package, Star, Search, Filter, Bell, Bike, Dumbbell, Users, Utensils, Dog, Car, PartyPopper, GraduationCap, MessageSquare, Shield, HelpCircle, Info, Settings, Menu, ChevronDown, Wallet, ListTodo, Home, User, LogIn, UserPlus, Mail, Award, Trophy, Volume2, Languages, Bug, X } from 'lucide-react';
+import { Toaster, toast } from 'react-hot-toast';
+import { useGeolocation } from './hooks/useGeolocation';
+import { Location } from './lib/locationService';
+import TaskMarketplace from './components/TaskMarketplace';
+import TaskTemplates from './components/TaskTemplates';
+import UserProfile from './components/UserProfile';
+import ChatList from './components/ChatList';
+import Auth from './components/Auth';
+import CreateTask from './components/CreateTask';
+import SafetyFeatures from './components/SafetyFeatures';
+import FAQSupport from './components/FAQSupport';
+import LearnMoreModal from './components/LearnMoreModal';
+import NotificationsModal from './components/NotificationsModal';
+import WalletModal from './components/WalletModal';
+import QuickStartGuide from './components/QuickStartGuide';
+import TaskPreview from './components/TaskPreview';
+import TaskCheckoutSuccess from './components/TaskCheckoutSuccess';
+import { auth } from './lib/firebase';
+import { onAuthStateChanged } from 'firebase/auth';
+import { subscribeToAuthChanges } from './lib/auth';
+import { notificationService } from './lib/database';
+import SafeWalkRequestForm from './components/SafeWalkRequestForm';
+import VoiceAssistant from './components/VoiceAssistant';
+import LanguageSettingsModal from './components/LanguageSettingsModal';
+import { useTranslation } from './components/TranslationProvider';
+import { LocaleSwitcher } from "lingo.dev/react/client";
+import AdminTools from './components/AdminTools';
+import SentryTest from './components/SentryTest';
+import * as Sentry from "@sentry/react";
+
+// Rest of the App component remains the same

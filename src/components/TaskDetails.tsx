@@ -22,9 +22,10 @@ interface TaskDetailsProps {
   task: any;
   onClose: () => void;
   onAccept?: () => void;
+  onTaskCompleted?: () => void;
 }
 
-const TaskDetails: React.FC<TaskDetailsProps> = ({ task, onClose, onAccept }) => {
+const TaskDetails: React.FC<TaskDetailsProps> = ({ task, onClose, onAccept, onTaskCompleted }) => {
   const [loading, setLoading] = useState(false);
   const [showChat, setShowChat] = useState(false);
   const [currentUser, setCurrentUser] = useState<any>(null);
@@ -313,6 +314,11 @@ const TaskDetails: React.FC<TaskDetailsProps> = ({ task, onClose, onAccept }) =>
       loadProgressUpdates();
       setShowStatusUpdateForm(false);
       setStatusUpdateNote('');
+      
+      // If task was completed, call the onTaskCompleted callback
+      if (status === 'completed' && onTaskCompleted) {
+        onTaskCompleted();
+      }
     } catch (error) {
       console.error('Error updating task progress:', error);
       toast.error('Error updating task progress');

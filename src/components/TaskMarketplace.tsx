@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Search, Filter, MapPin, Clock, DollarSign, Tag, User, Map as MapIcon, List, AlertCircle, CheckCircle, X as XIcon, Package, PlusCircle, Flame, ArrowRight, MessageSquare, Briefcase } from 'lucide-react';
+import { Search, Filter, MapPin, Clock, DollarSign, Tag, User, Map as MapIcon, List, AlertCircle, CheckCircle, X as XIcon, Package, PlusCircle, Flame, ArrowRight, MessageSquare, Briefcase, History } from 'lucide-react';
 import InteractiveCampusMap from './InteractiveCampusMap';
 import TaskDetails from './TaskDetails';
 import { Location } from '../lib/locationService';
@@ -33,6 +33,7 @@ const TaskMarketplace: React.FC<TaskMarketplaceProps> = ({ userLocation }) => {
   const [showStatusUpdate, setShowStatusUpdate] = useState(false);
   const [selectedTaskForUpdate, setSelectedTaskForUpdate] = useState<any>(null);
   const [showFilters, setShowFilters] = useState(false);
+  const [showCompletedNotification, setShowCompletedNotification] = useState(false);
 
   useEffect(() => {
     getCurrentUser();
@@ -85,10 +86,13 @@ const TaskMarketplace: React.FC<TaskMarketplaceProps> = ({ userLocation }) => {
       filters.push({ field: 'created_by', operator: '!=', value: currentUser.id });
     } else if (activeTab === 'accepted') {
       filters.push({ field: 'accepted_by', operator: '==', value: currentUser.id });
-      // Show tasks that are not open (accepted, in_progress, etc.)
+      // Show tasks that are not open and not completed
       filters.push({ field: 'status', operator: '!=', value: 'open' });
+      filters.push({ field: 'status', operator: '!=', value: 'completed' });
     } else if (activeTab === 'created') {
       filters.push({ field: 'created_by', operator: '==', value: currentUser.id });
+      // Don't show completed tasks
+      filters.push({ field: 'status', operator: '!=', value: 'completed' });
     }
 
     if (selectedCategory !== 'all') {
@@ -273,6 +277,15 @@ const TaskMarketplace: React.FC<TaskMarketplaceProps> = ({ userLocation }) => {
     setSelectedTaskForUpdate(null);
     // Refresh the task list
     setupTaskSubscriptions();
+  };
+
+  const handleViewTaskHistory = () => {
+    // Navigate to task history
+    setShowCompletedNotification(false);
+    window.dispatchEvent(new CustomEvent('open-profile'));
+    // Set the active tab to history in the profile component
+    const event = new CustomEvent('set-profile-tab', { detail: { tab: 'history' } });
+    window.dispatchEvent(event);
   };
 
   const filteredTasks = tasks.filter(task =>
@@ -468,7 +481,24 @@ const TaskMarketplace: React.FC<TaskMarketplaceProps> = ({ userLocation }) => {
         </div>
       </div>
       
-      {/* Search and Filters - Mobile Collapsed Version */}
+      {/* Completed Tasks Notification */}
+      {showCompletedNotification && (
+        <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-6 flex items-center justify-between">
+          <div className="flex items-center">
+            <CheckCircle className="w-5 h-5 text-green-500 mr-2" />
+            <p className="text-green-800">Completed tasks are now in your Task History.</p>
+          </div>
+          <button
+            onClick={handleViewTaskHistory}
+            className="bg-green-600 text-white px-3 py-1 rounded-lg text-sm hover:bg-green-700 transition-colors flex items-center"
+          >
+            <History className="w-4 h-4 mr-1" />
+            View History
+          </button>
+        </div>
+      )}
+      
+      {/* Mobile Search and Filters */}
       <div className="md:hidden mb-4">
         <div className="flex space-x-2">
           <div className="relative flex-1">
@@ -756,6 +786,12 @@ const TaskMarketplace: React.FC<TaskMarketplaceProps> = ({ userLocation }) => {
           task={selectedTask}
           onClose={() => setSelectedTask(null)}
           onAccept={() => handleAcceptTask(selectedTask.id)}
+          onTaskCompleted={() => {
+            setSelectedTask(null);
+            setShowCompletedNotification(true);
+            // Refresh task list
+            setupTaskSubscriptions();
+          }}
         />
       )}
 
@@ -763,7 +799,13 @@ const TaskMarketplace: React.FC<TaskMarketplaceProps> = ({ userLocation }) => {
         <TaskStatusUpdate
           task={selectedTaskForUpdate}
           onClose={() => setShowStatusUpdate(false)}
-          onStatusUpdated={handleStatusUpdateComplete}
+          onStatusUpdated={() => {
+            handleStatusUpdateComplete();
+            // If the task was completed, show the notification
+            if (selectedTaskForUpdate.status === 'completed') {
+              setShowCompletedNotification(true);
+            }
+          }}
         />
       )}
 

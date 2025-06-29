@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { X, Package, Clock, Truck, Flag, CheckCircle, MessageSquare, ArrowRight, Star, Trophy, Zap, Shield, Volume as VolumeUp } from 'lucide-react';
 import { taskService, taskProgressService, notificationService, userStatsService } from '../lib/database';
 import { walletService } from '../lib/walletService';

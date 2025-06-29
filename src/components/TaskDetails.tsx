@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { X, MapPin, Clock, DollarSign, User, MessageSquare, Shield, AlertTriangle, CheckCircle, Loader, XCircle, Navigation, CreditCard, Package, Truck, Flag, ArrowRight, Trophy, Star, Map, Info, Briefcase, Languages } from 'lucide-react';
+import { X, MapPin, Clock, DollarSign, User, MessageSquare, Shield, AlertTriangle, CheckCircle, Loader, XCircle, Navigation, CreditCard, Package, Truck, Flag, ArrowRight, Trophy, Star, Map, Info, Briefcase, Languages, Trash2 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import TaskProgress from './TaskProgress';
 import GameChat from './GameChat';
@@ -18,6 +18,7 @@ import TranslatableText from './TranslatableText';
 import TranslateButton from './TranslateButton';
 import { useTranslation } from './TranslationProvider';
 import TaskStatusUpdate from './TaskStatusUpdate';
+import TaskCancelModal from './TaskCancelModal';
 
 interface TaskDetailsProps {
   task: any;
@@ -49,6 +50,7 @@ const TaskDetails: React.FC<TaskDetailsProps> = ({ task, onClose, onAccept, onTa
   const { currentLanguage } = useTranslation();
   const [messages, setMessages] = useState<any[]>([]);
   const [chatLoading, setChatLoading] = useState(true);
+  const [showCancelModal, setShowCancelModal] = useState(false);
 
   useEffect(() => {
     getCurrentUser();
@@ -416,6 +418,16 @@ const TaskDetails: React.FC<TaskDetailsProps> = ({ task, onClose, onAccept, onTa
     }
   };
 
+  const handleCancelTask = () => {
+    setShowCancelModal(true);
+  };
+
+  const handleTaskCancelled = () => {
+    setShowCancelModal(false);
+    toast.success('Task cancelled successfully');
+    onClose();
+  };
+
   const isTaskParticipant = currentUser && (
     taskData.created_by === currentUser.id || taskData.accepted_by === currentUser.id
   );
@@ -595,7 +607,7 @@ const TaskDetails: React.FC<TaskDetailsProps> = ({ task, onClose, onAccept, onTa
 
               {activeTab === 'details' && (
                 <div className="p-6 space-y-6 flex-1 overflow-y-auto">
-                  {/* Task Creator Info */}
+                  {/* Task Creator Info and Action Buttons */}
                   <div className="flex items-center justify-between">
                     <div className="flex items-center">
                       <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#0038FF] to-[#FF5A1F] flex items-center justify-center shadow-lg">
@@ -609,31 +621,44 @@ const TaskDetails: React.FC<TaskDetailsProps> = ({ task, onClose, onAccept, onTa
                       </div>
                     </div>
                     
-                    {/* Update Status Button (for task performer) - Moved to top section */}
-                    {isTaskPerformer && taskData.status !== 'open' && taskData.status !== 'completed' && (
-                      <StarBorder color="#0038FF">
+                    <div className="flex space-x-2">
+                      {/* Cancel Task Button - Added here */}
+                      {isTaskParticipant && taskData.status !== 'completed' && taskData.status !== 'cancelled' && (
                         <button
-                          onClick={() => setShowStatusUpdateForm(true)}
-                          className="bg-gradient-to-r from-[#0038FF] to-[#0021A5] text-white px-4 py-2 rounded-lg font-semibold hover:opacity-90 transition duration-200 flex items-center justify-center"
+                          onClick={handleCancelTask}
+                          className="bg-red-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-red-600 transition-colors flex items-center"
                         >
-                          <ArrowRight className="w-5 h-5 mr-2" />
-                          Update Task Status
+                          <Trash2 className="w-4 h-4 mr-2" />
+                          Cancel Task
                         </button>
-                      </StarBorder>
-                    )}
-                    
-                    {/* Complete Task Button (for task creator) - Moved to top section */}
-                    {isTaskCreator && taskData.status !== 'open' && taskData.status !== 'completed' && (
-                      <StarBorder color="#10B981">
-                        <button
-                          onClick={() => updateTaskProgress('completed', 'Task completed')}
-                          className="bg-gradient-to-r from-green-600 to-green-500 text-white px-4 py-2 rounded-lg font-semibold hover:opacity-90 transition duration-200 flex items-center justify-center"
-                        >
-                          <CheckCircle className="w-5 h-5 mr-2" />
-                          Mark as Completed
-                        </button>
-                      </StarBorder>
-                    )}
+                      )}
+                      
+                      {/* Update Status Button (for task performer) */}
+                      {isTaskPerformer && taskData.status !== 'open' && taskData.status !== 'completed' && taskData.status !== 'cancelled' && (
+                        <StarBorder color="#0038FF">
+                          <button
+                            onClick={() => setShowStatusUpdateForm(true)}
+                            className="bg-gradient-to-r from-[#0038FF] to-[#0021A5] text-white px-4 py-2 rounded-lg font-semibold hover:opacity-90 transition duration-200 flex items-center justify-center"
+                          >
+                            <ArrowRight className="w-5 h-5 mr-2" />
+                            Update Status
+                          </button>
+                        </StarBorder>
+                      )}
+                      
+                      {/* Complete Task Button (for task creator) */}
+                      {isTaskCreator && taskData.status !== 'open' && taskData.status !== 'completed' && taskData.status !== 'cancelled' && (
+                        <StarBorder color="#10B981">
+                          <button
+                            onClick={() => updateTaskProgress('completed', 'Task completed')}
+                            className="bg-gradient-to-r from-green-600 to-green-500 text-white px-4 py-2 rounded-lg font-semibold hover:opacity-90 transition duration-200 flex items-center justify-center"
+                          >
+                            <CheckCircle className="w-5 h-5 mr-2" />
+                            Mark Complete
+                          </button>
+                        </StarBorder>
+                      )}
+                    </div>
                   </div>
 
                   {/* Unified Tracker Button - Only show for in-progress tasks */}
@@ -1002,6 +1027,15 @@ const TaskDetails: React.FC<TaskDetailsProps> = ({ task, onClose, onAccept, onTa
             refreshTaskData();
             loadProgressUpdates();
           }}
+        />
+      )}
+
+      {/* Cancel Task Modal */}
+      {showCancelModal && (
+        <TaskCancelModal
+          task={taskData}
+          onClose={() => setShowCancelModal(false)}
+          onCancelled={handleTaskCancelled}
         />
       )}
     </div>

@@ -42,11 +42,27 @@ const audioManager = {
         reject(e);
       };
       
-      audio.play().catch(err => {
+      // Use a try-catch block for the play() call
+      try {
+        const playPromise = audio.play();
+        
+        // Modern browsers return a promise from play()
+        if (playPromise !== undefined) {
+          playPromise.catch(err => {
+            console.warn('Audio playback error:', err.message);
+            URL.revokeObjectURL(audioUrl);
+            this.isPlaying = false;
+            this.currentAudio = null;
+            resolve(); // Resolve anyway to prevent blocking
+          });
+        }
+      } catch (err) {
+        console.warn('Audio playback error:', err);
+        URL.revokeObjectURL(audioUrl);
         this.isPlaying = false;
         this.currentAudio = null;
-        reject(err);
-      });
+        resolve(); // Resolve anyway to prevent blocking
+      }
     });
   },
   

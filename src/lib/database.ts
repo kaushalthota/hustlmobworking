@@ -930,30 +930,21 @@ export const messageService = {
 
   async sendMessage(taskId: string, messageData: any): Promise<string> {
     try {
-      // Get task details to identify participants
-      const taskDoc = await getDoc(doc(db, 'tasks', taskId));
+      // Extract sender and recipient from messageData
+      const senderId = messageData.sender_id;
+      const recipientId = messageData.recipient_id;
       
-      if (!taskDoc.exists()) {
-        throw new Error('Task not found');
-      }
-      
-      const taskData = taskDoc.data();
-      const creatorId = taskData.created_by;
-      const performerId = taskData.accepted_by;
-      
-      // Ensure both creator and performer exist
-      if (!creatorId || !performerId) {
-        throw new Error('Task must have both creator and performer');
+      if (!senderId || !recipientId) {
+        throw new Error('Message must have both sender_id and recipient_id');
       }
       
       // Find or create a chat thread between these users
-      const chatThreadId = await this.findOrCreateChatThread(creatorId, performerId, taskId);
+      const chatThreadId = await this.findOrCreateChatThread(senderId, recipientId, taskId);
       
       // Add the message to the chat thread
       const messagesRef = collection(db, 'user_chats', chatThreadId, 'messages');
       const docRef = await addDoc(messagesRef, {
         ...messageData,
-        task_id: taskId, // Include task ID for reference
         created_at: serverTimestamp()
       });
       
@@ -966,21 +957,37 @@ export const messageService = {
         updated_at: serverTimestamp()
       });
       
-      // Also update the task-specific chat for backward compatibility
-      await setDoc(doc(db, 'chats', taskId), {
-        task_id: taskId,
-        updated_at: serverTimestamp(),
-        last_message: messageData.content,
-        last_message_time: serverTimestamp(),
-        last_sender: messageData.sender_id
-      }, { merge: true });
-      
-      // Add the message to the task-specific chat collection
-      const taskMessagesRef = collection(db, 'chats', taskId, 'messages');
-      await addDoc(taskMessagesRef, {
-        ...messageData,
-        created_at: serverTimestamp()
-      });
+      // Only update task-specific chat if task exists and taskId is provided
+      if (taskId) {
+        try {
+          // Check if task exists before updating task-specific chat
+          const taskDoc = await getDoc(doc(db, 'tasks', taskId));
+          
+          if (taskDoc.exists()) {
+            // Update the task-specific chat for backward compatibility
+            await setDoc(doc(db, 'chats', taskId), {
+              task_id: taskId,
+              updated_at: serverTimestamp(),
+              last_message: messageData.content,
+              last_message_time: serverTimestamp(),
+              last_sender: messageData.sender_id
+            }, { merge: true });
+            
+            // Add the message to the task-specific chat collection
+            const taskMessagesRef = collection(db, 'chats', taskId, 'messages');
+            await addDoc(taskMessagesRef, {
+              ...messageData,
+              created_at: serverTimestamp()
+            });
+          }
+        } catch (taskError) {
+          // Log the error but don't fail the entire message send operation
+          captureException(taskError, {
+            tags: { action: 'send_message_task_update' },
+            extra: { taskId, messageData }
+          });
+        }
+      }
       
       return docRef.id;
     } catch (error) {

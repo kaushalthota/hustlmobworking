@@ -537,126 +537,129 @@ const UnifiedTaskTracker: React.FC<UnifiedTaskTrackerProps> = ({ taskId }) => {
       {/* Content */}
       <div className="flex-1 overflow-hidden">
         {activeTab === 'map' && (
-          <div className="h-full w-full">
-            <div ref={mapRef} className="w-full h-full"></div>
-            
-            {/* Location Controls */}
-            <div className="absolute top-4 left-4 bg-white rounded-lg shadow-lg p-4 max-w-xs">
-              <h3 className="font-medium mb-3 flex items-center">
-                <Navigation className="w-5 h-5 text-[#0038FF] mr-2" />
-                Live Location
-              </h3>
+          <div className="h-full flex flex-col">
+            {/* Map */}
+            <div className="flex-1 relative">
+              <div ref={mapRef} className="w-full h-full"></div>
               
-              {distance !== null && duration !== null && (
-                <div className="mb-4 space-y-2">
-                  <div className="flex items-center justify-between">
-                    <span className="text-gray-600 text-sm">Distance:</span>
-                    <span className="font-medium text-sm">{formatDistance(distance)}</span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-gray-600 text-sm">Travel Time:</span>
-                    <span className="font-medium text-sm">{formatDuration(duration)}</span>
-                  </div>
-                  {estimatedArrival && (
+              {/* Location Controls */}
+              <div className="absolute top-4 left-4 bg-white rounded-lg shadow-lg p-4 max-w-xs">
+                <h3 className="font-medium mb-3 flex items-center">
+                  <Navigation className="w-5 h-5 text-[#0038FF] mr-2" />
+                  Live Location
+                </h3>
+                
+                {distance !== null && duration !== null && (
+                  <div className="mb-4 space-y-2">
                     <div className="flex items-center justify-between">
-                      <span className="text-gray-600 text-sm">Arrival Time:</span>
-                      <span className="font-medium text-sm">{estimatedArrival}</span>
+                      <span className="text-gray-600 text-sm">Distance:</span>
+                      <span className="font-medium text-sm">{formatDistance(distance)}</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-gray-600 text-sm">Travel Time:</span>
+                      <span className="font-medium text-sm">{formatDuration(duration)}</span>
+                    </div>
+                    {estimatedArrival && (
+                      <div className="flex items-center justify-between">
+                        <span className="text-gray-600 text-sm">Arrival Time:</span>
+                        <span className="font-medium text-sm">{estimatedArrival}</span>
+                      </div>
+                    )}
+                  </div>
+                )}
+                
+                {isTaskPerformer && (
+                  <div className="space-y-2">
+                    {!isTrackingLocation ? (
+                      <button
+                        onClick={startLocationTracking}
+                        className="w-full bg-[#0038FF] text-white px-3 py-2 rounded-lg text-sm hover:bg-[#0021A5] transition-colors flex items-center justify-center"
+                      >
+                        <Navigation className="w-4 h-4 mr-1" />
+                        Share Location
+                      </button>
+                    ) : (
+                      <>
+                        <div className="flex items-center text-green-600 mb-2">
+                          <div className="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse"></div>
+                          <span className="text-sm">Sharing your location</span>
+                        </div>
+                        <button
+                          onClick={stopLocationTracking}
+                          className="w-full bg-red-500 text-white px-3 py-2 rounded-lg text-sm hover:bg-red-600 transition-colors"
+                        >
+                          Stop Sharing
+                        </button>
+                      </>
+                    )}
+                  </div>
+                )}
+                
+                {isTaskCreator && performerLocation && (
+                  <div className="text-sm text-green-600">
+                    <div className="flex items-center">
+                      <div className="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse"></div>
+                      Helper is sharing location
+                    </div>
+                    {performerLocation.timestamp && (
+                      <p className="text-xs text-gray-500 mt-1">
+                        Updated {new Date(performerLocation.timestamp).toLocaleTimeString()}
+                      </p>
+                    )}
+                  </div>
+                )}
+                
+                {locationError && (
+                  <div className="mt-2 p-2 bg-red-50 rounded text-xs flex items-start">
+                    <AlertTriangle className="w-3 h-3 text-red-500 mt-0.5 mr-1 flex-shrink-0" />
+                    <span className="text-red-700">{locationError}</span>
+                  </div>
+                )}
+              </div>
+              
+              {/* Legend */}
+              <div className="absolute bottom-4 right-4 bg-white rounded-lg shadow-lg p-3">
+                <div className="text-xs space-y-1">
+                  <div className="flex items-center">
+                    <div className="w-3 h-3 bg-[#FA4616] mr-2"></div>
+                    <span>Task Location</span>
+                  </div>
+                  {performerLocation && (
+                    <div className="flex items-center">
+                      <div className="w-3 h-3 bg-[#0021A5] rounded-full mr-2"></div>
+                      <span>Helper Location</span>
+                    </div>
+                  )}
+                  {locationHistory.length > 0 && (
+                    <div className="flex items-center">
+                      <div className="w-3 h-3 bg-[#FF5A1F] mr-2" style={{ opacity: 0.6 }}></div>
+                      <span>Location History</span>
                     </div>
                   )}
                 </div>
-              )}
+              </div>
               
-              {isTaskPerformer && (
-                <div className="space-y-2">
-                  {!isTrackingLocation ? (
-                    <button
-                      onClick={startLocationTracking}
-                      className="w-full bg-[#0038FF] text-white px-3 py-2 rounded-lg text-sm hover:bg-[#0021A5] transition-colors flex items-center justify-center"
-                    >
-                      <Navigation className="w-4 h-4 mr-1" />
-                      Share Location
-                    </button>
-                  ) : (
-                    <>
-                      <div className="flex items-center text-green-600 mb-2">
-                        <div className="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse"></div>
-                        <span className="text-sm">Sharing your location</span>
-                      </div>
-                      <button
-                        onClick={stopLocationTracking}
-                        className="w-full bg-red-500 text-white px-3 py-2 rounded-lg text-sm hover:bg-red-600 transition-colors"
-                      >
-                        Stop Sharing
-                      </button>
-                    </>
-                  )}
-                </div>
-              )}
-              
-              {isTaskCreator && performerLocation && (
-                <div className="text-sm text-green-600">
-                  <div className="flex items-center">
-                    <div className="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse"></div>
-                    Helper is sharing location
-                  </div>
-                  {performerLocation.timestamp && (
-                    <p className="text-xs text-gray-500 mt-1">
-                      Updated {new Date(performerLocation.timestamp).toLocaleTimeString()}
-                    </p>
-                  )}
-                </div>
-              )}
-              
-              {locationError && (
-                <div className="mt-2 p-2 bg-red-50 rounded text-xs flex items-start">
-                  <AlertTriangle className="w-3 h-3 text-red-500 mt-0.5 mr-1 flex-shrink-0" />
-                  <span className="text-red-700">{locationError}</span>
-                </div>
-              )}
-            </div>
-            
-            {/* Legend */}
-            <div className="absolute bottom-4 right-4 bg-white rounded-lg shadow-lg p-3">
-              <div className="text-xs space-y-1">
+              {/* Emergency Contact */}
+              <div className="absolute bottom-4 left-4 bg-white rounded-lg shadow-lg p-3">
+                <h4 className="text-xs font-medium text-red-600 mb-1">Emergency Contact</h4>
                 <div className="flex items-center">
-                  <div className="w-3 h-3 bg-[#FA4616] mr-2"></div>
-                  <span>Task Location</span>
+                  <a 
+                    href="tel:3523921111"
+                    className="text-sm text-[#0038FF] hover:underline flex items-center"
+                  >
+                    <Phone className="w-3 h-3 mr-1" />
+                    (352) 392-1111
+                  </a>
                 </div>
-                {performerLocation && (
-                  <div className="flex items-center">
-                    <div className="w-3 h-3 bg-[#0021A5] rounded-full mr-2"></div>
-                    <span>Helper Location</span>
-                  </div>
-                )}
-                {locationHistory.length > 0 && (
-                  <div className="flex items-center">
-                    <div className="w-3 h-3 bg-[#FF5A1F] mr-2" style={{ opacity: 0.6 }}></div>
-                    <span>Location History</span>
-                  </div>
-                )}
-              </div>
-            </div>
-            
-            {/* Emergency Contact */}
-            <div className="absolute bottom-4 left-4 bg-white rounded-lg shadow-lg p-3">
-              <h4 className="text-xs font-medium text-red-600 mb-1">Emergency Contact</h4>
-              <div className="flex items-center">
-                <a 
-                  href="tel:3523921111"
-                  className="text-sm text-[#0038FF] hover:underline flex items-center"
-                >
-                  <Phone className="w-3 h-3 mr-1" />
-                  (352) 392-1111
-                </a>
-              </div>
-              <div className="flex items-center mt-1">
-                <a 
-                  href={`mailto:${supportEmail}?subject=URGENT: Safety Concern`}
-                  className="text-sm text-[#0038FF] hover:underline flex items-center"
-                >
-                  <Mail className="w-3 h-3 mr-1" />
-                  Email Support
-                </a>
+                <div className="flex items-center mt-1">
+                  <a 
+                    href={`mailto:${supportEmail}?subject=URGENT: Safety Concern`}
+                    className="text-sm text-[#0038FF] hover:underline flex items-center"
+                  >
+                    <Mail className="w-3 h-3 mr-1" />
+                    Email Support
+                  </a>
+                </div>
               </div>
             </div>
           </div>

@@ -19,6 +19,8 @@ import TranslateButton from './TranslateButton';
 import { useTranslation } from './TranslationProvider';
 import TaskStatusUpdate from './TaskStatusUpdate';
 import TaskCancelModal from './TaskCancelModal';
+import TaskProgressChat from './TaskProgressChat';
+import TaskDetailsChat from './TaskDetailsChat';
 
 interface TaskDetailsProps {
   task: any;
@@ -501,7 +503,7 @@ const TaskDetails: React.FC<TaskDetailsProps> = ({ task, onClose, onAccept, onTa
     if (!isTaskParticipant) return false;
     
     const status = getLatestProgressStatus();
-    return status !== 'open' && status !== 'completed';
+    return status !== 'open' && status !== 'completed' && status !== 'cancelled';
   };
 
   // Format hourly rate display
@@ -528,6 +530,10 @@ const TaskDetails: React.FC<TaskDetailsProps> = ({ task, onClose, onAccept, onTa
 
   const handleTranslateDescription = (translatedText: string) => {
     setTranslatedDescription(translatedText);
+  };
+
+  const handleStatusUpdate = (status: string) => {
+    updateTaskProgress(status);
   };
 
   return (
@@ -937,13 +943,13 @@ const TaskDetails: React.FC<TaskDetailsProps> = ({ task, onClose, onAccept, onTa
                       <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#0038FF]"></div>
                     </div>
                   ) : otherUserProfile ? (
-                    <GameChat
+                    <TaskDetailsChat
                       taskId={taskData.id}
                       currentUser={currentUser}
                       otherUser={otherUserProfile}
-                      showTypingIndicator={true}
-                      enableFileSharing={true}
-                      showUserProfile={true}
+                      progressUpdates={progressUpdates}
+                      taskStatus={taskData.status}
+                      onStatusUpdate={handleStatusUpdate}
                     />
                   ) : (
                     <div className="flex-1 flex flex-col items-center justify-center p-6 text-center">
@@ -974,10 +980,11 @@ const TaskDetails: React.FC<TaskDetailsProps> = ({ task, onClose, onAccept, onTa
                   </button>
                 </div>
                 <div className="flex-1">
-                  <GameChat
+                  <TaskProgressChat
                     taskId={taskData.id}
                     currentUser={currentUser}
                     otherUser={otherUserProfile}
+                    onStatusUpdate={handleStatusUpdate}
                   />
                 </div>
               </div>

@@ -1,13 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Send, User, X, Paperclip, Loader, Phone, Video, MoreVertical, Clock, CheckCircle, Package, Truck, Flag, AlertTriangle, MessageSquare, ArrowRight } from 'lucide-react';
+import { Send, User, X, Paperclip, Loader, MessageSquare, ArrowRight, CheckCircle, Package, Clock, Truck, Flag, AlertTriangle } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { collection, query, orderBy, onSnapshot, addDoc, serverTimestamp, updateDoc, doc, getDoc } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { db, storage } from '../lib/firebase';
 import { taskService, taskProgressService, messageService } from '../lib/database';
+import TaskStatusMessage from './TaskStatusMessage';
 import { StarBorder } from './ui/star-border';
 
-interface TaskChatProps {
+interface TaskProgressChatProps {
   taskId: string;
   currentUser: any;
   otherUser: any;
@@ -21,26 +22,21 @@ interface Message {
   sender_id: string;
   recipient_id?: string;
   image_url?: string;
-  file_url?: string;
-  file_name?: string;
-  file_type?: string;
   is_read?: boolean;
-  is_delivered?: boolean;
-  message_type?: 'text' | 'image' | 'file' | 'status_update';
+  message_type?: 'text' | 'image' | 'status_update';
   status_update?: {
     status: string;
     notes?: string;
   };
 }
 
-const TaskChat: React.FC<TaskChatProps> = ({ taskId, currentUser, otherUser, onStatusUpdate }) => {
+const TaskProgressChat: React.FC<TaskProgressChatProps> = ({ taskId, currentUser, otherUser, onStatusUpdate }) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState('');
   const [loading, setLoading] = useState(false);
   const [uploadingImage, setUploadingImage] = useState(false);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [imageFile, setImageFile] = useState<File | null>(null);
-  const [connectionStatus, setConnectionStatus] = useState<'connected' | 'connecting' | 'disconnected'>('connecting');
   const [taskData, setTaskData] = useState<any>(null);
   const [progressUpdates, setProgressUpdates] = useState<any[]>([]);
   const [showStatusOptions, setShowStatusOptions] = useState(false);
@@ -50,58 +46,20 @@ const TaskChat: React.FC<TaskChatProps> = ({ taskId, currentUser, otherUser, onS
 
   useEffect(() => {
     if (!taskId || !currentUser?.uid || !otherUser?.id) {
-      console.warn('TaskChat missing required props:', { taskId, currentUserUid: currentUser?.uid, otherUserId: otherUser?.id });
+      console.warn('TaskProgressChat missing required props:', { taskId, currentUserUid: currentUser?.uid, otherUserId: otherUser?.id });
       return;
     }
     
-    const unsubscribe = loadMessages();
     loadTaskData();
+    loadChatMessages();
     loadProgressUpdates();
     
     // Subscribe to task progress updates
     const progressUnsubscribe = taskProgressService.subscribeToTaskProgress(taskId, (progress) => {
       setProgressUpdates(progress);
-      
-      // Create status update messages for new progress updates
-      if (progress.length > 0) {
-        const latestProgress = progress[progress.length - 1];
-        
-        // Check if we already have a message for this progress update
-        const existingStatusMessage = messages.find(
-          msg => 
-            msg.message_type === 'status_update' && 
-            msg.status_update?.status === latestProgress.status &&
-            new Date(msg.created_at).getTime() === new Date(latestProgress.created_at).getTime()
-        );
-        
-        if (!existingStatusMessage) {
-          // Create a new status update message
-          const statusMessage: Message = {
-            id: `status-${Date.now()}`,
-            content: `Status updated to: ${formatStatus(latestProgress.status)}`,
-            created_at: latestProgress.created_at,
-            sender_id: latestProgress.user_id || 'system',
-            message_type: 'status_update',
-            status_update: {
-              status: latestProgress.status,
-              notes: latestProgress.notes
-            }
-          };
-          
-          // Add the status message to the messages array
-          setMessages(prev => [...prev, statusMessage].sort((a, b) => {
-            const dateA = new Date(a.created_at).getTime();
-            const dateB = new Date(b.created_at).getTime();
-            return dateA - dateB;
-          }));
-        }
-      }
     });
     
-    setConnectionStatus('connected');
-    
     return () => {
-      if (unsubscribe) unsubscribe();
       if (progressUnsubscribe) progressUnsubscribe();
     };
   }, [taskId, currentUser, otherUser]);
@@ -119,80 +77,21 @@ const TaskChat: React.FC<TaskChatProps> = ({ taskId, currentUser, otherUser, onS
     }
   };
 
+  const loadChatMessages = async () => {
+    try {
+      const chatMessages = await messageService.getMessages(taskId);
+      setMessages(chatMessages);
+    } catch (error) {
+      console.error('Error loading chat messages:', error);
+    }
+  };
+
   const loadProgressUpdates = async () => {
     try {
       const progress = await taskProgressService.getTaskProgress(taskId);
       setProgressUpdates(progress || []);
     } catch (error) {
       console.error('Error loading progress updates:', error);
-    }
-  };
-
-  const loadMessages = () => {
-    if (!taskId || !currentUser?.uid || !otherUser?.id) {
-      console.warn('Cannot load messages: missing required data');
-      return () => {};
-    }
-
-    // Use the messageService to get messages
-    return messageService.subscribeToMessages(taskId, (messageData) => {
-      // Combine regular messages with status update messages
-      let allMessages = [...messageData];
-      
-      // Add status update messages if they don't exist already
-      progressUpdates.forEach(update => {
-        const existingStatusMessage = allMessages.find(
-          msg => 
-            msg.message_type === 'status_update' && 
-            msg.status_update?.status === update.status &&
-            new Date(msg.created_at).getTime() === new Date(update.created_at).getTime()
-        );
-        
-        if (!existingStatusMessage) {
-          allMessages.push({
-            id: `status-${update.id}`,
-            content: `Status updated to: ${formatStatus(update.status)}`,
-            created_at: update.created_at,
-            sender_id: update.user_id || 'system',
-            message_type: 'status_update',
-            status_update: {
-              status: update.status,
-              notes: update.notes
-            }
-          });
-        }
-      });
-      
-      // Sort messages by timestamp
-      allMessages.sort((a, b) => {
-        const dateA = new Date(a.created_at).getTime();
-        const dateB = new Date(b.created_at).getTime();
-        return dateA - dateB;
-      });
-      
-      setMessages(allMessages);
-      
-      // Mark messages as read
-      markMessagesAsRead(messageData);
-      
-      scrollToBottom();
-      setConnectionStatus('connected');
-    });
-  };
-
-  const markMessagesAsRead = async (messageList: Message[]) => {
-    if (!currentUser?.uid) return;
-    
-    const unreadMessages = messageList.filter(
-      msg => msg.sender_id !== currentUser.uid && !msg.is_read
-    );
-    
-    for (const message of unreadMessages) {
-      try {
-        await messageService.markAsRead(taskId, message.id);
-      } catch (error) {
-        console.error('Error marking message as read:', error);
-      }
     }
   };
 
@@ -269,24 +168,6 @@ const TaskChat: React.FC<TaskChatProps> = ({ taskId, currentUser, otherUser, onS
       return;
     }
 
-    // Optimistic UI - add message immediately
-    const optimisticId = `temp-${Date.now()}`;
-    const optimisticMessage: Message = {
-      id: optimisticId,
-      content: newMessage.trim() || (imageFile ? 'Sending image...' : ''),
-      created_at: new Date(),
-      sender_id: currentUser.uid,
-      recipient_id: otherUser.id,
-      task_id: taskId,
-      image_url: imagePreview,
-      is_read: false
-    };
-
-    setMessages(prev => [...prev, optimisticMessage]);
-    setNewMessage('');
-    removeImagePreview();
-    scrollToBottom();
-
     setLoading(true);
     try {
       let imageUrl = null;
@@ -309,17 +190,17 @@ const TaskChat: React.FC<TaskChatProps> = ({ taskId, currentUser, otherUser, onS
       // Use messageService to send the message
       await messageService.sendMessage(taskId, messageData);
       
-      // Remove optimistic message since real one will come through subscription
-      setMessages(prev => prev.filter(msg => msg.id !== optimisticId));
+      setNewMessage('');
+      removeImagePreview();
+      
+      // Reload messages to include the new one
+      loadChatMessages();
       
       // Show success feedback
       toast.success('Message sent', { duration: 1000 });
     } catch (error) {
       console.error('Error sending message:', error);
       toast.error('Error sending message. Please try again.');
-      
-      // Remove optimistic message on error
-      setMessages(prev => prev.filter(msg => msg.id !== optimisticId));
     } finally {
       setLoading(false);
       setUploadingImage(false);
@@ -362,6 +243,9 @@ const TaskChat: React.FC<TaskChatProps> = ({ taskId, currentUser, otherUser, onS
       toast.success(`Task status updated to ${formatStatus(status)}`);
       setShowStatusOptions(false);
       setStatusNote('');
+      
+      // Reload progress updates
+      loadProgressUpdates();
     } catch (error) {
       console.error('Error updating task status:', error);
       toast.error('Error updating task status');
@@ -414,6 +298,8 @@ const TaskChat: React.FC<TaskChatProps> = ({ taskId, currentUser, otherUser, onS
         return <Flag className="w-5 h-5 text-green-500" />;
       case 'completed':
         return <CheckCircle className="w-5 h-5 text-green-500" />;
+      case 'cancelled':
+        return <AlertTriangle className="w-5 h-5 text-red-500" />;
       default:
         return <Clock className="w-5 h-5 text-gray-500" />;
     }
@@ -421,15 +307,6 @@ const TaskChat: React.FC<TaskChatProps> = ({ taskId, currentUser, otherUser, onS
 
   const isOwnMessage = (message: Message) => {
     return currentUser?.uid && message.sender_id === currentUser.uid;
-  };
-
-  const getConnectionStatusColor = () => {
-    switch (connectionStatus) {
-      case 'connected': return 'text-green-500';
-      case 'connecting': return 'text-yellow-500';
-      case 'disconnected': return 'text-red-500';
-      default: return 'text-gray-500';
-    }
   };
 
   const getNextStatus = () => {
@@ -448,6 +325,43 @@ const TaskChat: React.FC<TaskChatProps> = ({ taskId, currentUser, otherUser, onS
 
   const isTaskPerformer = currentUser && taskData && taskData.accepted_by === currentUser.id;
 
+  // Combine messages and progress updates into a single timeline
+  const getCombinedTimeline = () => {
+    const timeline: (Message | any)[] = [...messages];
+    
+    // Add progress updates as special messages
+    progressUpdates.forEach(update => {
+      // Check if we already have this update in the messages
+      const existingUpdate = timeline.find(
+        item => 
+          item.message_type === 'status_update' && 
+          item.status_update?.status === update.status &&
+          new Date(item.created_at).getTime() === new Date(update.created_at).getTime()
+      );
+      
+      if (!existingUpdate) {
+        timeline.push({
+          id: `status-${update.id}`,
+          content: `Status updated to: ${formatStatus(update.status)}`,
+          created_at: update.created_at,
+          sender_id: update.user_id || 'system',
+          message_type: 'status_update',
+          status_update: {
+            status: update.status,
+            notes: update.notes
+          }
+        });
+      }
+    });
+    
+    // Sort by timestamp
+    return timeline.sort((a, b) => {
+      const dateA = new Date(a.created_at).getTime();
+      const dateB = new Date(b.created_at).getTime();
+      return dateA - dateB;
+    });
+  };
+
   // Don't render if essential props are missing
   if (!taskId || !currentUser?.uid || !otherUser?.id) {
     return (
@@ -457,49 +371,10 @@ const TaskChat: React.FC<TaskChatProps> = ({ taskId, currentUser, otherUser, onS
     );
   }
 
+  const timeline = getCombinedTimeline();
+
   return (
     <div className="flex flex-col h-full bg-gray-50">
-      {/* Chat Header */}
-      <div className="p-4 border-b bg-white shadow-sm">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center">
-            {otherUser.avatar_url ? (
-              <img
-                src={otherUser.avatar_url}
-                alt={otherUser.full_name}
-                className="w-10 h-10 rounded-full object-cover"
-              />
-            ) : (
-              <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center">
-                <User className="w-6 h-6 text-gray-400" />
-              </div>
-            )}
-            <div className="ml-3">
-              <h3 className="font-medium">{otherUser.full_name}</h3>
-              <div className="flex items-center space-x-2">
-                <div className={`w-2 h-2 rounded-full ${getConnectionStatusColor()}`}></div>
-                <p className="text-sm text-gray-500">
-                  {connectionStatus === 'connected' ? 'Online' : 
-                   connectionStatus === 'connecting' ? 'Connecting...' : 'Offline'}
-                </p>
-              </div>
-            </div>
-          </div>
-          
-          <div className="flex items-center space-x-2">
-            <button className="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-full transition-colors">
-              <Phone className="w-5 h-5" />
-            </button>
-            <button className="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-full transition-colors">
-              <Video className="w-5 h-5" />
-            </button>
-            <button className="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-full transition-colors">
-              <MoreVertical className="w-5 h-5" />
-            </button>
-          </div>
-        </div>
-      </div>
-
       {/* Status Update Bar - Only for task performer */}
       {isTaskPerformer && taskData && taskData.status !== 'completed' && taskData.status !== 'cancelled' && (
         <div className="bg-blue-50 p-3 border-b">
@@ -576,7 +451,7 @@ const TaskChat: React.FC<TaskChatProps> = ({ taskId, currentUser, otherUser, onS
 
       {/* Messages */}
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
-        {messages.length === 0 ? (
+        {timeline.length === 0 ? (
           <div className="text-center text-gray-500 py-8">
             <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
               <MessageSquare className="w-8 h-8 text-gray-400" />
@@ -585,39 +460,27 @@ const TaskChat: React.FC<TaskChatProps> = ({ taskId, currentUser, otherUser, onS
             <p className="text-sm">Send a message to {otherUser.full_name} about the task.</p>
           </div>
         ) : (
-          messages.map((message, index) => {
-            const isOwn = isOwnMessage(message);
-            const showAvatar = index === 0 || messages[index - 1].sender_id !== message.sender_id;
-            const isStatusUpdate = message.message_type === 'status_update';
-            
-            if (isStatusUpdate) {
-              // Render status update message
+          timeline.map((item, index) => {
+            // Handle status update
+            if (item.message_type === 'status_update') {
               return (
-                <div key={message.id} className="flex justify-center">
-                  <div className="bg-blue-50 rounded-lg px-4 py-2 inline-flex items-center shadow-sm border border-blue-100">
-                    {message.status_update && getStatusIcon(message.status_update.status)}
-                    <div className="ml-2">
-                      <p className="text-sm font-medium text-blue-800">
-                        Status updated to {formatStatus(message.status_update?.status || '')}
-                      </p>
-                      {message.status_update?.notes && (
-                        <p className="text-xs text-blue-600 mt-1">
-                          "{message.status_update.notes}"
-                        </p>
-                      )}
-                      <p className="text-xs text-gray-500 mt-1">
-                        {formatTimestamp(message.created_at)}
-                      </p>
-                    </div>
-                  </div>
-                </div>
+                <TaskStatusMessage
+                  key={item.id}
+                  status={item.status_update?.status || ''}
+                  notes={item.status_update?.notes}
+                  timestamp={new Date(item.created_at)}
+                  userName={item.sender_id === currentUser.uid ? 'You' : otherUser.full_name}
+                />
               );
             }
             
-            // Render regular message
+            // Handle regular message
+            const isOwn = isOwnMessage(item);
+            const showAvatar = index === 0 || timeline[index - 1].sender_id !== item.sender_id;
+            
             return (
               <div
-                key={message.id}
+                key={item.id}
                 className={`flex ${isOwn ? 'justify-end' : 'justify-start'} ${
                   showAvatar ? 'mt-4' : 'mt-1'
                 }`}
@@ -644,30 +507,30 @@ const TaskChat: React.FC<TaskChatProps> = ({ taskId, currentUser, otherUser, onS
                         : 'bg-white text-gray-900 border border-gray-200 rounded-bl-md shadow-sm'
                     }`}
                   >
-                    {message.image_url && isImage(message.image_url) && (
+                    {item.image_url && isImage(item.image_url) && (
                       <div className="mb-2">
                         <img 
-                          src={message.image_url} 
+                          src={item.image_url} 
                           alt="Shared image" 
                           className="rounded-lg max-h-60 w-auto cursor-pointer hover:opacity-90 transition-opacity"
-                          onClick={() => window.open(message.image_url, '_blank')}
+                          onClick={() => window.open(item.image_url, '_blank')}
                         />
                       </div>
                     )}
-                    {message.content && (
-                      <p className="text-sm break-words">{message.content}</p>
+                    {item.content && (
+                      <p className="text-sm break-words">{item.content}</p>
                     )}
                     <div className="flex items-center justify-between mt-1">
                       <span className={`text-xs ${
                         isOwn ? 'text-blue-200' : 'text-gray-500'
                       }`}>
-                        {formatTimestamp(message.created_at)}
+                        {formatTimestamp(item.created_at)}
                       </span>
                       {isOwn && (
                         <span className={`text-xs ml-2 ${
-                          message.is_read ? 'text-blue-200' : 'text-blue-300'
+                          item.is_read ? 'text-blue-200' : 'text-blue-300'
                         }`}>
-                          {message.is_read ? '✓✓' : '✓'}
+                          {item.is_read ? '✓✓' : '✓'}
                         </span>
                       )}
                     </div>
@@ -769,4 +632,4 @@ const TaskChat: React.FC<TaskChatProps> = ({ taskId, currentUser, otherUser, onS
   );
 };
 
-export default TaskChat;
+export default TaskProgressChat;

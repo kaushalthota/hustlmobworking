@@ -104,8 +104,8 @@ const ChatList: React.FC<ChatListProps> = ({ userId, currentUser }) => {
           if (!a.last_message) return 1;
           if (!b.last_message) return -1;
           
-          const aTime = new Date(a.last_message.created_at).getTime();
-          const bTime = new Date(b.last_message.created_at).getTime();
+          const aTime = a.last_message.created_at ? new Date(a.last_message.created_at).getTime() : 0;
+          const bTime = b.last_message.created_at ? new Date(b.last_message.created_at).getTime() : 0;
           
           return bTime - aTime;
         });

@@ -98,9 +98,10 @@ const GameChat: React.FC<GameChatProps> = ({
       return;
     }
     
-    // Find or create a chat thread between the users
+    // Initialize chat thread
     const initializeChat = async () => {
       try {
+        // Find or create a chat thread between the users
         const threadId = await messageService.findOrCreateChatThread(
           currentUser.uid,
           otherUser.id,

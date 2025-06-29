@@ -1284,8 +1284,8 @@ export const messageService = {
       const querySnapshot = await getDocs(q);
       
       // Map the chat threads to a more usable format
-      const chatThreads = await Promise.all(querySnapshot.docs.map(async doc => {
-        const data = doc.data();
+      const chatThreads = await Promise.all(querySnapshot.docs.map(async snapshotDoc => {
+        const data = snapshotDoc.data();
         
         // Get the other participant's ID
         const otherUserId = data.participants.find((id: string) => id !== userId);
@@ -1303,7 +1303,7 @@ export const messageService = {
         }
         
         return {
-          id: doc.id,
+          id: snapshotDoc.id,
           ...data,
           other_user: otherUserProfile
         };

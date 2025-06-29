@@ -4,7 +4,6 @@ import InteractiveCampusMap from './InteractiveCampusMap';
 import TaskDetails from './TaskDetails';
 import { Location } from '../lib/locationService';
 import toast from 'react-hot-toast';
-import TaskLiveTracker from './TaskLiveTracker';
 import { taskService, profileService, notificationService, taskProgressService } from '../lib/database';
 import { auth, db } from '../lib/firebase';
 import { doc, runTransaction, collection } from 'firebase/firestore';
@@ -23,13 +22,11 @@ const TaskMarketplace: React.FC<TaskMarketplaceProps> = ({ userLocation }) => {
   const [sortBy, setSortBy] = useState('proximity');
   const [viewMode, setViewMode] = useState<'list' | 'map'>('list');
   const [selectedTask, setSelectedTask] = useState<any>(null);
+  const [selectedTaskInitialTab, setSelectedTaskInitialTab] = useState<'details' | 'chat' | 'tracker'>('details');
   const [currentLocation, setCurrentLocation] = useState<Location | null>(userLocation || null);
   const [selectedBundle, setSelectedBundle] = useState<any>(null);
   const [currentUser, setCurrentUser] = useState<any>(null);
   const [activeTab, setActiveTab] = useState<'available' | 'accepted' | 'created'>('available');
-  const [showLiveTracker, setShowLiveTracker] = useState(false);
-  const [selectedTaskForTracking, setSelectedTaskForTracking] = useState<string | null>(null);
-  const [taskSubscriptions, setTaskSubscriptions] = useState<Map<string, () => void>>(new Map());
   const [showStatusUpdate, setShowStatusUpdate] = useState(false);
   const [selectedTaskForUpdate, setSelectedTaskForUpdate] = useState<any>(null);
   const [showFilters, setShowFilters] = useState(false);
@@ -70,6 +67,8 @@ const TaskMarketplace: React.FC<TaskMarketplaceProps> = ({ userLocation }) => {
       console.error('Error getting current user:', error);
     }
   };
+
+  const [taskSubscriptions, setTaskSubscriptions] = useState<Map<string, () => void>>(new Map());
 
   const setupTaskSubscriptions = () => {
     // Clean up existing subscriptions
@@ -262,9 +261,9 @@ const TaskMarketplace: React.FC<TaskMarketplaceProps> = ({ userLocation }) => {
     setSelectedTask(task);
   };
 
-  const handleViewLiveTracker = (taskId: string) => {
-    setSelectedTaskForTracking(taskId);
-    setShowLiveTracker(true);
+  const handleViewTracker = (task: any) => {
+    setSelectedTask(task);
+    setSelectedTaskInitialTab('tracker');
   };
 
   const handleUpdateStatus = (task: any) => {
@@ -629,7 +628,10 @@ const TaskMarketplace: React.FC<TaskMarketplaceProps> = ({ userLocation }) => {
             <div
               key={task.id}
               className="premium-card hover:shadow-xl transition-all duration-300 hover:-translate-y-1 cursor-pointer transform hover:scale-[1.02]"
-              onClick={() => setSelectedTask(task)}
+              onClick={() => {
+                setSelectedTask(task);
+                setSelectedTaskInitialTab('details');
+              }}
             >
               {/* Task Header - Urgent Badge */}
               {task.urgencyScore > 70 && (
@@ -728,7 +730,7 @@ const TaskMarketplace: React.FC<TaskMarketplaceProps> = ({ userLocation }) => {
                       <button
                         onClick={(e) => {
                           e.stopPropagation();
-                          handleViewLiveTracker(task.id);
+                          handleViewTracker(task);
                         }}
                         className="w-full bg-gradient-to-r from-[#0038FF] to-[#0021A5] text-white px-4 py-2 rounded-lg font-semibold flex items-center justify-center"
                       >
@@ -792,6 +794,7 @@ const TaskMarketplace: React.FC<TaskMarketplaceProps> = ({ userLocation }) => {
             // Refresh task list
             setupTaskSubscriptions();
           }}
+          initialTab={selectedTaskInitialTab}
         />
       )}
 
@@ -807,22 +810,6 @@ const TaskMarketplace: React.FC<TaskMarketplaceProps> = ({ userLocation }) => {
             }
           }}
         />
-      )}
-
-      {showLiveTracker && selectedTaskForTracking && (
-        <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 backdrop-blur-sm p-4">
-          <div className="bg-white rounded-lg w-full max-w-2xl max-h-[90vh] overflow-y-auto">
-            <div className="p-4 border-b flex justify-between items-center">
-              <h2 className="text-xl font-semibold">Live Task Tracker</h2>
-              <button onClick={() => setShowLiveTracker(false)} className="text-gray-500 hover:text-gray-700">
-                <XIcon className="w-6 h-6" />
-              </button>
-            </div>
-            <div className="p-4">
-              <TaskLiveTracker taskId={selectedTaskForTracking} />
-            </div>
-          </div>
-        </div>
       )}
 
       {selectedBundle && (

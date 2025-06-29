@@ -52,7 +52,7 @@ Sentry.init({
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <Sentry.ErrorBoundary fallback={<p>An error has occurred. Our team has been notified.</p>}>
-      <LingoProviderWrapper loadDictionary={(locale) => loadDictionary(locale)}>
+      <LingoProviderWrapper loadDictionary={(locale) => import(`./lingo/dictionary.js`).then(module => module.default[locale] || module.default['en'])}>
         <TranslationProvider>
           <StripeProvider>
             <App />

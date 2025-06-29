@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Mic, MicOff, Volume2, VolumeX, MessageCircle, X, Zap, Package, Search, Wallet, User, HelpCircle, Shield } from 'lucide-react';
 import { elevenLabsService } from '../lib/elevenLabsService';
 import { toast } from 'react-hot-toast';
@@ -285,15 +285,6 @@ export default function VoiceAssistant({ onClose, userLocation }: VoiceAssistant
           {error && (
             <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg">
               <p className="text-sm text-red-800">{error}</p>
-            </div>
-          )}
-
-          {/* Voice error message (only shown in development) */}
-          {voiceError && process.env.NODE_ENV === 'development' && (
-            <div className="mb-4 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
-              <p className="text-sm text-yellow-800">
-                <strong>Voice Note:</strong> {voiceError}
-              </p>
             </div>
           )}
 

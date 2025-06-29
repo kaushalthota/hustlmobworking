@@ -82,6 +82,15 @@ export const TranslationProvider: React.FC<TranslationProviderProps> = ({ childr
     
     setIsTranslating(true);
     try {
+      // First try to use the dictionary
+      if (lingo.t) {
+        const translated = lingo.t(text);
+        if (translated !== text) {
+          return translated;
+        }
+      }
+      
+      // Fall back to API translation if needed
       const translatedText = await translationService.translateText(text, {
         targetLanguage: currentLanguage
       });
@@ -116,7 +125,20 @@ export const TranslationProvider: React.FC<TranslationProviderProps> = ({ childr
       isTranslating,
       t: (text: string) => {
         try {
-          return lingo.t ? lingo.t(text) : text;
+          // First try to use the dictionary directly
+          if (lingo.dictionary && lingo.locale) {
+            const translations = lingo.dictionary[lingo.locale];
+            if (translations && translations[text]) {
+              return translations[text];
+            }
+          }
+          
+          // Fall back to lingo.t if available
+          if (lingo.t) {
+            return lingo.t(text);
+          }
+          
+          return text;
         } catch (e) {
           // Capture translation errors in Sentry
           captureException(e, {

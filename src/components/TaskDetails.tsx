@@ -596,16 +596,44 @@ const TaskDetails: React.FC<TaskDetailsProps> = ({ task, onClose, onAccept, onTa
               {activeTab === 'details' && (
                 <div className="p-6 space-y-6 flex-1 overflow-y-auto">
                   {/* Task Creator Info */}
-                  <div className="flex items-center">
-                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#0038FF] to-[#FF5A1F] flex items-center justify-center shadow-lg">
-                      <User className="w-6 h-6 text-white" />
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center">
+                      <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#0038FF] to-[#FF5A1F] flex items-center justify-center shadow-lg">
+                        <User className="w-6 h-6 text-white" />
+                      </div>
+                      <div className="ml-4">
+                        <h3 className="font-bold">Task Creator</h3>
+                        <p className="text-sm text-gray-500">
+                          Posted {new Date(taskData.created_at?.toDate ? taskData.created_at.toDate() : taskData.created_at).toLocaleDateString()}
+                        </p>
+                      </div>
                     </div>
-                    <div className="ml-4">
-                      <h3 className="font-bold">Task Creator</h3>
-                      <p className="text-sm text-gray-500">
-                        Posted {new Date(taskData.created_at?.toDate ? taskData.created_at.toDate() : taskData.created_at).toLocaleDateString()}
-                      </p>
-                    </div>
+                    
+                    {/* Update Status Button (for task performer) - Moved to top section */}
+                    {isTaskPerformer && taskData.status !== 'open' && taskData.status !== 'completed' && (
+                      <StarBorder color="#0038FF">
+                        <button
+                          onClick={() => setShowStatusUpdateForm(true)}
+                          className="bg-gradient-to-r from-[#0038FF] to-[#0021A5] text-white px-4 py-2 rounded-lg font-semibold hover:opacity-90 transition duration-200 flex items-center justify-center"
+                        >
+                          <ArrowRight className="w-5 h-5 mr-2" />
+                          Update Task Status
+                        </button>
+                      </StarBorder>
+                    )}
+                    
+                    {/* Complete Task Button (for task creator) - Moved to top section */}
+                    {isTaskCreator && taskData.status !== 'open' && taskData.status !== 'completed' && (
+                      <StarBorder color="#10B981">
+                        <button
+                          onClick={() => updateTaskProgress('completed', 'Task completed')}
+                          className="bg-gradient-to-r from-green-600 to-green-500 text-white px-4 py-2 rounded-lg font-semibold hover:opacity-90 transition duration-200 flex items-center justify-center"
+                        >
+                          <CheckCircle className="w-5 h-5 mr-2" />
+                          Mark as Completed
+                        </button>
+                      </StarBorder>
+                    )}
                   </div>
 
                   {/* Unified Tracker Button - Only show for in-progress tasks */}
@@ -670,6 +698,24 @@ const TaskDetails: React.FC<TaskDetailsProps> = ({ task, onClose, onAccept, onTa
                         {translatedDescription || taskData.description}
                       </p>
                     </div>
+
+                    {/* Real-time Location Tracker - Only show for task participants */}
+                    {isTaskParticipant && taskData.status !== 'open' && taskData.location_coords && (
+                      <div>
+                        <h4 className="font-bold mb-2 flex items-center">
+                          <Navigation className="w-4 h-4 mr-1 text-[#0038FF]" />
+                          Live Location Tracker
+                        </h4>
+                        <RealTimeLocationTracker
+                          taskId={taskData.id}
+                          taskLocation={taskData.location_coords}
+                          currentUser={currentUser}
+                          isTaskPerformer={isTaskPerformer}
+                          isTaskCreator={isTaskCreator}
+                          otherUser={otherUserProfile}
+                        />
+                      </div>
+                    )}
 
                     <div className="grid grid-cols-2 gap-4">
                       <div className="flex items-center">
@@ -767,32 +813,6 @@ const TaskDetails: React.FC<TaskDetailsProps> = ({ task, onClose, onAccept, onTa
                         </div>
                       </div>
                     </div>
-
-                    {/* Complete Task Button (for task creator) */}
-                    {isTaskCreator && taskData.status !== 'open' && taskData.status !== 'completed' && (
-                      <StarBorder color="#10B981">
-                        <button
-                          onClick={() => updateTaskProgress('completed', 'Task completed')}
-                          className="w-full bg-gradient-to-r from-green-600 to-green-500 text-white px-4 py-3 rounded-lg font-bold hover:opacity-90 transition duration-200 flex items-center justify-center"
-                        >
-                          <CheckCircle className="w-5 h-5 mr-2" />
-                          Mark Task as Completed
-                        </button>
-                      </StarBorder>
-                    )}
-
-                    {/* Update Status Button (for task performer) */}
-                    {isTaskPerformer && taskData.status !== 'open' && taskData.status !== 'completed' && (
-                      <StarBorder color="#0038FF">
-                        <button
-                          onClick={() => setShowStatusUpdateForm(true)}
-                          className="w-full bg-gradient-to-r from-[#0038FF] to-[#0021A5] text-white px-4 py-3 rounded-lg font-bold hover:opacity-90 transition duration-200 flex items-center justify-center"
-                        >
-                          <ArrowRight className="w-5 h-5 mr-2" />
-                          Update Task Status
-                        </button>
-                      </StarBorder>
-                    )}
 
                     {/* Review Buttons (for completed tasks) */}
                     {taskData.status === 'completed' && isTaskParticipant && (

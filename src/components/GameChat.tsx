@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Languages, Loader, X, Paperclip, Smile, Star, Award, MapPin, Calendar, Clock, MessageSquare, Shield, Trophy, Zap, Info, Eye, Flag, User, Navigation, Send } from 'lucide-react';
+import { Send, User, X, Paperclip, Loader, Smile, Star, Award, MapPin, Calendar, MessageSquare, Shield, Trophy, Zap, Info, Eye, Flag, Languages } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { collection, query, where, orderBy, onSnapshot, addDoc, serverTimestamp, updateDoc, doc, getDoc } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
@@ -172,7 +172,7 @@ const GameChat: React.FC<GameChatProps> = ({
       console.warn('Cannot load messages: missing required data');
       return () => {};
     }
-
+    
     setLoading(true);
     
     // Use the messageService to get messages for this task

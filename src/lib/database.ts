@@ -948,6 +948,7 @@ export const messageService = {
         last_message: messageData.content,
         last_message_time: serverTimestamp(),
         last_sender: messageData.sender_id,
+        last_task_id: taskId,
         updated_at: serverTimestamp()
       });
       

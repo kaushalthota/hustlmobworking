@@ -310,7 +310,7 @@ const ChatList: React.FC<ChatListProps> = ({ userId, currentUser }) => {
 
       {/* Chat Window - Full width on mobile when a chat is selected */}
       <div className={`${isMobile && !selectedChat ? 'hidden' : 'flex'} flex-1 flex-col bg-gray-50`}>
-        {selectedChat && selectedChatData && currentUser && selectedChatData.task_id ? (
+        {selectedChat && selectedChatData && currentUser ? (
           <>
             {/* Mobile back button */}
             {isMobile && (
@@ -325,19 +325,11 @@ const ChatList: React.FC<ChatListProps> = ({ userId, currentUser }) => {
               </div>
             )}
             <GameChat
-              taskId={selectedChatData.task_id}
+              taskId={selectedChatData.task_id || selectedChat}
               otherUser={selectedChatData.other_user}
               currentUser={currentUser}
             />
           </>
-        ) : selectedChat && selectedChatData && currentUser ? (
-          <div className="flex items-center justify-center h-full text-center text-gray-500 p-4">
-            <div>
-              <MessageSquare className="w-16 h-16 mx-auto mb-4" />
-              <h3 className="text-xl font-semibold mb-2">Chat not available</h3>
-              <p>This chat is not associated with a task and cannot be displayed.</p>
-            </div>
-          </div>
         ) : (
           <div className="flex items-center justify-center h-full text-center text-gray-500 p-4">
             <div>

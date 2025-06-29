@@ -8,7 +8,7 @@ import ReportModal from './ReportModal';
 import ReviewModal from './ReviewModal';
 import ViewReviewsModal from './ViewReviewsModal';
 import UnifiedTaskTracker from './UnifiedTaskTracker';
-import { taskService, taskProgressService, notificationService, profileService, userStatsService, reviewService } from '../lib/database';
+import { taskService, taskProgressService, notificationService, profileService, userStatsService, reviewService, messageService } from '../lib/database';
 import { walletService } from '../lib/walletService';
 import { auth } from '../lib/firebase';
 import { doc, runTransaction, collection } from 'firebase/firestore';
@@ -47,6 +47,8 @@ const TaskDetails: React.FC<TaskDetailsProps> = ({ task, onClose, onAccept, onTa
   const [translatedTitle, setTranslatedTitle] = useState<string | null>(null);
   const [translatedDescription, setTranslatedDescription] = useState<string | null>(null);
   const { currentLanguage } = useTranslation();
+  const [messages, setMessages] = useState<any[]>([]);
+  const [chatLoading, setChatLoading] = useState(true);
 
   useEffect(() => {
     getCurrentUser();
@@ -65,6 +67,13 @@ const TaskDetails: React.FC<TaskDetailsProps> = ({ task, onClose, onAccept, onTa
       if (unsubscribe) unsubscribe();
     };
   }, []);
+
+  useEffect(() => {
+    // Load chat messages when the chat tab is active
+    if (activeTab === 'chat' && taskData && currentUser && otherUserProfile) {
+      loadChatMessages();
+    }
+  }, [activeTab, taskData, currentUser, otherUserProfile]);
 
   const getCurrentUser = async () => {
     try {
@@ -93,7 +102,7 @@ const TaskDetails: React.FC<TaskDetailsProps> = ({ task, onClose, onAccept, onTa
       if (updatedTask) {
         setTaskData(updatedTask);
         
-        // Load other user profile and auto-show chat for accepted tasks
+        // Load other user profile for accepted tasks
         if (updatedTask.status !== 'open' && currentUser) {
           const otherUserId = updatedTask.created_by === currentUser.id ? 
             updatedTask.accepted_by : updatedTask.created_by;
@@ -111,6 +120,21 @@ const TaskDetails: React.FC<TaskDetailsProps> = ({ task, onClose, onAccept, onTa
       }
     } catch (error) {
       console.error('Error refreshing task data:', error);
+    }
+  };
+
+  const loadChatMessages = async () => {
+    if (!taskData || !currentUser) return;
+    
+    setChatLoading(true);
+    try {
+      const chatMessages = await messageService.getMessages(taskData.id);
+      setMessages(chatMessages);
+    } catch (error) {
+      console.error('Error loading chat messages:', error);
+      toast.error('Error loading chat messages');
+    } finally {
+      setChatLoading(false);
     }
   };
 
@@ -527,7 +551,7 @@ const TaskDetails: React.FC<TaskDetailsProps> = ({ task, onClose, onAccept, onTa
               <div className="p-4 border-b flex justify-between items-center bg-gradient-to-r from-[#0038FF] to-[#0021A5] text-white rounded-tl-2xl">
                 <div className="flex items-center">
                   <h2 className="text-xl font-bold">Task Details</h2>
-                  {isTaskParticipant && otherUserProfile && (
+                  {isTaskParticipant && (
                     <div className="ml-4 flex space-x-2">
                       <button
                         onClick={() => setActiveTab('details')}
@@ -843,7 +867,7 @@ const TaskDetails: React.FC<TaskDetailsProps> = ({ task, onClose, onAccept, onTa
                     )}
 
                     {/* Chat Button (for task participants) */}
-                    {isTaskParticipant && !showChat && otherUserProfile && activeTab === 'details' && (
+                    {isTaskParticipant && !showChat && activeTab === 'details' && (
                       <StarBorder color="#0038FF">
                         <button
                           onClick={() => {
@@ -861,16 +885,30 @@ const TaskDetails: React.FC<TaskDetailsProps> = ({ task, onClose, onAccept, onTa
                 </div>
               )}
 
-              {activeTab === 'chat' && otherUserProfile && currentUser && (
+              {activeTab === 'chat' && currentUser && (
                 <div className="flex-1 flex flex-col">
-                  <GameChat
-                    taskId={taskData.id}
-                    currentUser={currentUser}
-                    otherUser={otherUserProfile}
-                    showTypingIndicator={true}
-                    enableFileSharing={true}
-                    showUserProfile={true}
-                  />
+                  {chatLoading ? (
+                    <div className="flex-1 flex items-center justify-center">
+                      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#0038FF]"></div>
+                    </div>
+                  ) : otherUserProfile ? (
+                    <GameChat
+                      taskId={taskData.id}
+                      currentUser={currentUser}
+                      otherUser={otherUserProfile}
+                      showTypingIndicator={true}
+                      enableFileSharing={true}
+                      showUserProfile={true}
+                    />
+                  ) : (
+                    <div className="flex-1 flex flex-col items-center justify-center p-6 text-center">
+                      <MessageSquare className="w-12 h-12 text-gray-300 mb-4" />
+                      <h3 className="text-lg font-medium text-gray-700 mb-2">Chat will be available once the task is accepted</h3>
+                      <p className="text-gray-500 max-w-md">
+                        When someone accepts this task, you'll be able to chat with them directly here.
+                      </p>
+                    </div>
+                  )}
                 </div>
               )}
             </div>

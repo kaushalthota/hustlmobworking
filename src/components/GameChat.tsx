@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Send, User, X, Paperclip, Loader, Phone, Video, MoreVertical, Heart, ThumbsUp, Smile, Star, Award, MapPin, Calendar, MessageSquare, Shield, Trophy, Zap, Info, Eye, Flag, Languages } from 'lucide-react';
+import { Languages, Loader, X, Paperclip, Smile, Star, Award, MapPin, Calendar, Clock, MessageSquare, Shield, Trophy, Zap, Info, Eye, Flag, User, Navigation, Send } from 'lucide-react';
 import toast from 'react-hot-toast';
-import { collection, query, orderBy, onSnapshot, addDoc, serverTimestamp, updateDoc, doc, getDoc } from 'firebase/firestore';
+import { collection, query, where, orderBy, onSnapshot, addDoc, serverTimestamp, updateDoc, doc, getDoc } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { db, storage } from '../lib/firebase';
 import UserProfileModal from './UserProfileModal';
@@ -25,6 +25,7 @@ interface Message {
   content: string;
   created_at: any;
   sender_id: string;
+  recipient_id?: string;
   image_url?: string;
   file_url?: string;
   file_name?: string;
@@ -132,7 +133,7 @@ const GameChat: React.FC<GameChatProps> = ({
         setOtherUserProfile({
           id: otherUser.id,
           full_name: profileData.full_name || otherUser.full_name,
-          avatar_url: profileData.avatar_url,
+          avatar_url: profileData.avatar_url || otherUser.avatar_url,
           major: profileData.major,
           bio: profileData.bio,
           level: calculateLevel(statsData.total_earnings || 0),
@@ -140,7 +141,7 @@ const GameChat: React.FC<GameChatProps> = ({
           badges: profileData.badges || [],
           rating: statsData.average_rating || 0,
           total_tasks: statsData.tasks_completed || 0,
-          reviews: [], // Would load from reviews collection
+          reviews: [],
           contact_details: {
             email: profileData.email,
             phone: profileData.phone
@@ -319,6 +320,7 @@ const GameChat: React.FC<GameChatProps> = ({
     const optimisticMessage: Message = {
       id: optimisticId,
       sender_id: currentUser.uid,
+      recipient_id: otherUser.id,
       content: newMessage.trim() || (selectedFile ? `Sending ${selectedFile.name}...` : ''),
       image_url: filePreview?.type === 'image' ? filePreview.url : undefined,
       file_url: filePreview?.type === 'file' ? 'pending' : undefined,
@@ -552,18 +554,12 @@ const GameChat: React.FC<GameChatProps> = ({
           </div>
           
           <div className="flex items-center space-x-2">
-            <button className="p-3 text-[#0038FF] hover:text-[#0021A5] hover:bg-blue-50 rounded-full transition-colors">
-              <Phone className="w-5 h-5" />
-            </button>
-            <button className="p-3 text-[#0038FF] hover:text-[#0021A5] hover:bg-blue-50 rounded-full transition-colors">
-              <Video className="w-5 h-5" />
-            </button>
             <div className="relative" ref={menuRef}>
               <button 
                 onClick={() => setShowMenu(!showMenu)}
                 className="p-3 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-full transition-colors"
               >
-                <MoreVertical className="w-5 h-5" />
+                <Info className="w-5 h-5" />
               </button>
               
               {showMenu && (
@@ -574,12 +570,6 @@ const GameChat: React.FC<GameChatProps> = ({
                   >
                     <Eye className="w-4 h-4 mr-2" />
                     View Profile
-                  </button>
-                  <button
-                    className="flex items-center w-full px-4 py-2 text-left text-gray-700 hover:bg-gray-100"
-                  >
-                    <Info className="w-4 h-4 mr-2" />
-                    Task Details
                   </button>
                   <button
                     onClick={handleReportIssue}
@@ -868,7 +858,7 @@ const GameChat: React.FC<GameChatProps> = ({
       </form>
 
       {/* User Profile Modal */}
-      {showUserProfileModal && otherUserProfile && (
+      {showUserProfileModal && otherUserProfile && showUserProfile && (
         <UserProfileModal
           user={otherUserProfile}
           onClose={() => setShowUserProfileModal(false)}

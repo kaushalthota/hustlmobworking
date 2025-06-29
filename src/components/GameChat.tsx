@@ -6,8 +6,8 @@ import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { db, storage } from '../lib/firebase';
 import UserProfileModal from './UserProfileModal';
 import ReportModal from './ReportModal';
-import TranslateButton from './TranslateButton';
 import TranslatableText from './TranslatableText';
+import TranslateButton from './TranslateButton';
 import { useTranslation } from './TranslationProvider';
 import { messageService } from '../lib/database';
 
@@ -846,7 +846,7 @@ const GameChat: React.FC<GameChatProps> = ({
           <button
             type="submit"
             disabled={loading || uploadingFile || (!newMessage.trim() && !selectedFile)}
-            className="p-3 bg-gradient-to-r from-[#0038FF] to-[#0021A5] text-white rounded-full hover:opacity-90 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center shadow-lg"
+            className="p-3 bg-gradient-to-r from-[#0038FF] to-[#0021A5] text-white rounded-full hover:opacity-90 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center shadow-lg transform hover:scale-105 active:scale-95"
           >
             {loading || uploadingFile ? (
               <Loader className="w-5 h-5 animate-spin" />

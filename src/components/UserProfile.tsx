@@ -1,11 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { User, Mail, MapPin, Star, Edit, Camera, Save, X, Shield, Award, DollarSign, Clock, Package, CheckSquare, Loader, History, Briefcase } from 'lucide-react';
+import { User, Mail, MapPin, Star, Edit, Camera, Save, X, Shield, Award, DollarSign, Clock, Package, CheckSquare, Loader, History, Briefcase, Zap, Crown } from 'lucide-react';
 import { auth, db, storage } from '../lib/firebase';
 import { doc, getDoc, updateDoc, collection, query, where, getDocs, orderBy } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import toast from 'react-hot-toast';
 import TaskHistory from './TaskHistory';
 import { StarBorder } from './ui/star-border';
+import { revenueCatService } from '../lib/revenueCatService';
+import SubscriptionPlans from './SubscriptionPlans';
 
 const UserProfile: React.FC = () => {
   const [profile, setProfile] = useState<any>(null);
@@ -15,10 +17,12 @@ const UserProfile: React.FC = () => {
   const [editing, setEditing] = useState(false);
   const [editedProfile, setEditedProfile] = useState<any>({});
   const [uploadingImage, setUploadingImage] = useState(false);
-  const [activeTab, setActiveTab] = useState<'profile' | 'tasks' | 'stats' | 'history'>('profile');
+  const [activeTab, setActiveTab] = useState<'profile' | 'tasks' | 'stats' | 'history' | 'premium'>('profile');
   const fileInputRef = React.useRef<HTMLInputElement>(null);
   const [isMobile, setIsMobile] = useState(false);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
+  const [subscription, setSubscription] = useState<any>(null);
+  const [showSubscriptionPlans, setShowSubscriptionPlans] = useState(false);
   
   // New state for hourly rate settings
   const [hourlyRate, setHourlyRate] = useState<string>('');
@@ -87,6 +91,10 @@ const UserProfile: React.FC = () => {
       }));
       
       setTasks(tasksData);
+      
+      // Check subscription status
+      const subscriptionData = await revenueCatService.getCurrentSubscription(user.uid);
+      setSubscription(subscriptionData);
     } catch (error) {
       console.error('Error loading user data:', error);
       toast.error('Error loading profile data');
@@ -250,6 +258,10 @@ const UserProfile: React.FC = () => {
     );
   }
 
+  if (showSubscriptionPlans) {
+    return <SubscriptionPlans onClose={() => setShowSubscriptionPlans(false)} />;
+  }
+
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
       <div className="flex flex-col md:flex-row gap-6 sm:gap-8">
@@ -298,6 +310,16 @@ const UserProfile: React.FC = () => {
                 <div className="flex items-center justify-center mt-2">
                   <Shield className="w-4 h-4 mr-1 text-blue-200" />
                   <span className="text-sm">Verified Student</span>
+                </div>
+              )}
+              
+              {/* Subscription Badge */}
+              {subscription && (
+                <div className="absolute top-4 right-4">
+                  <div className="bg-yellow-400 text-[#0038FF] px-2 py-1 rounded-full text-xs font-bold flex items-center shadow-lg">
+                    <Crown className="w-3 h-3 mr-1" />
+                    PREMIUM
+                  </div>
                 </div>
               )}
             </div>
@@ -352,6 +374,23 @@ const UserProfile: React.FC = () => {
                   <Award className="w-5 h-5 mr-3" />
                   <span>Stats & Achievements</span>
                 </button>
+                
+                <button
+                  onClick={() => setActiveTab('premium')}
+                  className={`flex items-center p-3 rounded-lg ${
+                    activeTab === 'premium'
+                      ? 'bg-blue-50 text-[#0038FF]'
+                      : 'text-gray-700 hover:bg-gray-50'
+                  }`}
+                >
+                  <Zap className="w-5 h-5 mr-3" />
+                  <span>Premium</span>
+                  {subscription && (
+                    <span className="ml-auto bg-yellow-400 text-xs px-2 py-0.5 rounded-full text-[#0038FF] font-bold">
+                      ACTIVE
+                    </span>
+                  )}
+                </button>
               </div>
             </div>
           </div>
@@ -391,6 +430,14 @@ const UserProfile: React.FC = () => {
               }`}
             >
               Stats
+            </button>
+            <button
+              onClick={() => setActiveTab('premium')}
+              className={`px-3 py-2 rounded-lg text-sm font-medium whitespace-nowrap ${
+                activeTab === 'premium' ? 'bg-blue-50 text-[#0038FF]' : 'text-gray-600'
+              }`}
+            >
+              Premium
             </button>
           </div>
         )}
@@ -524,6 +571,32 @@ const UserProfile: React.FC = () => {
                             Unverified
                           </span>
                         )}
+                      </div>
+                    </div>
+                  </div>
+                  
+                  {/* Subscription Status */}
+                  <div className="flex items-start">
+                    <Zap className="w-5 h-5 text-gray-400 mt-1 mr-3" />
+                    <div>
+                      <h3 className="text-sm font-medium text-gray-500">Subscription</h3>
+                      <div className="mt-1 flex items-center">
+                        {subscription ? (
+                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                            <Crown className="w-3 h-3 mr-1" />
+                            Premium
+                          </span>
+                        ) : (
+                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                            Free Plan
+                          </span>
+                        )}
+                        <button
+                          onClick={() => setShowSubscriptionPlans(true)}
+                          className="ml-3 text-[#0038FF] hover:text-[#0021A5] text-sm"
+                        >
+                          {subscription ? 'Manage' : 'Upgrade'}
+                        </button>
                       </div>
                     </div>
                   </div>
@@ -814,7 +887,170 @@ const UserProfile: React.FC = () => {
                     </div>
                   </div>
                 </div>
+                
+                {/* Premium Achievement */}
+                <div className={`p-4 rounded-lg border ${
+                  subscription
+                    ? 'bg-yellow-50 border-yellow-200'
+                    : 'bg-gray-50 border-gray-200'
+                }`}>
+                  <div className="flex items-center">
+                    <div className={`w-10 h-10 rounded-full flex items-center justify-center mr-3 ${
+                      subscription
+                        ? 'bg-yellow-100'
+                        : 'bg-gray-100'
+                    }`}>
+                      <Crown className={`w-6 h-6 ${
+                        subscription
+                          ? 'text-yellow-600'
+                          : 'text-gray-400'
+                      }`} />
+                    </div>
+                    <div>
+                      <h4 className="font-medium">Premium Member</h4>
+                      <p className="text-sm text-gray-500">Upgrade to Hustl Premium</p>
+                      {!subscription && (
+                        <button
+                          onClick={() => setShowSubscriptionPlans(true)}
+                          className="text-xs text-[#0038FF] hover:text-[#0021A5] mt-1"
+                        >
+                          Upgrade Now
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                </div>
               </div>
+            </div>
+          )}
+          
+          {activeTab === 'premium' && (
+            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+              <div className="flex justify-between items-center mb-6">
+                <h2 className="text-xl sm:text-2xl font-bold flex items-center">
+                  <Zap className="w-6 h-6 text-[#0038FF] mr-2" />
+                  Hustl Premium
+                </h2>
+                {!subscription && (
+                  <StarBorder color="#0038FF">
+                    <button
+                      onClick={() => setShowSubscriptionPlans(true)}
+                      className="bg-gradient-to-r from-[#0038FF] to-[#0021A5] text-white px-4 py-2 rounded-lg font-semibold flex items-center"
+                    >
+                      <Zap className="w-4 h-4 mr-2" />
+                      Upgrade Now
+                    </button>
+                  </StarBorder>
+                )}
+              </div>
+              
+              {subscription ? (
+                <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-6 mb-6">
+                  <div className="flex items-start">
+                    <div className="bg-yellow-100 p-3 rounded-full mr-4">
+                      <Crown className="w-6 h-6 text-yellow-600" />
+                    </div>
+                    <div>
+                      <h3 className="font-bold text-lg text-yellow-800">Premium Subscription Active</h3>
+                      <p className="text-yellow-700 mb-2">
+                        You're currently subscribed to {subscription.planName}
+                      </p>
+                      <p className="text-sm text-yellow-600">
+                        Next billing date: {new Date(subscription.expirationDate).toLocaleDateString()}
+                      </p>
+                      <button
+                        onClick={() => setShowSubscriptionPlans(true)}
+                        className="mt-3 text-[#0038FF] hover:text-[#0021A5] text-sm font-medium"
+                      >
+                        Manage Subscription
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div className="bg-blue-50 border border-blue-100 rounded-xl p-6 mb-6">
+                  <div className="flex items-start">
+                    <div className="bg-blue-100 p-3 rounded-full mr-4">
+                      <Zap className="w-6 h-6 text-[#0038FF]" />
+                    </div>
+                    <div>
+                      <h3 className="font-bold text-lg text-blue-800">Upgrade to Premium</h3>
+                      <p className="text-blue-700 mb-2">
+                        Unlock all premium features and benefits
+                      </p>
+                      <p className="text-sm text-blue-600">
+                        Starting at just $4.99/month
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              )}
+              
+              <h3 className="text-lg font-semibold mb-4">Premium Benefits</h3>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                <div className="bg-white border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+                  <div className="flex items-center mb-2">
+                    <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center mr-3">
+                      <DollarSign className="w-5 h-5 text-[#0038FF]" />
+                    </div>
+                    <h4 className="font-medium">No Service Fees</h4>
+                  </div>
+                  <p className="text-sm text-gray-600">
+                    Save 15% on every task by eliminating service fees
+                  </p>
+                </div>
+                
+                <div className="bg-white border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+                  <div className="flex items-center mb-2">
+                    <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center mr-3">
+                      <Zap className="w-5 h-5 text-[#0038FF]" />
+                    </div>
+                    <h4 className="font-medium">Priority Matching</h4>
+                  </div>
+                  <p className="text-sm text-gray-600">
+                    Get matched with helpers faster with priority task placement
+                  </p>
+                </div>
+                
+                <div className="bg-white border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+                  <div className="flex items-center mb-2">
+                    <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center mr-3">
+                      <Award className="w-5 h-5 text-[#0038FF]" />
+                    </div>
+                    <h4 className="font-medium">Premium Badge</h4>
+                  </div>
+                  <p className="text-sm text-gray-600">
+                    Stand out with a premium badge on your profile and tasks
+                  </p>
+                </div>
+                
+                <div className="bg-white border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
+                  <div className="flex items-center mb-2">
+                    <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center mr-3">
+                      <Shield className="w-5 h-5 text-[#0038FF]" />
+                    </div>
+                    <h4 className="font-medium">Premium Support</h4>
+                  </div>
+                  <p className="text-sm text-gray-600">
+                    Get priority support and dedicated assistance
+                  </p>
+                </div>
+              </div>
+              
+              {!subscription && (
+                <div className="text-center">
+                  <StarBorder color="#0038FF">
+                    <button
+                      onClick={() => setShowSubscriptionPlans(true)}
+                      className="bg-gradient-to-r from-[#0038FF] to-[#0021A5] text-white px-6 py-3 rounded-lg font-semibold flex items-center justify-center mx-auto"
+                    >
+                      <Zap className="w-5 h-5 mr-2" />
+                      View Premium Plans
+                    </button>
+                  </StarBorder>
+                </div>
+              )}
             </div>
           )}
         </div>

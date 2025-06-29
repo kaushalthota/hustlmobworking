@@ -23,7 +23,8 @@
     "qrcode.react": "^3.1.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-hot-toast": "^2.4.1"
+    "react-hot-toast": "^2.4.1",
+    "revenuecat-react": "^1.0.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.9.1",

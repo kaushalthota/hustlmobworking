@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { Zap, ArrowRight, BookOpen, Coffee, Package, Star, Search, Filter, Bell, Bike, Dumbbell, Users, Utensils, Dog, Car, PartyPopper, GraduationCap, MessageSquare, Shield, HelpCircle, Info, Settings, Menu, ChevronDown, Wallet, ListTodo, Home, User, LogIn, UserPlus, Mail, Award, Trophy, Volume2, Languages, Bug, X } from 'lucide-react';
+import { Zap, ArrowRight, BookOpen, Coffee, Package, Star, Search, Filter, Bell, Bike, Dumbbell, Users, Utensils, Dog, Car, PartyPopper, GraduationCap, MessageSquare, Shield, HelpCircle, Info, Settings, Menu, ChevronDown, Wallet, ListTodo, Home, User, LogIn, UserPlus, Mail, Award, Trophy, Volume2, Languages, Bug, X, Crown } from 'lucide-react';
 import { Toaster, toast } from 'react-hot-toast';
 import { useGeolocation } from './hooks/useGeolocation';
 import { Location } from './lib/locationService';
@@ -21,7 +21,7 @@ import { auth } from './lib/firebase';
 import { onAuthStateChanged } from 'firebase/auth';
 import { subscribeToAuthChanges } from './lib/auth';
 import { notificationService } from './lib/database';
-import SafeWalkRequestForm from './components/SafeWalkRequestForm';
+import { SafeWalkRequestForm } from './components/SafeWalkRequestForm';
 import VoiceAssistant from './components/VoiceAssistant';
 import LanguageSettingsModal from './components/LanguageSettingsModal';
 import { useTranslation } from './components/TranslationProvider';
@@ -29,6 +29,9 @@ import { LocaleSwitcher } from "lingo.dev/react/client";
 import AdminTools from './components/AdminTools';
 import SentryTest from './components/SentryTest';
 import * as Sentry from "@sentry/react";
+import SubscriptionPlans from './components/SubscriptionPlans';
+import PremiumFeatureModal from './components/PremiumFeatureModal';
+import { revenueCatService } from './lib/revenueCatService';
 
 const CATEGORY_GROUPS = [
   {
@@ -119,6 +122,10 @@ const App: React.FC = () => {
   const [showAdminTools, setShowAdminTools] = useState(false);
   const [showSentryTest, setShowSentryTest] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [showSubscriptionPlans, setShowSubscriptionPlans] = useState(false);
+  const [showPremiumFeature, setShowPremiumFeature] = useState(false);
+  const [premiumFeatureInfo, setPremiumFeatureInfo] = useState({ name: '', description: '' });
+  const [hasSubscription, setHasSubscription] = useState(false);
   
   const { location: userLocation, loading: locationLoading, error: locationError } = useGeolocation({
     timeout: 6000,
@@ -136,6 +143,7 @@ const App: React.FC = () => {
         setShowAuth(false);
         setShowQuickStart(true);
         checkUnreadNotifications(currentUser.uid);
+        checkSubscriptionStatus(currentUser.uid);
         
         // Set user context in Sentry
         Sentry.setUser({
@@ -234,6 +242,16 @@ const App: React.FC = () => {
         setCurrentView('marketplace');
       }
     };
+    
+    const handleOpenSubscriptions = () => {
+      if (user) {
+        setShowSubscriptionPlans(true);
+      } else {
+        toast.error('Please sign in to view subscription plans');
+        setShowAuth(true);
+        setAuthMode('signin');
+      }
+    };
 
     // Check if mobile
     const checkMobile = () => {
@@ -252,6 +270,7 @@ const App: React.FC = () => {
     window.addEventListener('open-wallet', handleOpenWallet);
     window.addEventListener('open-profile', handleOpenProfile);
     window.addEventListener('view-task', handleViewTask);
+    window.addEventListener('open-subscriptions', handleOpenSubscriptions);
 
     return () => {
       unsubscribe();
@@ -264,6 +283,7 @@ const App: React.FC = () => {
       window.removeEventListener('open-wallet', handleOpenWallet);
       window.removeEventListener('open-profile', handleOpenProfile);
       window.removeEventListener('view-task', handleViewTask);
+      window.removeEventListener('open-subscriptions', handleOpenSubscriptions);
       window.removeEventListener('resize', checkMobile);
     };
   }, [user]);
@@ -289,6 +309,15 @@ const App: React.FC = () => {
     } catch (error) {
       console.error('Error checking notifications:', error);
       Sentry.captureException(error);
+    }
+  };
+  
+  const checkSubscriptionStatus = async (userId: string) => {
+    try {
+      const hasActive = await revenueCatService.hasActiveSubscription(userId);
+      setHasSubscription(hasActive);
+    } catch (error) {
+      console.error('Error checking subscription status:', error);
     }
   };
 
@@ -375,6 +404,34 @@ const App: React.FC = () => {
   
   const handleOpenSentryTest = () => {
     setShowSentryTest(true);
+  };
+  
+  const handleOpenSubscriptionPlans = () => {
+    handleProtectedAction(() => {
+      setShowSubscriptionPlans(true);
+    }, 'view subscription plans');
+  };
+  
+  const handlePremiumFeature = (featureName: string, description: string) => {
+    if (!user) {
+      toast.error('Please sign in to access premium features');
+      setShowAuth(true);
+      setAuthMode('signin');
+      return;
+    }
+    
+    if (hasSubscription) {
+      // User has premium, allow access to the feature
+      toast.success(`Access granted to ${featureName}`);
+      return;
+    }
+    
+    // Show premium feature modal
+    setPremiumFeatureInfo({
+      name: featureName,
+      description: description
+    });
+    setShowPremiumFeature(true);
   };
 
   return (
@@ -533,6 +590,21 @@ const App: React.FC = () => {
                             <Languages className="w-4 h-4 mr-2" />
                             Language Settings
                           </button>
+                          <button
+                            onClick={() => {
+                              handleOpenSubscriptionPlans();
+                              setShowNavDropdown(false);
+                            }}
+                            className="w-full text-left px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-[#0038FF] flex items-center transition-colors"
+                          >
+                            <Crown className="w-4 h-4 mr-2" />
+                            Premium
+                            {hasSubscription && (
+                              <span className="ml-auto bg-yellow-400 text-xs px-1.5 py-0.5 rounded-full text-[#0038FF] font-bold">
+                                ACTIVE
+                              </span>
+                            )}
+                          </button>
                           {user && (user.email === 'kaushalthota1@gmail.com' || user.email === 'apoorvamahajan94@gmail.com') && (
                             <>
                               <button
@@ -579,6 +651,17 @@ const App: React.FC = () => {
                       className="px-2 py-1 text-sm border border-gray-200 rounded-lg hover:border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
                   </div>
+                  
+                  {/* Premium Badge - Show if user has subscription */}
+                  {hasSubscription && (
+                    <button
+                      onClick={handleOpenSubscriptionPlans}
+                      className="hidden sm:flex items-center bg-yellow-400 text-[#0038FF] px-2 py-1 rounded-lg text-sm font-bold hover:bg-yellow-300 transition-colors"
+                    >
+                      <Crown className="w-4 h-4 mr-1" />
+                      PREMIUM
+                    </button>
+                  )}
                   
                   {/* Voice Assistant Button - Hidden on mobile */}
                   <button
@@ -707,7 +790,7 @@ const App: React.FC = () => {
               <section 
                 className="relative text-white py-24 bg-cover bg-center"
                 style={{ 
-                  backgroundImage: "url('https://images.pexels.com/photos/267885/pexels-photo-267885.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260')",
+                  backgroundImage: "url('https://images.pexels.com/photos/267885/pexels-photo-267885.jpeg?auto=format&fit=crop&w=800&q=80')",
                   backgroundSize: 'cover',
                   backgroundPosition: 'center'
                 }}
@@ -1024,6 +1107,22 @@ const App: React.FC = () => {
                 </div>
               </div>
             </div>
+          )}
+          
+          {showSubscriptionPlans && (
+            <SubscriptionPlans onClose={() => setShowSubscriptionPlans(false)} />
+          )}
+          
+          {showPremiumFeature && (
+            <PremiumFeatureModal
+              featureName={premiumFeatureInfo.name}
+              description={premiumFeatureInfo.description}
+              onClose={() => setShowPremiumFeature(false)}
+              onSubscribe={() => {
+                setShowPremiumFeature(false);
+                setHasSubscription(true);
+              }}
+            />
           )}
 
           {/* Mobile Bottom Navigation */}

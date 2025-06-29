@@ -29,7 +29,22 @@ interface TranslationProviderProps {
 export const TranslationProvider: React.FC<TranslationProviderProps> = ({ children }) => {
   const [currentLanguage, setCurrentLanguage] = useState<string>('en');
   const [isTranslating, setIsTranslating] = useState<boolean>(false);
+  const [dictionary, setDictionary] = useState<any>(null);
   const lingo = useLingo();
+  
+  useEffect(() => {
+    // Load dictionary asynchronously
+    const loadDictionary = async () => {
+      try {
+        const dictionaryModule = await import('../lingo/dictionary.js');
+        setDictionary(dictionaryModule.default);
+      } catch (error) {
+        console.warn('Could not load dictionary:', error);
+      }
+    };
+    
+    loadDictionary();
+  }, []);
   
   useEffect(() => {
     // Load saved language preference from localStorage
@@ -83,7 +98,6 @@ export const TranslationProvider: React.FC<TranslationProviderProps> = ({ childr
     setIsTranslating(true);
     try {
       // First try to use the dictionary
-      const dictionary = await import('../lingo/dictionary.js').then(module => module.default);
       if (dictionary && dictionary[currentLanguage] && dictionary[currentLanguage][text]) {
         return dictionary[currentLanguage][text];
       }
@@ -136,8 +150,7 @@ export const TranslationProvider: React.FC<TranslationProviderProps> = ({ childr
             return lingo.t(text);
           }
           
-          // If all else fails, use our dictionary
-          const dictionary = require('../lingo/dictionary.js').default;
+          // If all else fails, use our loaded dictionary
           if (dictionary && dictionary[currentLanguage] && dictionary[currentLanguage][text]) {
             return dictionary[currentLanguage][text];
           }

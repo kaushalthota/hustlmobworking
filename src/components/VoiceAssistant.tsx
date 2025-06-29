@@ -39,7 +39,8 @@ const audioManager = {
         URL.revokeObjectURL(audioUrl);
         this.isPlaying = false;
         this.currentAudio = null;
-        reject(e);
+        console.warn('Audio playback error:', e);
+        resolve(); // Resolve anyway to prevent blocking
       };
       
       // Use a try-catch block for the play() call
@@ -285,15 +286,6 @@ export default function VoiceAssistant({ onClose, userLocation }: VoiceAssistant
           {error && (
             <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg">
               <p className="text-sm text-red-800">{error}</p>
-            </div>
-          )}
-
-          {/* Voice error message (only shown in development) */}
-          {voiceError && process.env.NODE_ENV === 'development' && (
-            <div className="mb-4 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
-              <p className="text-sm text-yellow-800">
-                <strong>Voice Note:</strong> {voiceError}
-              </p>
             </div>
           )}
 

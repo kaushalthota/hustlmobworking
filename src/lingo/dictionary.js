@@ -16,7 +16,19 @@ export default {
     "Sign Out": "Sign Out",
     "Post Task": "Post Task",
     "Welcome to Hustl": "Welcome to Hustl",
-    "Your campus task marketplace - get help or earn money helping others": "Your campus task marketplace - get help or earn money helping others"
+    "Your campus task marketplace - get help or earn money helping others": "Your campus task marketplace - get help or earn money helping others",
+    "Campus Gigs": "Campus Gigs",
+    "More": "More",
+    "Learn More": "Learn More",
+    "Safety": "Safety",
+    "Help": "Help",
+    "Messages": "Messages",
+    "Email Support": "Email Support",
+    "Notifications": "Notifications",
+    "Task Created Successfully!": "Task Created Successfully!",
+    "Your task is now live and visible to potential helpers": "Your task is now live and visible to potential helpers",
+    "View Task Details": "View Task Details",
+    "Close": "Close"
   },
   
   // Spanish translations
@@ -36,7 +48,19 @@ export default {
     "Sign Out": "Cerrar sesión",
     "Post Task": "Publicar tarea",
     "Welcome to Hustl": "Bienvenido a Hustl",
-    "Your campus task marketplace - get help or earn money helping others": "Tu mercado de tareas del campus - obtén ayuda o gana dinero ayudando a otros"
+    "Your campus task marketplace - get help or earn money helping others": "Tu mercado de tareas del campus - obtén ayuda o gana dinero ayudando a otros",
+    "Campus Gigs": "Trabajos del Campus",
+    "More": "Más",
+    "Learn More": "Más información",
+    "Safety": "Seguridad",
+    "Help": "Ayuda",
+    "Messages": "Mensajes",
+    "Email Support": "Soporte por correo",
+    "Notifications": "Notificaciones",
+    "Task Created Successfully!": "¡Tarea creada con éxito!",
+    "Your task is now live and visible to potential helpers": "Tu tarea ya está activa y visible para posibles ayudantes",
+    "View Task Details": "Ver detalles de la tarea",
+    "Close": "Cerrar"
   },
   
   // French translations
@@ -56,7 +80,19 @@ export default {
     "Sign Out": "Se déconnecter",
     "Post Task": "Publier une tâche",
     "Welcome to Hustl": "Bienvenue sur Hustl",
-    "Your campus task marketplace - get help or earn money helping others": "Votre marché de tâches sur le campus - obtenez de l'aide ou gagnez de l'argent en aidant les autres"
+    "Your campus task marketplace - get help or earn money helping others": "Votre marché de tâches sur le campus - obtenez de l'aide ou gagnez de l'argent en aidant les autres",
+    "Campus Gigs": "Missions de Campus",
+    "More": "Plus",
+    "Learn More": "En savoir plus",
+    "Safety": "Sécurité",
+    "Help": "Aide",
+    "Messages": "Messages",
+    "Email Support": "Support par email",
+    "Notifications": "Notifications",
+    "Task Created Successfully!": "Tâche créée avec succès !",
+    "Your task is now live and visible to potential helpers": "Votre tâche est maintenant en ligne et visible pour les assistants potentiels",
+    "View Task Details": "Voir les détails de la tâche",
+    "Close": "Fermer"
   },
   
   // German translations
@@ -76,6 +112,50 @@ export default {
     "Sign Out": "Abmelden",
     "Post Task": "Aufgabe erstellen",
     "Welcome to Hustl": "Willkommen bei Hustl",
-    "Your campus task marketplace - get help or earn money helping others": "Ihr Campus-Aufgabenmarktplatz - Holen Sie sich Hilfe oder verdienen Sie Geld, indem Sie anderen helfen"
+    "Your campus task marketplace - get help or earn money helping others": "Ihr Campus-Aufgabenmarktplatz - Holen Sie sich Hilfe oder verdienen Sie Geld, indem Sie anderen helfen",
+    "Campus Gigs": "Campus-Jobs",
+    "More": "Mehr",
+    "Learn More": "Mehr erfahren",
+    "Safety": "Sicherheit",
+    "Help": "Hilfe",
+    "Messages": "Nachrichten",
+    "Email Support": "E-Mail-Support",
+    "Notifications": "Benachrichtigungen",
+    "Task Created Successfully!": "Aufgabe erfolgreich erstellt!",
+    "Your task is now live and visible to potential helpers": "Ihre Aufgabe ist jetzt live und für potenzielle Helfer sichtbar",
+    "View Task Details": "Aufgabendetails anzeigen",
+    "Close": "Schließen"
+  },
+  
+  // Japanese translations
+  "ja": {
+    "Language Settings": "言語設定",
+    "Select Your Preferred Language": "希望する言語を選択してください",
+    "Automatically translate content to my language": "コンテンツを自動的に私の言語に翻訳する",
+    "About Translation": "翻訳について",
+    "Translation is powered by Lingo.dev. While we strive for accuracy, automatic translations may not be perfect. You can always view the original text.": "翻訳はLingo.devによって提供されています。正確さを目指していますが、自動翻訳は完璧ではないかもしれません。いつでも原文を表示できます。",
+    "Save Settings": "設定を保存",
+    "Cancel": "キャンセル",
+    "Home": "ホーム",
+    "Browse Tasks": "タスクを閲覧",
+    "Profile": "プロフィール",
+    "Sign In": "サインイン",
+    "Sign Up": "サインアップ",
+    "Sign Out": "サインアウト",
+    "Post Task": "タスクを投稿",
+    "Welcome to Hustl": "Hustlへようこそ",
+    "Your campus task marketplace - get help or earn money helping others": "あなたのキャンパスタスクマーケットプレイス - 助けを得るか、他の人を助けてお金を稼ぐ",
+    "Campus Gigs": "キャンパスの仕事",
+    "More": "もっと見る",
+    "Learn More": "詳細を見る",
+    "Safety": "安全性",
+    "Help": "ヘルプ",
+    "Messages": "メッセージ",
+    "Email Support": "メールサポート",
+    "Notifications": "通知",
+    "Task Created Successfully!": "タスクが正常に作成されました！",
+    "Your task is now live and visible to potential helpers": "あなたのタスクは現在ライブで、潜在的なヘルパーに表示されています",
+    "View Task Details": "タスクの詳細を表示",
+    "Close": "閉じる"
   }
 };

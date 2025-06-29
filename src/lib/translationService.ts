@@ -29,27 +29,22 @@ class TranslationService {
   }
   
   /**
-   * Translate text using Lingo.dev API directly
-   * This is a fallback method when the compiler-based translation isn't available
+   * Translate text using dictionary-based approach
+   * This avoids API calls to prevent hitting rate limits
    */
   async translateText(text: string, options: TranslationOptions): Promise<string> {
-    if (!this.apiKey) {
-      throw new Error('Translation API key not configured');
-    }
-    
     if (!text || text.trim() === '') {
       return text;
     }
     
     try {
-      // Use the dictionary-based translation first
+      // Use the dictionary-based translation
       const dictionary = await import('../lingo/dictionary.js').then(module => module.default);
       if (dictionary && dictionary[options.targetLanguage] && dictionary[options.targetLanguage][text]) {
         return dictionary[options.targetLanguage][text];
       }
       
       // If not found in dictionary, return the original text
-      // We're not calling the API directly to avoid hitting rate limits
       return text;
     } catch (error) {
       console.error('Translation error:', error);
@@ -66,7 +61,8 @@ class TranslationService {
       { code: 'en', name: 'English' },
       { code: 'es', name: 'Spanish' },
       { code: 'fr', name: 'French' },
-      { code: 'de', name: 'German' }
+      { code: 'de', name: 'German' },
+      { code: 'ja', name: 'Japanese' }
     ];
   }
   
@@ -100,6 +96,13 @@ class TranslationService {
         lowerText.includes('das ') || lowerText.includes(' und ') ||
         lowerText.includes('hallo') || lowerText.includes('danke')) {
       return 'de';
+    }
+    
+    // Japanese detection
+    if (lowerText.includes('は') || lowerText.includes('の') || 
+        lowerText.includes('に') || lowerText.includes('を') ||
+        lowerText.includes('こんにちは') || lowerText.includes('ありがとう')) {
+      return 'ja';
     }
     
     // Default to English

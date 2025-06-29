@@ -4,7 +4,7 @@ import App from './App.tsx';
 import './index.css';
 import StripeProvider from './components/StripeProvider.tsx';
 import { TranslationProvider } from './components/TranslationProvider.tsx';
-import { LingoProviderWrapper, loadDictionary } from "lingo.dev/react/client";
+import { LingoProviderWrapper } from "lingo.dev/react/client";
 import * as Sentry from "@sentry/react";
 
 // Initialize Sentry
@@ -49,10 +49,21 @@ Sentry.init({
   release: import.meta.env.VITE_APP_VERSION || "hustl@dev",
 });
 
+// Function to load dictionary based on locale
+const loadDictionary = async (locale: string) => {
+  try {
+    const dictionary = await import('./lingo/dictionary.js');
+    return dictionary.default[locale] || dictionary.default['en'];
+  } catch (error) {
+    console.error('Error loading dictionary:', error);
+    return {};
+  }
+};
+
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <Sentry.ErrorBoundary fallback={<p>An error has occurred. Our team has been notified.</p>}>
-      <LingoProviderWrapper loadDictionary={(locale) => import(`./lingo/dictionary.js`).then(module => module.default[locale] || module.default['en'])}>
+      <LingoProviderWrapper loadDictionary={(locale) => loadDictionary(locale)}>
         <TranslationProvider>
           <StripeProvider>
             <App />

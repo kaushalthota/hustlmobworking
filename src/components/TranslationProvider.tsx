@@ -83,11 +83,9 @@ export const TranslationProvider: React.FC<TranslationProviderProps> = ({ childr
     setIsTranslating(true);
     try {
       // First try to use the dictionary
-      if (lingo.t) {
-        const translated = lingo.t(text);
-        if (translated !== text) {
-          return translated;
-        }
+      const dictionary = await import('../lingo/dictionary.js').then(module => module.default);
+      if (dictionary && dictionary[currentLanguage] && dictionary[currentLanguage][text]) {
+        return dictionary[currentLanguage][text];
       }
       
       // Fall back to API translation if needed
@@ -136,6 +134,12 @@ export const TranslationProvider: React.FC<TranslationProviderProps> = ({ childr
           // Fall back to lingo.t if available
           if (lingo.t) {
             return lingo.t(text);
+          }
+          
+          // If all else fails, use our dictionary
+          const dictionary = require('../lingo/dictionary.js').default;
+          if (dictionary && dictionary[currentLanguage] && dictionary[currentLanguage][text]) {
+            return dictionary[currentLanguage][text];
           }
           
           return text;

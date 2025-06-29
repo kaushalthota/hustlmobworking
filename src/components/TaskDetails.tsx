@@ -496,389 +496,410 @@ const TaskDetails: React.FC<TaskDetailsProps> = ({ task, onClose, onAccept, onTa
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 backdrop-blur-sm">
-      <div className="bg-white rounded-2xl w-full max-w-6xl h-[90vh] flex shadow-2xl">
-        {/* Task Details Panel */}
-        <div className={`${showChat || activeTab !== 'details' ? 'w-1/2' : 'w-full'} overflow-y-auto border-r flex flex-col`}>
-          <div className="p-4 border-b flex justify-between items-center bg-gradient-to-r from-[#0038FF] to-[#0021A5] text-white rounded-tl-2xl">
-            <div className="flex items-center">
-              <h2 className="text-xl font-bold">Task Details</h2>
-              {isTaskParticipant && otherUserProfile && (
-                <div className="ml-4 flex space-x-2">
-                  <button
-                    onClick={() => setActiveTab('details')}
-                    className={`px-3 py-1 rounded-lg text-sm font-medium transition-colors ${
-                      activeTab === 'details' 
-                        ? 'bg-white text-[#0021A5]' 
-                        : 'bg-white/10 text-white hover:bg-white/20'
-                    }`}
-                  >
-                    Details
-                  </button>
-                  <button
-                    onClick={() => setActiveTab('chat')}
-                    className={`px-3 py-1 rounded-lg text-sm font-medium transition-colors ${
-                      activeTab === 'chat' 
-                        ? 'bg-white text-[#0021A5]' 
-                        : 'bg-white/10 text-white hover:bg-white/20'
-                    }`}
-                  >
-                    Chat
-                  </button>
-                  {shouldShowUnifiedTracker() && (
-                    <button
-                      onClick={() => setActiveTab('tracker')}
-                      className={`px-3 py-1 rounded-lg text-sm font-medium transition-colors ${
-                        activeTab === 'tracker' 
-                          ? 'bg-white text-[#0021A5]' 
-                          : 'bg-white/10 text-white hover:bg-white/20'
-                      }`}
-                    >
-                      Tracker
-                    </button>
-                  )}
-                </div>
-              )}
-            </div>
-            <button onClick={onClose} className="text-white hover:text-gray-200 p-2 rounded-full hover:bg-white/10 transition-colors">
-              <X className="w-6 h-6" />
-            </button>
-          </div>
-
-          {activeTab === 'details' && (
-            <div className="p-6 space-y-6 flex-1 overflow-y-auto">
-              {/* Task Creator Info */}
+      <div className={`bg-white rounded-2xl w-full max-w-6xl h-[90vh] flex shadow-2xl ${activeTab === 'tracker' ? 'flex-col' : ''}`}>
+        {activeTab === 'tracker' ? (
+          <>
+            {/* Full-width tracker view */}
+            <div className="p-4 border-b flex justify-between items-center bg-gradient-to-r from-[#0038FF] to-[#0021A5] text-white rounded-t-2xl">
               <div className="flex items-center">
-                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#0038FF] to-[#FF5A1F] flex items-center justify-center shadow-lg">
-                  <User className="w-6 h-6 text-white" />
-                </div>
-                <div className="ml-4">
-                  <h3 className="font-bold">Task Creator</h3>
-                  <p className="text-sm text-gray-500">
-                    Posted {new Date(taskData.created_at?.toDate ? taskData.created_at.toDate() : taskData.created_at).toLocaleDateString()}
-                  </p>
-                </div>
+                <h2 className="text-xl font-bold">Live Task Tracking: {taskData.title}</h2>
               </div>
-
-              {/* Unified Tracker Button - Only show for in-progress tasks */}
-              {shouldShowUnifiedTracker() && (
-                <div className="bg-gradient-to-r from-[#0038FF] to-[#0021A5] text-white rounded-2xl p-4 shadow-lg">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <h3 className="font-bold text-lg mb-1">Live Task Tracking</h3>
-                      <p className="text-blue-100">Track location, chat, and progress in real-time</p>
-                    </div>
-                    <button
-                      onClick={() => setActiveTab('tracker')}
-                      className="bg-white text-[#0038FF] px-4 py-2 rounded-lg font-semibold hover:bg-gray-100 transition-colors flex items-center"
-                    >
-                      <Map className="w-5 h-5 mr-2" />
-                      Open Tracker
-                    </button>
-                  </div>
-                </div>
-              )}
-
-              {/* Task Progress - Always show if task is not open */}
-              {taskData.status !== 'open' && (
-                <div className="bg-blue-50 rounded-2xl p-4 border border-blue-100 shadow-md">
-                  <h3 className="font-bold text-blue-900 mb-3">Task Progress</h3>
-                  <TaskProgress
-                    progressUpdates={progressUpdates}
-                    taskStatus={taskData.status}
-                  />
-                </div>
-              )}
-
-              {/* Task Details */}
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <h3 className="text-2xl font-bold">
-                    {translatedTitle || taskData.title}
-                  </h3>
-                  <TranslateButton 
-                    text={taskData.title}
-                    onTranslated={handleTranslateTitle}
-                    className="bg-gray-100 hover:bg-gray-200"
-                    targetLanguage={currentLanguage}
-                  />
-                </div>
-                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 mt-2">
-                  {taskData.category}
-                </span>
-
-                <div className="bg-gray-50 p-4 rounded-lg">
-                  <div className="flex items-center justify-between mb-2">
-                    <h4 className="font-medium">Description</h4>
-                    <TranslateButton 
-                      text={taskData.description}
-                      onTranslated={handleTranslateDescription}
-                      size="sm"
-                      className="bg-white"
-                      targetLanguage={currentLanguage}
-                    />
-                  </div>
-                  <p className="text-gray-600">
-                    {translatedDescription || taskData.description}
-                  </p>
-                </div>
-
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="flex items-center">
-                    <MapPin className="w-5 h-5 text-[#FF5A1F] mr-2" />
-                    <span>{taskData.location}</span>
-                  </div>
-                  <div className="flex items-center">
-                    <Clock className="w-5 h-5 text-[#FF5A1F] mr-2" />
-                    <span>{taskData.estimated_time}</span>
-                  </div>
-                  <div className="flex items-center">
-                    <DollarSign className="w-5 h-5 text-[#FF5A1F] mr-2" />
-                    <span className="font-bold">
-                      {taskData.price === 0 ? 'Free' : `$${taskData.price}`}
-                    </span>
-                  </div>
-                  {taskData.hourly_rate && (
-                    <div className="flex items-center">
-                      {formatHourlyRate()}
-                    </div>
-                  )}
-                  <div className="flex items-center">
-                    <Shield className="w-5 h-5 text-[#FF5A1F] mr-2" />
-                    <span>Verified User</span>
-                  </div>
-                </div>
-
-                {/* Payment Options Modal */}
-                {showPaymentOptions && (
-                  <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 backdrop-blur-sm">
-                    <div className="bg-white rounded-2xl p-6 max-w-md w-full shadow-2xl">
-                      <h3 className="text-xl font-bold mb-4">Choose Payment Method</h3>
-                      <p className="text-gray-600 mb-4">
-                        This task costs ${taskData.price}. How would you like to pay?
-                      </p>
-                      
-                      <div className="space-y-3">
+              <div className="flex items-center space-x-2">
+                <button
+                  onClick={() => setActiveTab('details')}
+                  className="bg-white/10 text-white px-3 py-1 rounded-lg text-sm font-medium hover:bg-white/20 transition-colors"
+                >
+                  Back to Details
+                </button>
+                <button onClick={onClose} className="text-white hover:text-gray-200 p-2 rounded-full hover:bg-white/10 transition-colors">
+                  <X className="w-6 h-6" />
+                </button>
+              </div>
+            </div>
+            <div className="flex-1 overflow-hidden">
+              <UnifiedTaskTracker taskId={task.id} />
+            </div>
+          </>
+        ) : (
+          <>
+            {/* Split view for details and chat */}
+            <div className={`${showChat || activeTab === 'chat' ? 'w-1/2' : 'w-full'} overflow-y-auto border-r flex flex-col`}>
+              <div className="p-4 border-b flex justify-between items-center bg-gradient-to-r from-[#0038FF] to-[#0021A5] text-white rounded-tl-2xl">
+                <div className="flex items-center">
+                  <h2 className="text-xl font-bold">Task Details</h2>
+                  {isTaskParticipant && otherUserProfile && (
+                    <div className="ml-4 flex space-x-2">
+                      <button
+                        onClick={() => setActiveTab('details')}
+                        className={`px-3 py-1 rounded-lg text-sm font-medium transition-colors ${
+                          activeTab === 'details' 
+                            ? 'bg-white text-[#0021A5]' 
+                            : 'bg-white/10 text-white hover:bg-white/20'
+                        }`}
+                      >
+                        Details
+                      </button>
+                      <button
+                        onClick={() => setActiveTab('chat')}
+                        className={`px-3 py-1 rounded-lg text-sm font-medium transition-colors ${
+                          activeTab === 'chat' 
+                            ? 'bg-white text-[#0021A5]' 
+                            : 'bg-white/10 text-white hover:bg-white/20'
+                        }`}
+                      >
+                        Chat
+                      </button>
+                      {shouldShowUnifiedTracker() && (
                         <button
-                          onClick={() => handlePaymentAndAccept('wallet')}
-                          disabled={walletBalance < taskData.price}
-                          className={`w-full p-4 rounded-xl border flex items-center justify-between ${
-                            walletBalance >= taskData.price
-                              ? 'border-[#0038FF] bg-blue-50 hover:bg-blue-100'
-                              : 'border-gray-300 bg-gray-50 cursor-not-allowed opacity-50'
+                          onClick={() => setActiveTab('tracker')}
+                          className={`px-3 py-1 rounded-lg text-sm font-medium transition-colors ${
+                            activeTab === 'tracker' 
+                              ? 'bg-white text-[#0021A5]' 
+                              : 'bg-white/10 text-white hover:bg-white/20'
                           }`}
                         >
-                          <div className="flex items-center">
-                            <DollarSign className="w-5 h-5 mr-2" />
-                            <div className="text-left">
-                              <p className="font-bold">Wallet Balance</p>
-                              <p className="text-sm text-gray-600">${walletBalance.toFixed(2)} available</p>
-                            </div>
-                          </div>
-                          {walletBalance < taskData.price && (
-                            <span className="text-red-600 text-sm">Insufficient</span>
-                          )}
+                          Tracker
                         </button>
-                        
-                        <button
-                          onClick={() => handlePaymentAndAccept('stripe')}
-                          className="w-full p-4 rounded-xl border border-gray-300 hover:bg-gray-50 flex items-center"
-                        >
-                          <CreditCard className="w-5 h-5 mr-2" />
-                          <div className="text-left">
-                            <p className="font-bold">Credit/Debit Card</p>
-                            <p className="text-sm text-gray-600">Pay with Stripe</p>
-                          </div>
-                        </button>
-                      </div>
-                      
-                      <div className="flex space-x-3 mt-4">
-                        <button
-                          onClick={() => setShowPaymentOptions(false)}
-                          className="flex-1 bg-gray-100 text-gray-700 px-4 py-3 rounded-xl font-bold hover:bg-gray-200 transition-colors"
-                        >
-                          Cancel
-                        </button>
-                      </div>
+                      )}
                     </div>
-                  </div>
-                )}
-
-                {/* Safety Tips */}
-                <div className="bg-yellow-50 rounded-2xl p-4 border border-yellow-100 shadow-md">
-                  <div className="flex items-start">
-                    <AlertTriangle className="w-5 h-5 text-yellow-500 mr-2 mt-0.5" />
-                    <div>
-                      <h4 className="font-bold text-yellow-800">Safety Tips</h4>
-                      <ul className="mt-2 text-sm text-yellow-700 space-y-1">
-                        <li>• Meet in a public place</li>
-                        <li>• Share your task details with a friend</li>
-                        <li>• Use our in-app chat for communication</li>
-                        <li>• Report any suspicious behavior</li>
-                      </ul>
-                    </div>
-                  </div>
+                  )}
                 </div>
+                <button onClick={onClose} className="text-white hover:text-gray-200 p-2 rounded-full hover:bg-white/10 transition-colors">
+                  <X className="w-6 h-6" />
+                </button>
+              </div>
 
-                {/* Complete Task Button (for task creator) */}
-                {isTaskCreator && taskData.status !== 'open' && taskData.status !== 'completed' && (
-                  <StarBorder color="#10B981">
-                    <button
-                      onClick={() => updateTaskProgress('completed', 'Task completed')}
-                      className="w-full bg-gradient-to-r from-green-600 to-green-500 text-white px-4 py-3 rounded-lg font-bold hover:opacity-90 transition duration-200 flex items-center justify-center"
-                    >
-                      <CheckCircle className="w-5 h-5 mr-2" />
-                      Mark Task as Completed
-                    </button>
-                  </StarBorder>
-                )}
+              {activeTab === 'details' && (
+                <div className="p-6 space-y-6 flex-1 overflow-y-auto">
+                  {/* Task Creator Info */}
+                  <div className="flex items-center">
+                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#0038FF] to-[#FF5A1F] flex items-center justify-center shadow-lg">
+                      <User className="w-6 h-6 text-white" />
+                    </div>
+                    <div className="ml-4">
+                      <h3 className="font-bold">Task Creator</h3>
+                      <p className="text-sm text-gray-500">
+                        Posted {new Date(taskData.created_at?.toDate ? taskData.created_at.toDate() : taskData.created_at).toLocaleDateString()}
+                      </p>
+                    </div>
+                  </div>
 
-                {/* Update Status Button (for task performer) */}
-                {isTaskPerformer && taskData.status !== 'open' && taskData.status !== 'completed' && (
-                  <StarBorder color="#0038FF">
-                    <button
-                      onClick={() => setShowStatusUpdateForm(true)}
-                      className="w-full bg-gradient-to-r from-[#0038FF] to-[#0021A5] text-white px-4 py-3 rounded-lg font-bold hover:opacity-90 transition duration-200 flex items-center justify-center"
-                    >
-                      <ArrowRight className="w-5 h-5 mr-2" />
-                      Update Task Status
-                    </button>
-                  </StarBorder>
-                )}
-
-                {/* Review Buttons (for completed tasks) */}
-                {taskData.status === 'completed' && isTaskParticipant && (
-                  <div className="space-y-3">
-                    {!hasReviewed && (
-                      <StarBorder color="#0038FF">
+                  {/* Unified Tracker Button - Only show for in-progress tasks */}
+                  {shouldShowUnifiedTracker() && (
+                    <div className="bg-gradient-to-r from-[#0038FF] to-[#0021A5] text-white rounded-2xl p-4 shadow-lg">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <h3 className="font-bold text-lg mb-1">Live Task Tracking</h3>
+                          <p className="text-blue-100">Track location, chat, and progress in real-time</p>
+                        </div>
                         <button
-                          onClick={handleLeaveReview}
-                          className="w-full bg-gradient-to-r from-[#0038FF] to-[#0021A5] text-white px-4 py-3 rounded-lg font-bold hover:opacity-90 transition duration-200 flex items-center justify-center"
+                          onClick={() => setActiveTab('tracker')}
+                          className="bg-white text-[#0038FF] px-4 py-2 rounded-lg font-semibold hover:bg-gray-100 transition-colors flex items-center"
                         >
-                          <Star className="w-5 h-5 mr-2" />
-                          Leave a Review
+                          <Map className="w-5 h-5 mr-2" />
+                          Open Tracker
+                        </button>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Task Progress - Always show if task is not open */}
+                  {taskData.status !== 'open' && (
+                    <div className="bg-blue-50 rounded-2xl p-4 border border-blue-100 shadow-md">
+                      <h3 className="font-bold text-blue-900 mb-3">Task Progress</h3>
+                      <TaskProgress
+                        progressUpdates={progressUpdates}
+                        taskStatus={taskData.status}
+                      />
+                    </div>
+                  )}
+
+                  {/* Task Details */}
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <h3 className="text-2xl font-bold">
+                        {translatedTitle || taskData.title}
+                      </h3>
+                      <TranslateButton 
+                        text={taskData.title}
+                        onTranslated={handleTranslateTitle}
+                        className="bg-gray-100 hover:bg-gray-200"
+                        targetLanguage={currentLanguage}
+                      />
+                    </div>
+                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 mt-2">
+                      {taskData.category}
+                    </span>
+
+                    <div className="bg-gray-50 p-4 rounded-lg">
+                      <div className="flex items-center justify-between mb-2">
+                        <h4 className="font-medium">Description</h4>
+                        <TranslateButton 
+                          text={taskData.description}
+                          onTranslated={handleTranslateDescription}
+                          size="sm"
+                          className="bg-white"
+                          targetLanguage={currentLanguage}
+                        />
+                      </div>
+                      <p className="text-gray-600">
+                        {translatedDescription || taskData.description}
+                      </p>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="flex items-center">
+                        <MapPin className="w-5 h-5 text-[#FF5A1F] mr-2" />
+                        <span>{taskData.location}</span>
+                      </div>
+                      <div className="flex items-center">
+                        <Clock className="w-5 h-5 text-[#FF5A1F] mr-2" />
+                        <span>{taskData.estimated_time}</span>
+                      </div>
+                      <div className="flex items-center">
+                        <DollarSign className="w-5 h-5 text-[#FF5A1F] mr-2" />
+                        <span className="font-bold">
+                          {taskData.price === 0 ? 'Free' : `$${taskData.price}`}
+                        </span>
+                      </div>
+                      {taskData.hourly_rate && (
+                        <div className="flex items-center">
+                          {formatHourlyRate()}
+                        </div>
+                      )}
+                      <div className="flex items-center">
+                        <Shield className="w-5 h-5 text-[#FF5A1F] mr-2" />
+                        <span>Verified User</span>
+                      </div>
+                    </div>
+
+                    {/* Payment Options Modal */}
+                    {showPaymentOptions && (
+                      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 backdrop-blur-sm">
+                        <div className="bg-white rounded-2xl p-6 max-w-md w-full shadow-2xl">
+                          <h3 className="text-xl font-bold mb-4">Choose Payment Method</h3>
+                          <p className="text-gray-600 mb-4">
+                            This task costs ${taskData.price}. How would you like to pay?
+                          </p>
+                          
+                          <div className="space-y-3">
+                            <button
+                              onClick={() => handlePaymentAndAccept('wallet')}
+                              disabled={walletBalance < taskData.price}
+                              className={`w-full p-4 rounded-xl border flex items-center justify-between ${
+                                walletBalance >= taskData.price
+                                  ? 'border-[#0038FF] bg-blue-50 hover:bg-blue-100'
+                                  : 'border-gray-300 bg-gray-50 cursor-not-allowed opacity-50'
+                              }`}
+                            >
+                              <div className="flex items-center">
+                                <DollarSign className="w-5 h-5 mr-2" />
+                                <div className="text-left">
+                                  <p className="font-bold">Wallet Balance</p>
+                                  <p className="text-sm text-gray-600">${walletBalance.toFixed(2)} available</p>
+                                </div>
+                              </div>
+                              {walletBalance < taskData.price && (
+                                <span className="text-red-600 text-sm">Insufficient</span>
+                              )}
+                            </button>
+                            
+                            <button
+                              onClick={() => handlePaymentAndAccept('stripe')}
+                              className="w-full p-4 rounded-xl border border-gray-300 hover:bg-gray-50 flex items-center"
+                            >
+                              <CreditCard className="w-5 h-5 mr-2" />
+                              <div className="text-left">
+                                <p className="font-bold">Credit/Debit Card</p>
+                                <p className="text-sm text-gray-600">Pay with Stripe</p>
+                              </div>
+                            </button>
+                          </div>
+                          
+                          <div className="flex space-x-3 mt-4">
+                            <button
+                              onClick={() => setShowPaymentOptions(false)}
+                              className="flex-1 bg-gray-100 text-gray-700 px-4 py-3 rounded-xl font-bold hover:bg-gray-200 transition-colors"
+                            >
+                              Cancel
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Safety Tips */}
+                    <div className="bg-yellow-50 rounded-2xl p-4 border border-yellow-100 shadow-md">
+                      <div className="flex items-start">
+                        <AlertTriangle className="w-5 h-5 text-yellow-500 mr-2 mt-0.5" />
+                        <div>
+                          <h4 className="font-bold text-yellow-800">Safety Tips</h4>
+                          <ul className="mt-2 text-sm text-yellow-700 space-y-1">
+                            <li>• Meet in a public place</li>
+                            <li>• Share your task details with a friend</li>
+                            <li>• Use our in-app chat for communication</li>
+                            <li>• Report any suspicious behavior</li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Complete Task Button (for task creator) */}
+                    {isTaskCreator && taskData.status !== 'open' && taskData.status !== 'completed' && (
+                      <StarBorder color="#10B981">
+                        <button
+                          onClick={() => updateTaskProgress('completed', 'Task completed')}
+                          className="w-full bg-gradient-to-r from-green-600 to-green-500 text-white px-4 py-3 rounded-lg font-bold hover:opacity-90 transition duration-200 flex items-center justify-center"
+                        >
+                          <CheckCircle className="w-5 h-5 mr-2" />
+                          Mark Task as Completed
                         </button>
                       </StarBorder>
                     )}
-                    
-                    <button
-                      onClick={handleViewReviews}
-                      className="w-full bg-gray-100 text-gray-700 px-4 py-3 rounded-lg font-bold hover:bg-gray-200 transition duration-200 flex items-center justify-center"
-                    >
-                      <MessageSquare className="w-5 h-5 mr-2" />
-                      View Reviews
-                    </button>
-                  </div>
-                )}
 
-                {/* Action Buttons */}
-                {currentUser && !isTaskCreator && taskData.status === 'open' && (
-                  <div className="flex space-x-4">
-                    <StarBorder color="#0038FF" className="flex-1">
-                      <button
-                        onClick={handleAcceptTask}
-                        disabled={acceptLoading}
-                        className="w-full bg-gradient-to-r from-[#0038FF] to-[#0021A5] text-white px-4 py-3 rounded-lg font-bold hover:opacity-90 transition duration-200 flex items-center justify-center"
-                      >
-                        {acceptLoading ? (
-                          <Loader className="w-5 h-5 animate-spin" />
-                        ) : (
-                          <>
-                            <CheckCircle className="w-5 h-5 mr-2" />
-                            {taskData.price > 0 ? `Accept & Pay $${taskData.price}` : 'Accept Task'}
-                          </>
+                    {/* Update Status Button (for task performer) */}
+                    {isTaskPerformer && taskData.status !== 'open' && taskData.status !== 'completed' && (
+                      <StarBorder color="#0038FF">
+                        <button
+                          onClick={() => setShowStatusUpdateForm(true)}
+                          className="w-full bg-gradient-to-r from-[#0038FF] to-[#0021A5] text-white px-4 py-3 rounded-lg font-bold hover:opacity-90 transition duration-200 flex items-center justify-center"
+                        >
+                          <ArrowRight className="w-5 h-5 mr-2" />
+                          Update Task Status
+                        </button>
+                      </StarBorder>
+                    )}
+
+                    {/* Review Buttons (for completed tasks) */}
+                    {taskData.status === 'completed' && isTaskParticipant && (
+                      <div className="space-y-3">
+                        {!hasReviewed && (
+                          <StarBorder color="#0038FF">
+                            <button
+                              onClick={handleLeaveReview}
+                              className="w-full bg-gradient-to-r from-[#0038FF] to-[#0021A5] text-white px-4 py-3 rounded-lg font-bold hover:opacity-90 transition duration-200 flex items-center justify-center"
+                            >
+                              <Star className="w-5 h-5 mr-2" />
+                              Leave a Review
+                            </button>
+                          </StarBorder>
                         )}
+                        
+                        <button
+                          onClick={handleViewReviews}
+                          className="w-full bg-gray-100 text-gray-700 px-4 py-3 rounded-lg font-bold hover:bg-gray-200 transition duration-200 flex items-center justify-center"
+                        >
+                          <MessageSquare className="w-5 h-5 mr-2" />
+                          View Reviews
+                        </button>
+                      </div>
+                    )}
+
+                    {/* Action Buttons */}
+                    {currentUser && !isTaskCreator && taskData.status === 'open' && (
+                      <div className="flex space-x-4">
+                        <StarBorder color="#0038FF" className="flex-1">
+                          <button
+                            onClick={handleAcceptTask}
+                            disabled={acceptLoading}
+                            className="w-full bg-gradient-to-r from-[#0038FF] to-[#0021A5] text-white px-4 py-3 rounded-lg font-bold hover:opacity-90 transition duration-200 flex items-center justify-center"
+                          >
+                            {acceptLoading ? (
+                              <Loader className="w-5 h-5 animate-spin" />
+                            ) : (
+                              <>
+                                <CheckCircle className="w-5 h-5 mr-2" />
+                                {taskData.price > 0 ? `Accept & Pay $${taskData.price}` : 'Accept Task'}
+                              </>
+                            )}
+                          </button>
+                        </StarBorder>
+                        <button
+                          onClick={handleDeclineTask}
+                          disabled={declineLoading}
+                          className="flex-1 bg-gray-100 text-gray-700 px-4 py-3 rounded-xl font-bold hover:bg-gray-200 transition duration-200 flex items-center justify-center shadow-sm"
+                        >
+                          {declineLoading ? (
+                            <Loader className="w-5 h-5 animate-spin" />
+                          ) : (
+                            <>
+                              <XCircle className="w-5 h-5 mr-2" />
+                              Decline
+                            </>
+                          )}
+                        </button>
+                      </div>
+                    )}
+
+                    {/* Report Button */}
+                    {currentUser && !isTaskCreator && (
+                      <button
+                        onClick={handleReport}
+                        className="w-full px-4 py-3 border border-gray-300 rounded-xl text-gray-700 hover:bg-gray-50 transition duration-200 flex items-center justify-center shadow-sm"
+                      >
+                        <AlertTriangle className="w-5 h-5 mr-2" />
+                        Report Task
                       </button>
-                    </StarBorder>
-                    <button
-                      onClick={handleDeclineTask}
-                      disabled={declineLoading}
-                      className="flex-1 bg-gray-100 text-gray-700 px-4 py-3 rounded-xl font-bold hover:bg-gray-200 transition duration-200 flex items-center justify-center shadow-sm"
-                    >
-                      {declineLoading ? (
-                        <Loader className="w-5 h-5 animate-spin" />
-                      ) : (
-                        <>
-                          <XCircle className="w-5 h-5 mr-2" />
-                          Decline
-                        </>
-                      )}
-                    </button>
+                    )}
+
+                    {/* Chat Button (for task participants) */}
+                    {isTaskParticipant && !showChat && otherUserProfile && activeTab === 'details' && (
+                      <StarBorder color="#0038FF">
+                        <button
+                          onClick={() => {
+                            setShowChat(true);
+                            setActiveTab('chat');
+                          }}
+                          className="w-full bg-gradient-to-r from-[#0038FF] to-[#0021A5] text-white px-4 py-3 rounded-lg font-bold hover:opacity-90 transition duration-200 flex items-center justify-center"
+                        >
+                          <MessageSquare className="w-5 h-5 mr-2" />
+                          Open Chat
+                        </button>
+                      </StarBorder>
+                    )}
                   </div>
-                )}
+                </div>
+              )}
 
-                {/* Report Button */}
-                {currentUser && !isTaskCreator && (
+              {activeTab === 'chat' && otherUserProfile && currentUser && (
+                <div className="flex-1 flex flex-col">
+                  <GameChat
+                    taskId={taskData.id}
+                    currentUser={currentUser}
+                    otherUser={otherUserProfile}
+                    showTypingIndicator={true}
+                    enableFileSharing={true}
+                    showUserProfile={true}
+                  />
+                </div>
+              )}
+            </div>
+
+            {/* Chat Panel (when not in tab mode) */}
+            {showChat && otherUserProfile && currentUser && activeTab === 'details' && (
+              <div className="w-1/2 flex flex-col">
+                <div className="p-4 border-b bg-gradient-to-r from-[#0021A5] to-[#0038FF] flex justify-between items-center rounded-tr-2xl">
+                  <h3 className="font-bold text-white flex items-center">
+                    <MessageSquare className="w-5 h-5 mr-2" />
+                    Chat with {otherUserProfile.full_name}
+                  </h3>
                   <button
-                    onClick={handleReport}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl text-gray-700 hover:bg-gray-50 transition duration-200 flex items-center justify-center shadow-sm"
+                    onClick={() => setShowChat(false)}
+                    className="text-white hover:text-gray-200 p-2 rounded-full hover:bg-white/10 transition-colors"
                   >
-                    <AlertTriangle className="w-5 h-5 mr-2" />
-                    Report Task
+                    <X className="w-5 h-5" />
                   </button>
-                )}
-
-                {/* Chat Button (for task participants) */}
-                {isTaskParticipant && !showChat && otherUserProfile && activeTab === 'details' && (
-                  <StarBorder color="#0038FF">
-                    <button
-                      onClick={() => {
-                        setShowChat(true);
-                        setActiveTab('chat');
-                      }}
-                      className="w-full bg-gradient-to-r from-[#0038FF] to-[#0021A5] text-white px-4 py-3 rounded-lg font-bold hover:opacity-90 transition duration-200 flex items-center justify-center"
-                    >
-                      <MessageSquare className="w-5 h-5 mr-2" />
-                      Open Chat
-                    </button>
-                  </StarBorder>
-                )}
+                </div>
+                <div className="flex-1">
+                  <GameChat
+                    taskId={taskData.id}
+                    currentUser={currentUser}
+                    otherUser={otherUserProfile}
+                  />
+                </div>
               </div>
-            </div>
-          )}
-
-          {activeTab === 'chat' && otherUserProfile && currentUser && (
-            <div className="flex-1 flex flex-col">
-              <GameChat
-                taskId={taskData.id}
-                currentUser={currentUser}
-                otherUser={otherUserProfile}
-                showTypingIndicator={true}
-                enableFileSharing={true}
-                showUserProfile={true}
-              />
-            </div>
-          )}
-
-          {activeTab === 'tracker' && (
-            <div className="flex-1 flex flex-col">
-              <UnifiedTaskTracker taskId={task.id} />
-            </div>
-          )}
-        </div>
-
-        {/* Chat Panel (when not in tab mode) */}
-        {showChat && otherUserProfile && currentUser && activeTab === 'details' && (
-          <div className="w-1/2 flex flex-col">
-            <div className="p-4 border-b bg-gradient-to-r from-[#0021A5] to-[#0038FF] flex justify-between items-center rounded-tr-2xl">
-              <h3 className="font-bold text-white flex items-center">
-                <MessageSquare className="w-5 h-5 mr-2" />
-                Chat with {otherUserProfile.full_name}
-              </h3>
-              <button
-                onClick={() => setShowChat(false)}
-                className="text-white hover:text-gray-200 p-2 rounded-full hover:bg-white/10 transition-colors"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-            <div className="flex-1">
-              <GameChat
-                taskId={taskData.id}
-                currentUser={currentUser}
-                otherUser={otherUserProfile}
-              />
-            </div>
-          </div>
+            )}
+          </>
         )}
       </div>
 

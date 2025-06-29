@@ -82,7 +82,6 @@ export default function VoiceAssistant({ onClose, userLocation }: VoiceAssistant
   const [transcript, setTranscript] = useState('');
   const [response, setResponse] = useState('');
   const [error, setError] = useState<string | null>(null);
-  const [voiceError, setVoiceError] = useState<string | null>(null);
   const [isAudioEnabled, setIsAudioEnabled] = useState(true);
   
   const recognitionRef = useRef<SpeechRecognition | null>(null);
@@ -223,14 +222,12 @@ export default function VoiceAssistant({ onClose, userLocation }: VoiceAssistant
     if (!isAudioEnabled || isSpeaking) return;
     
     setIsSpeaking(true);
-    setVoiceError(null);
     
     try {
       // Use the modified ElevenLabs service that uses the audio manager
       await elevenLabsService.speakText(text, undefined, audioManager);
     } catch (error: any) {
       console.warn('Voice synthesis failed:', error.message);
-      setVoiceError(error.message);
       // Don't show error to user, just disable audio silently
       setIsAudioEnabled(false);
     } finally {
@@ -240,7 +237,6 @@ export default function VoiceAssistant({ onClose, userLocation }: VoiceAssistant
 
   const toggleAudio = () => {
     setIsAudioEnabled(!isAudioEnabled);
-    setVoiceError(null);
     
     // If turning off audio, stop any playing audio
     if (isAudioEnabled) {

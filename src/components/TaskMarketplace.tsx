@@ -31,6 +31,7 @@ const TaskMarketplace: React.FC<TaskMarketplaceProps> = ({ userLocation }) => {
   const [selectedTaskForUpdate, setSelectedTaskForUpdate] = useState<any>(null);
   const [showFilters, setShowFilters] = useState(false);
   const [showCompletedNotification, setShowCompletedNotification] = useState(false);
+  const [taskSubscriptions, setTaskSubscriptions] = useState<Map<string, () => void>>(new Map());
 
   useEffect(() => {
     getCurrentUser();
@@ -49,10 +50,19 @@ const TaskMarketplace: React.FC<TaskMarketplaceProps> = ({ userLocation }) => {
     };
     window.addEventListener('create-task', handleCreateTask);
 
+    // Listen for profile tab change events
+    const handleSetProfileTab = (event: any) => {
+      if (event.detail && event.detail.tab) {
+        console.log('Setting profile tab to:', event.detail.tab);
+      }
+    };
+    window.addEventListener('set-profile-tab', handleSetProfileTab);
+
     return () => {
       // Clean up all subscriptions
       taskSubscriptions.forEach(unsubscribe => unsubscribe());
       window.removeEventListener('create-task', handleCreateTask);
+      window.removeEventListener('set-profile-tab', handleSetProfileTab);
     };
   }, [selectedCategory, sortBy, userLocation, activeTab, currentUser]);
 
@@ -67,8 +77,6 @@ const TaskMarketplace: React.FC<TaskMarketplaceProps> = ({ userLocation }) => {
       console.error('Error getting current user:', error);
     }
   };
-
-  const [taskSubscriptions, setTaskSubscriptions] = useState<Map<string, () => void>>(new Map());
 
   const setupTaskSubscriptions = () => {
     // Clean up existing subscriptions
@@ -237,9 +245,13 @@ const TaskMarketplace: React.FC<TaskMarketplaceProps> = ({ userLocation }) => {
       // Automatically switch to "Tasks You're Doing" tab
       setActiveTab('accepted');
       
-      // Open task details to show progress controls and chat
+      // Open task details to show progress controls
       setTimeout(() => {
-        setSelectedTask(task);
+        const acceptedTask = tasks.find(t => t.id === taskId);
+        if (acceptedTask) {
+          setSelectedTask(acceptedTask);
+          setSelectedTaskInitialTab('details');
+        }
       }, 500);
       
     } catch (error) {
@@ -259,6 +271,7 @@ const TaskMarketplace: React.FC<TaskMarketplaceProps> = ({ userLocation }) => {
   const handleContinueTask = (task: any) => {
     // Open task details with progress controls and chat visible
     setSelectedTask(task);
+    setSelectedTaskInitialTab('details');
   };
 
   const handleViewTracker = (task: any) => {
@@ -267,8 +280,9 @@ const TaskMarketplace: React.FC<TaskMarketplaceProps> = ({ userLocation }) => {
   };
 
   const handleUpdateStatus = (task: any) => {
-    setSelectedTaskForUpdate(task);
-    setShowStatusUpdate(true);
+    // Instead of opening the status update modal, open the task details page
+    setSelectedTask(task);
+    setSelectedTaskInitialTab('details');
   };
 
   const handleStatusUpdateComplete = () => {
@@ -598,7 +612,10 @@ const TaskMarketplace: React.FC<TaskMarketplaceProps> = ({ userLocation }) => {
           <InteractiveCampusMap
             tasks={filteredTasks}
             currentLocation={currentLocation}
-            onTaskSelect={setSelectedTask}
+            onTaskSelect={(task) => {
+              setSelectedTask(task);
+              setSelectedTaskInitialTab('details');
+            }}
             onBundleSelect={setSelectedBundle}
             onLocationUpdate={setCurrentLocation}
           />
@@ -745,7 +762,8 @@ const TaskMarketplace: React.FC<TaskMarketplaceProps> = ({ userLocation }) => {
                         <button
                           onClick={(e) => {
                             e.stopPropagation();
-                            handleUpdateStatus(task);
+                            // Direct to task details page instead of status update modal
+                            handleContinueTask(task);
                           }}
                           className="w-full bg-gradient-to-r from-[#0038FF] to-[#0021A5] text-white px-4 py-2 rounded-lg font-semibold flex items-center justify-center"
                         >

@@ -88,15 +88,40 @@ const GameChat: React.FC<GameChatProps> = ({
   const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const menuRef = useRef<HTMLDivElement>(null);
   const { currentLanguage } = useTranslation();
+  const [chatThreadId, setChatThreadId] = useState<string>(taskId);
   
   useEffect(() => {
-    if (!taskId || !currentUser?.uid || !otherUser?.id) {
-      console.warn('GameChat component missing required props:', { taskId, currentUserUid: currentUser?.uid, otherUserId: otherUser?.id });
+    if (!currentUser?.uid || !otherUser?.id) {
+      console.warn('GameChat component missing required props:', { currentUserUid: currentUser?.uid, otherUserId: otherUser?.id });
       return;
     }
     
+    // Find or create a chat thread between the users
+    const initializeChat = async () => {
+      try {
+        const threadId = await messageService.findOrCreateChatThread(
+          currentUser.uid,
+          otherUser.id,
+          taskId
+        );
+        setChatThreadId(threadId);
+        
+        // Now load messages from this thread
+        const unsubscribe = messageService.subscribeToMessages(threadId, (messageData) => {
+          setMessages(messageData);
+          setLoading(false);
+        });
+        
+        return unsubscribe;
+      } catch (error) {
+        console.error('Error initializing chat:', error);
+        setLoading(false);
+        return () => {};
+      }
+    };
+    
     loadOtherUserProfile();
-    const unsubscribe = loadMessages();
+    const unsubscribePromise = initializeChat();
     setConnectionStatus('connected');
     
     // Handle clicks outside the menu
@@ -109,13 +134,16 @@ const GameChat: React.FC<GameChatProps> = ({
     document.addEventListener('mousedown', handleClickOutside);
     
     return () => {
-      if (unsubscribe) unsubscribe();
+      unsubscribePromise.then(unsubscribe => {
+        if (unsubscribe) unsubscribe();
+      });
+      
       if (typingTimeoutRef.current) {
         clearTimeout(typingTimeoutRef.current);
       }
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [taskId, currentUser, otherUser]);
+  }, [currentUser, otherUser, taskId]);
 
   useEffect(() => {
     scrollToBottom();
@@ -167,29 +195,6 @@ const GameChat: React.FC<GameChatProps> = ({
     return 'New Gator';
   };
 
-  const loadMessages = () => {
-    if (!taskId || !currentUser?.uid || !otherUser?.id) {
-      console.warn('Cannot load messages: missing required data');
-      return () => {};
-    }
-    
-    setLoading(true);
-    
-    // Use the messageService to get messages for this task
-    const unsubscribe = messageService.subscribeToMessages(taskId, (messageData) => {
-      setMessages(messageData);
-      
-      // Mark messages as read and delivered
-      markMessagesAsReadAndDelivered(messageData);
-      
-      scrollToBottom();
-      setConnectionStatus('connected');
-      setLoading(false);
-    });
-
-    return unsubscribe;
-  };
-
   const markMessagesAsReadAndDelivered = async (messageList: Message[]) => {
     if (!currentUser?.uid) return;
     
@@ -199,7 +204,7 @@ const GameChat: React.FC<GameChatProps> = ({
     
     for (const message of unreadMessages) {
       try {
-        await messageService.markAsRead(taskId, message.id);
+        await messageService.markAsRead(chatThreadId, message.id);
       } catch (error) {
         console.error('Error marking message as read:', error);
       }
@@ -286,7 +291,7 @@ const GameChat: React.FC<GameChatProps> = ({
 
       const fileExt = file.name.split('.').pop();
       const fileName = `${Math.random().toString(36).substring(2, 15)}.${fileExt}`;
-      const filePath = `chat/${taskId}/${fileName}`;
+      const filePath = `chat/${chatThreadId}/${fileName}`;
 
       const storageRef = ref(storage, filePath);
       await uploadBytes(storageRef, file);
@@ -310,7 +315,7 @@ const GameChat: React.FC<GameChatProps> = ({
       return;
     }
     
-    if (!currentUser?.uid || !otherUser?.id || !taskId) {
+    if (!currentUser?.uid || !otherUser?.id) {
       toast.error('Missing required information to send message');
       return;
     }
@@ -374,7 +379,7 @@ const GameChat: React.FC<GameChatProps> = ({
       }
 
       // Send the message using the messageService
-      await messageService.sendMessage(taskId, messageData);
+      await messageService.sendMessage(chatThreadId, messageData);
 
       // Remove optimistic message since real one will come through subscription
       setMessages(prev => prev.filter(msg => msg.id !== optimisticId));
@@ -392,7 +397,7 @@ const GameChat: React.FC<GameChatProps> = ({
 
   const addReaction = async (messageId: string, emoji: string) => {
     try {
-      await messageService.addReaction(taskId, messageId, currentUser.uid, emoji);
+      await messageService.addReaction(chatThreadId, messageId, currentUser.uid, emoji);
       setShowReactions(null);
     } catch (error) {
       console.error('Error adding reaction:', error);
@@ -502,7 +507,7 @@ const GameChat: React.FC<GameChatProps> = ({
     setShowMenu(false);
   };
 
-  if (!taskId || !currentUser?.uid || !otherUser?.id) {
+  if (!currentUser?.uid || !otherUser?.id) {
     return (
       <div className="flex flex-col h-full items-center justify-center text-gray-500">
         <p>Unable to load chat. Please refresh the page.</p>
@@ -597,7 +602,7 @@ const GameChat: React.FC<GameChatProps> = ({
               <MessageSquare className="w-10 h-10 text-white" />
             </div>
             <p className="text-lg font-bold mb-2">Start the conversation!</p>
-            <p className="text-sm">Send a message to {otherUserProfile?.full_name} about the task.</p>
+            <p className="text-sm">Send a message to {otherUserProfile?.full_name}.</p>
           </div>
         ) : (
           messages.map((message, index) => {

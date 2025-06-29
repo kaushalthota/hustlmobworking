@@ -2,9 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { MessageSquare, Search, User, ChevronRight, Clock, Eye, MoreVertical, Info, Flag } from 'lucide-react';
 import Chat from './Chat';
 import GameChat from './GameChat';
-import { collection, query, where, getDocs, orderBy, onSnapshot, doc, getDoc } from 'firebase/firestore';
-import { db } from '../lib/firebase';
-import { taskService, messageService, profileService } from '../lib/database';
+import { messageService, profileService } from '../lib/database';
 import UserProfileModal from './UserProfileModal';
 import ReportModal from './ReportModal';
 import toast from 'react-hot-toast';
@@ -41,6 +39,7 @@ const ChatList: React.FC<ChatListProps> = ({ userId, currentUser }) => {
   const [showMenu, setShowMenu] = useState<string | null>(null);
   const menuRef = useRef<HTMLDivElement>(null);
   const [isMobile, setIsMobile] = useState(false);
+  const [unsubscribeFunction, setUnsubscribeFunction] = useState<(() => void) | null>(null);
 
   useEffect(() => {
     loadChats();
@@ -52,8 +51,6 @@ const ChatList: React.FC<ChatListProps> = ({ userId, currentUser }) => {
       }
     };
     
-    document.addEventListener('mousedown', handleClickOutside);
-    
     // Check if mobile
     const checkMobile = () => {
       setIsMobile(window.innerWidth < 768);
@@ -61,10 +58,14 @@ const ChatList: React.FC<ChatListProps> = ({ userId, currentUser }) => {
     
     checkMobile();
     window.addEventListener('resize', checkMobile);
+    document.addEventListener('mousedown', handleClickOutside);
     
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
       window.removeEventListener('resize', checkMobile);
+      document.removeEventListener('mousedown', handleClickOutside);
+      if (unsubscribeFunction) {
+        unsubscribeFunction();
+      }
     };
   }, [userId]);
 
@@ -72,79 +73,52 @@ const ChatList: React.FC<ChatListProps> = ({ userId, currentUser }) => {
     try {
       setLoading(true);
       
-      // Get all user chat threads
-      const userChatThreads = await messageService.getUserChatThreads(userId);
-      
-      // If there are no chat threads, check for tasks to create chat threads
-      if (userChatThreads.length === 0) {
-        await createChatThreadsFromTasks();
-        return; // The function above will call loadChats again
+      // Unsubscribe from previous subscription if exists
+      if (unsubscribeFunction) {
+        unsubscribeFunction();
       }
       
-      // Process chat threads to get the right format
-      const chatItems: ChatItem[] = userChatThreads.map(thread => {
-        return {
-          id: thread.id,
-          task_id: thread.last_task_id, // Use the last task ID if available
-          other_user: {
-            id: thread.other_user.id,
-            full_name: thread.other_user.full_name || 'Unknown User',
-            avatar_url: thread.other_user.avatar_url
-          },
-          last_message: thread.last_message ? {
-            content: thread.last_message,
-            created_at: thread.last_message_time
-          } : undefined
-        };
+      // Subscribe to user chat threads
+      const unsubscribe = messageService.subscribeToUserChatThreads(userId, (chatThreads) => {
+        // Process chat threads to get the right format
+        const chatItems: ChatItem[] = chatThreads.map(thread => {
+          return {
+            id: thread.id,
+            task_id: thread.last_task_id, // Use the last task ID if available
+            other_user: {
+              id: thread.other_user?.id || 'unknown',
+              full_name: thread.other_user?.full_name || 'Unknown User',
+              avatar_url: thread.other_user?.avatar_url
+            },
+            last_message: thread.last_message ? {
+              content: thread.last_message,
+              created_at: thread.last_message_time
+            } : undefined
+          };
+        });
+        
+        // Sort by last message time (most recent first)
+        chatItems.sort((a, b) => {
+          if (!a.last_message && !b.last_message) return 0;
+          if (!a.last_message) return 1;
+          if (!b.last_message) return -1;
+          
+          const aTime = a.last_message.created_at ? new Date(a.last_message.created_at).getTime() : 0;
+          const bTime = b.last_message.created_at ? new Date(b.last_message.created_at).getTime() : 0;
+          
+          return bTime - aTime;
+        });
+        
+        setChats(chatItems);
+        setLoading(false);
       });
       
-      // Sort by last message time (most recent first)
-      chatItems.sort((a, b) => {
-        if (!a.last_message && !b.last_message) return 0;
-        if (!a.last_message) return 1;
-        if (!b.last_message) return -1;
-        
-        const aTime = new Date(a.last_message.created_at).getTime();
-        const bTime = new Date(b.last_message.created_at).getTime();
-        
-        return bTime - aTime;
-      });
+      setUnsubscribeFunction(() => unsubscribe);
       
-      setChats(chatItems);
     } catch (error) {
       console.error('Error loading chats:', error);
       toast.error('Error loading chat list');
-    } finally {
       setLoading(false);
-    }
-  };
-
-  const createChatThreadsFromTasks = async () => {
-    try {
-      // Get all tasks where the user is either creator or acceptor
-      const allTasks = await taskService.getTasks();
-      
-      // Filter tasks where user is involved and task is not open
-      const userTasks = allTasks.filter(task => 
-        (task.created_by === userId || task.accepted_by === userId) && 
-        task.status !== 'open' && task.accepted_by
-      );
-      
-      // Create chat threads for each task if they don't exist
-      for (const task of userTasks) {
-        const otherUserId = task.created_by === userId ? task.accepted_by : task.created_by;
-        
-        // Skip if otherUserId is null
-        if (!otherUserId) continue;
-        
-        // Create a chat thread between the users, passing the task ID
-        await messageService.findOrCreateChatThread(userId, otherUserId, task.id);
-      }
-      
-      // Reload chats after creating threads
-      loadChats();
-    } catch (error) {
-      console.error('Error creating chat threads from tasks:', error);
     }
   };
 
@@ -168,28 +142,34 @@ const ChatList: React.FC<ChatListProps> = ({ userId, currentUser }) => {
   const formatTimestamp = (timestamp: any) => {
     if (!timestamp) return '';
     
-    try {
-      const date = new Date(timestamp);
-      if (isNaN(date.getTime())) {
-        return '';
-      }
-      
-      const now = new Date();
-      const diff = now.getTime() - date.getTime();
-      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    let date;
+    if (timestamp instanceof Date) {
+      date = timestamp;
+    } else if (timestamp.toDate && typeof timestamp.toDate === 'function') {
+      date = timestamp.toDate();
+    } else {
+      // Try to parse as ISO string or timestamp
+      date = new Date(timestamp);
+    }
+    
+    // Check if date is valid
+    if (isNaN(date.getTime())) {
+      console.warn('Invalid date:', timestamp);
+      return 'Unknown';
+    }
+    
+    const now = new Date();
+    const diff = now.getTime() - date.getTime();
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
 
-      if (days === 0) {
-        return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-      } else if (days === 1) {
-        return 'Yesterday';
-      } else if (days < 7) {
-        return date.toLocaleDateString([], { weekday: 'short' });
-      } else {
-        return date.toLocaleDateString([], { month: 'short', day: 'numeric' });
-      }
-    } catch (error) {
-      console.error('Error formatting timestamp:', error, timestamp);
-      return '';
+    if (days === 0) {
+      return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    } else if (days === 1) {
+      return 'Yesterday';
+    } else if (days < 7) {
+      return date.toLocaleDateString([], { weekday: 'short' });
+    } else {
+      return date.toLocaleDateString([], { month: 'short', day: 'numeric' });
     }
   };
 

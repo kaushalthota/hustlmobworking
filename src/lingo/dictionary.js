@@ -28,7 +28,17 @@ export default {
     "Task Created Successfully!": "Task Created Successfully!",
     "Your task is now live and visible to potential helpers": "Your task is now live and visible to potential helpers",
     "View Task Details": "View Task Details",
-    "Close": "Close"
+    "Close": "Close",
+    "Popular Tasks": "Popular Tasks",
+    "Choose from our most popular task templates or create your own": "Choose from our most popular task templates or create your own",
+    "Need Something Else?": "Need Something Else?",
+    "Create a custom task for anything you need help with on campus.": "Create a custom task for anything you need help with on campus.",
+    "Create Custom Task": "Create Custom Task",
+    "How Hustl Works": "How Hustl Works",
+    "Help is just a few clicks away!": "Help is just a few clicks away!",
+    "Post Your Task": "Post Your Task",
+    "Get Matched": "Get Matched",
+    "Task Complete": "Task Complete"
   },
   
   // Spanish translations
@@ -60,7 +70,17 @@ export default {
     "Task Created Successfully!": "¡Tarea creada con éxito!",
     "Your task is now live and visible to potential helpers": "Tu tarea ya está activa y visible para posibles ayudantes",
     "View Task Details": "Ver detalles de la tarea",
-    "Close": "Cerrar"
+    "Close": "Cerrar",
+    "Popular Tasks": "Tareas populares",
+    "Choose from our most popular task templates or create your own": "Elige entre nuestras plantillas de tareas más populares o crea la tuya propia",
+    "Need Something Else?": "¿Necesitas algo más?",
+    "Create a custom task for anything you need help with on campus.": "Crea una tarea personalizada para cualquier cosa con la que necesites ayuda en el campus.",
+    "Create Custom Task": "Crear tarea personalizada",
+    "How Hustl Works": "Cómo funciona Hustl",
+    "Help is just a few clicks away!": "¡La ayuda está a solo unos clics de distancia!",
+    "Post Your Task": "Publica tu tarea",
+    "Get Matched": "Encuentra coincidencias",
+    "Task Complete": "Tarea completada"
   },
   
   // French translations
@@ -92,7 +112,17 @@ export default {
     "Task Created Successfully!": "Tâche créée avec succès !",
     "Your task is now live and visible to potential helpers": "Votre tâche est maintenant en ligne et visible pour les assistants potentiels",
     "View Task Details": "Voir les détails de la tâche",
-    "Close": "Fermer"
+    "Close": "Fermer",
+    "Popular Tasks": "Tâches populaires",
+    "Choose from our most popular task templates or create your own": "Choisissez parmi nos modèles de tâches les plus populaires ou créez le vôtre",
+    "Need Something Else?": "Besoin d'autre chose ?",
+    "Create a custom task for anything you need help with on campus.": "Créez une tâche personnalisée pour tout ce dont vous avez besoin d'aide sur le campus.",
+    "Create Custom Task": "Créer une tâche personnalisée",
+    "How Hustl Works": "Comment fonctionne Hustl",
+    "Help is just a few clicks away!": "L'aide n'est qu'à quelques clics !",
+    "Post Your Task": "Publiez votre tâche",
+    "Get Matched": "Trouvez une correspondance",
+    "Task Complete": "Tâche terminée"
   },
   
   // German translations
@@ -124,7 +154,17 @@ export default {
     "Task Created Successfully!": "Aufgabe erfolgreich erstellt!",
     "Your task is now live and visible to potential helpers": "Ihre Aufgabe ist jetzt live und für potenzielle Helfer sichtbar",
     "View Task Details": "Aufgabendetails anzeigen",
-    "Close": "Schließen"
+    "Close": "Schließen",
+    "Popular Tasks": "Beliebte Aufgaben",
+    "Choose from our most popular task templates or create your own": "Wählen Sie aus unseren beliebtesten Aufgabenvorlagen oder erstellen Sie Ihre eigene",
+    "Need Something Else?": "Brauchen Sie etwas anderes?",
+    "Create a custom task for anything you need help with on campus.": "Erstellen Sie eine benutzerdefinierte Aufgabe für alles, womit Sie auf dem Campus Hilfe benötigen.",
+    "Create Custom Task": "Benutzerdefinierte Aufgabe erstellen",
+    "How Hustl Works": "Wie Hustl funktioniert",
+    "Help is just a few clicks away!": "Hilfe ist nur wenige Klicks entfernt!",
+    "Post Your Task": "Veröffentlichen Sie Ihre Aufgabe",
+    "Get Matched": "Werden Sie vermittelt",
+    "Task Complete": "Aufgabe abgeschlossen"
   },
   
   // Japanese translations
@@ -156,6 +196,16 @@ export default {
     "Task Created Successfully!": "タスクが正常に作成されました！",
     "Your task is now live and visible to potential helpers": "あなたのタスクは現在ライブで、潜在的なヘルパーに表示されています",
     "View Task Details": "タスクの詳細を表示",
-    "Close": "閉じる"
+    "Close": "閉じる",
+    "Popular Tasks": "人気のタスク",
+    "Choose from our most popular task templates or create your own": "最も人気のあるタスクテンプレートから選択するか、独自のものを作成する",
+    "Need Something Else?": "他に何か必要ですか？",
+    "Create a custom task for anything you need help with on campus.": "キャンパスで助けが必要なことについて、カスタムタスクを作成してください。",
+    "Create Custom Task": "カスタムタスクを作成",
+    "How Hustl Works": "Hustlの仕組み",
+    "Help is just a few clicks away!": "助けはほんの数クリックで！",
+    "Post Your Task": "タスクを投稿する",
+    "Get Matched": "マッチングする",
+    "Task Complete": "タスク完了"
   }
 };

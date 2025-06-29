@@ -693,14 +693,14 @@ const UnifiedTaskTracker: React.FC<UnifiedTaskTrackerProps> = ({ taskId }) => {
                 {/* Progress Steps */}
                 <div className="space-y-8">
                   {progressUpdates.map((update, index) => {
-                    const Icon = getStatusIcon(update.status);
+                    const icon = getStatusIcon(update.status);
                     const date = update.created_at?.toDate?.() || new Date(update.created_at);
                     
                     return (
                       <div key={update.id} className="relative flex items-start">
                         {/* Step Icon */}
                         <div className="w-12 h-12 rounded-full bg-blue-100 border-2 border-[#0021A5] flex items-center justify-center z-10">
-                          <Icon />
+                          {icon}
                         </div>
 
                         {/* Step Content */}

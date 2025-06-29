@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { User, Mail, MapPin, Star, Edit, Camera, Save, X, Shield, Award, DollarSign, Clock, Package, CheckSquare, Loader, History, Briefcase, Zap, Crown } from 'lucide-react';
+import { User, Mail, MapPin, Star, Edit, Camera, Save, X, Shield, Award, DollarSign, Clock, Package, CheckSquare, Loader, History, Briefcase, Zap, Crown, MessageSquare } from 'lucide-react';
 import { auth, db, storage } from '../lib/firebase';
 import { doc, getDoc, updateDoc, collection, query, where, getDocs, orderBy } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
@@ -8,8 +8,9 @@ import TaskHistory from './TaskHistory';
 import { StarBorder } from './ui/star-border';
 import { revenueCatService } from '../lib/revenueCatService';
 import SubscriptionPlans from './SubscriptionPlans';
+import DirectMessageModal from './DirectMessageModal';
 
-const UserProfile: React.FC = () => {
+interface UserProfile: React.FC = () => {
   const [profile, setProfile] = useState<any>(null);
   const [stats, setStats] = useState<any>(null);
   const [tasks, setTasks] = useState<any[]>([]);
@@ -17,12 +18,13 @@ const UserProfile: React.FC = () => {
   const [editing, setEditing] = useState(false);
   const [editedProfile, setEditedProfile] = useState<any>({});
   const [uploadingImage, setUploadingImage] = useState(false);
-  const [activeTab, setActiveTab] = useState<'profile' | 'tasks' | 'stats' | 'history' | 'premium'>('profile');
+  const [activeTab, setActiveTab] = useState<'profile' | 'tasks' | 'stats' | 'history' | 'premium' | 'messages'>('profile');
   const fileInputRef = React.useRef<HTMLInputElement>(null);
   const [isMobile, setIsMobile] = useState(false);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [subscription, setSubscription] = useState<any>(null);
   const [showSubscriptionPlans, setShowSubscriptionPlans] = useState(false);
+  const [showDirectMessage, setShowDirectMessage] = useState(false);
   
   // New state for hourly rate settings
   const [hourlyRate, setHourlyRate] = useState<string>('');
@@ -39,8 +41,17 @@ const UserProfile: React.FC = () => {
     checkMobile();
     window.addEventListener('resize', checkMobile);
     
+    // Listen for profile tab change events
+    const handleSetProfileTab = (event: any) => {
+      if (event.detail && event.detail.tab) {
+        setActiveTab(event.detail.tab);
+      }
+    };
+    window.addEventListener('set-profile-tab', handleSetProfileTab);
+    
     return () => {
       window.removeEventListener('resize', checkMobile);
+      window.removeEventListener('set-profile-tab', handleSetProfileTab);
     };
   }, []);
 
@@ -262,6 +273,10 @@ const UserProfile: React.FC = () => {
     return <SubscriptionPlans onClose={() => setShowSubscriptionPlans(false)} />;
   }
 
+  if (showDirectMessage) {
+    return <DirectMessageModal onClose={() => setShowDirectMessage(false)} />;
+  }
+
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
       <div className="flex flex-col md:flex-row gap-6 sm:gap-8">
@@ -364,6 +379,18 @@ const UserProfile: React.FC = () => {
                 </button>
                 
                 <button
+                  onClick={() => setActiveTab('messages')}
+                  className={`flex items-center p-3 rounded-lg ${
+                    activeTab === 'messages'
+                      ? 'bg-blue-50 text-[#0038FF]'
+                      : 'text-gray-700 hover:bg-gray-50'
+                  }`}
+                >
+                  <MessageSquare className="w-5 h-5 mr-3" />
+                  <span>Messages</span>
+                </button>
+                
+                <button
                   onClick={() => setActiveTab('stats')}
                   className={`flex items-center p-3 rounded-lg ${
                     activeTab === 'stats'
@@ -422,6 +449,14 @@ const UserProfile: React.FC = () => {
               }`}
             >
               History
+            </button>
+            <button
+              onClick={() => setActiveTab('messages')}
+              className={`px-3 py-2 rounded-lg text-sm font-medium whitespace-nowrap ${
+                activeTab === 'messages' ? 'bg-blue-50 text-[#0038FF]' : 'text-gray-600'
+              }`}
+            >
+              Messages
             </button>
             <button
               onClick={() => setActiveTab('stats')}
@@ -674,6 +709,39 @@ const UserProfile: React.FC = () => {
                   </div>
                 </div>
               )}
+              
+              {/* Premium Achievement */}
+              <div className={`p-4 rounded-lg border mt-6 ${
+                subscription
+                  ? 'bg-yellow-50 border-yellow-200'
+                  : 'bg-gray-50 border-gray-200'
+              }`}>
+                <div className="flex items-center">
+                  <div className={`w-10 h-10 rounded-full flex items-center justify-center mr-3 ${
+                    subscription
+                      ? 'bg-yellow-100'
+                      : 'bg-gray-100'
+                  }`}>
+                    <Crown className={`w-6 h-6 ${
+                      subscription
+                        ? 'text-yellow-600'
+                        : 'text-gray-400'
+                    }`} />
+                  </div>
+                  <div>
+                    <h4 className="font-medium">Premium Member</h4>
+                    <p className="text-sm text-gray-500">Upgrade to Hustl Premium</p>
+                    {!subscription && (
+                      <button
+                        onClick={() => setShowSubscriptionPlans(true)}
+                        className="text-xs text-[#0038FF] hover:text-[#0021A5] mt-1"
+                      >
+                        Upgrade Now
+                      </button>
+                    )}
+                  </div>
+                </div>
+              </div>
             </div>
           )}
           
@@ -743,6 +811,46 @@ const UserProfile: React.FC = () => {
           
           {activeTab === 'history' && (
             <TaskHistory />
+          )}
+          
+          {activeTab === 'messages' && (
+            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+              <div className="flex justify-between items-center mb-6">
+                <h2 className="text-xl sm:text-2xl font-bold flex items-center">
+                  <MessageSquare className="w-6 h-6 text-[#0038FF] mr-2" />
+                  Messages
+                </h2>
+                <StarBorder color="#0038FF">
+                  <button
+                    onClick={() => setShowDirectMessage(true)}
+                    className="bg-gradient-to-r from-[#0038FF] to-[#0021A5] text-white px-4 py-2 rounded-lg font-semibold flex items-center"
+                  >
+                    <MessageSquare className="w-4 h-4 mr-2" />
+                    New Message
+                  </button>
+                </StarBorder>
+              </div>
+              
+              <div className="bg-blue-50 p-4 rounded-lg mb-6">
+                <p className="text-blue-800">
+                  You can now message anyone you've previously shared a task with, even if you don't currently have a task together.
+                </p>
+              </div>
+              
+              <div className="text-center py-8">
+                <MessageSquare className="w-12 h-12 text-gray-300 mx-auto mb-4" />
+                <h3 className="text-lg font-medium text-gray-900">View your messages</h3>
+                <p className="mt-2 text-gray-500 mb-6">
+                  Go to the Messages tab in the main navigation to see all your conversations
+                </p>
+                <button
+                  onClick={() => window.dispatchEvent(new CustomEvent('view-messages'))}
+                  className="bg-[#0038FF] text-white px-4 py-2 rounded-lg font-semibold hover:bg-[#0021A5] transition-colors"
+                >
+                  View Messages
+                </button>
+              </div>
+            </div>
           )}
           
           {activeTab === 'stats' && (
@@ -884,39 +992,6 @@ const UserProfile: React.FC = () => {
                     <div>
                       <h4 className="font-medium">Money Maker</h4>
                       <p className="text-sm text-gray-500">Earn $50 from tasks</p>
-                    </div>
-                  </div>
-                </div>
-                
-                {/* Premium Achievement */}
-                <div className={`p-4 rounded-lg border ${
-                  subscription
-                    ? 'bg-yellow-50 border-yellow-200'
-                    : 'bg-gray-50 border-gray-200'
-                }`}>
-                  <div className="flex items-center">
-                    <div className={`w-10 h-10 rounded-full flex items-center justify-center mr-3 ${
-                      subscription
-                        ? 'bg-yellow-100'
-                        : 'bg-gray-100'
-                    }`}>
-                      <Crown className={`w-6 h-6 ${
-                        subscription
-                          ? 'text-yellow-600'
-                          : 'text-gray-400'
-                      }`} />
-                    </div>
-                    <div>
-                      <h4 className="font-medium">Premium Member</h4>
-                      <p className="text-sm text-gray-500">Upgrade to Hustl Premium</p>
-                      {!subscription && (
-                        <button
-                          onClick={() => setShowSubscriptionPlans(true)}
-                          className="text-xs text-[#0038FF] hover:text-[#0021A5] mt-1"
-                        >
-                          Upgrade Now
-                        </button>
-                      )}
                     </div>
                   </div>
                 </div>

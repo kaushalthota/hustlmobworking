@@ -86,9 +86,9 @@ const TaskMarketplace: React.FC<TaskMarketplaceProps> = ({ userLocation }) => {
       filters.push({ field: 'created_by', operator: '!=', value: currentUser.id });
     } else if (activeTab === 'accepted') {
       filters.push({ field: 'accepted_by', operator: '==', value: currentUser.id });
-      // Show tasks that are not open and not completed
-      filters.push({ field: 'status', operator: '!=', value: 'open' });
-      filters.push({ field: 'status', operator: '!=', value: 'completed' });
+      // Show tasks that are in progress (not open and not completed)
+      // Use 'in' operator instead of multiple '!=' filters
+      filters.push({ field: 'status', operator: 'in', value: ['accepted', 'picked_up', 'in_progress', 'on_way', 'delivered'] });
     } else if (activeTab === 'created') {
       filters.push({ field: 'created_by', operator: '==', value: currentUser.id });
       // Don't show completed tasks

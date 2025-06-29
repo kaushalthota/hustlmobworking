@@ -534,6 +534,3750 @@
         }
       }
     },
+    "components/AdminTools.tsx": {
+      "scopes": {
+        "7/0/init/body/11/argument/1/1/1": {
+          "type": "element",
+          "hash": "71515565d5c60e34223ae0863e5e9542",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:Settings></element:Settings> Hustl Admin Command Center"
+        },
+        "7/0/init/body/11/argument/1/3/1/1": {
+          "type": "element",
+          "hash": "f899fb1a4b1eac69c9202e1e62e9ec3a",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:Server></element:Server> System"
+        },
+        "7/0/init/body/11/argument/1/3/3/1": {
+          "type": "element",
+          "hash": "b664eccc33e8acc08754002895210ccb",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:Activity></element:Activity> Monitoring"
+        },
+        "7/0/init/body/11/argument/1/3/5/1": {
+          "type": "element",
+          "hash": "8e1747bfe6d16cc79d6ae7d638605400",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:Users></element:Users> Users"
+        },
+        "7/0/init/body/11/argument/1/5/3/expression/right/1/1/3/1": {
+          "type": "element",
+          "hash": "752d2211b51e7822c0111a515dce8cb4",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Reset System"
+        },
+        "7/0/init/body/11/argument/1/5/3/expression/right/1/1/3/3": {
+          "type": "element",
+          "hash": "07cb47d0fb6b94356cf6a19c1a902522",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "This will delete all tasks, in-progress work, and posted tasks across all users. This action cannot be undone."
+        },
+        "7/0/init/body/11/argument/1/5/3/expression/right/1/1/3/5/expression/alternate/1": {
+          "type": "element",
+          "hash": "28430cc595d4c8ac9930fbfb0ef44c2a",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Are you sure? This will delete ALL tasks and related data."
+        },
+        "7/0/init/body/11/argument/1/5/3/expression/right/1/1/3/5/expression/alternate/3/1": {
+          "type": "element",
+          "hash": "f70e38a4ab3376c69c7c4c05ed67e8ae",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<expression/> Confirm Reset"
+        },
+        "7/0/init/body/11/argument/1/5/3/expression/right/1/1/3/5/expression/alternate/3/3": {
+          "type": "element",
+          "hash": "b46dce13415b15bd9a014ba5847056c0",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Cancel"
+        },
+        "7/0/init/body/11/argument/1/5/3/expression/right/1/1/3/5/expression/consequent": {
+          "type": "element",
+          "hash": "95e8e6ede49493c5dbbd29f7f63e87af",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Clear All Tasks"
+        },
+        "7/0/init/body/11/argument/1/5/3/expression/right/3/1/3/1": {
+          "type": "element",
+          "hash": "4f22a2e2a26b08bb4396a4bad2a7f643",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Database Status"
+        },
+        "7/0/init/body/11/argument/1/5/3/expression/right/3/1/3/3": {
+          "type": "element",
+          "hash": "fcd7d38afe21c4fad77a1f66d1c947aa",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Connected to Firebase Firestore database"
+        },
+        "7/0/init/body/11/argument/1/5/3/expression/right/3/1/3/5/3": {
+          "type": "element",
+          "hash": "dde2b059e70f33c668f66c298ddd5b5e",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Operational"
+        },
+        "7/0/init/body/11/argument/1/5/3/expression/right/5/1/3/1": {
+          "type": "element",
+          "hash": "4d70b33d58c7f29da9c8f85ea4cf7f0d",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "System Logs"
+        },
+        "7/0/init/body/11/argument/1/5/3/expression/right/5/1/3/3": {
+          "type": "element",
+          "hash": "e409665b89c20219d9b39c7c1159b720",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "View and analyze system logs for troubleshooting"
+        },
+        "7/0/init/body/11/argument/1/5/3/expression/right/5/1/3/5": {
+          "type": "element",
+          "hash": "591f71c12307001a9987d974d64d62e2",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "View Firebase Logs"
+        },
+        "7/0/init/body/11/argument/1/5/5/expression/right/1/1/3/1": {
+          "type": "element",
+          "hash": "9586cedd0681af034eb5a44edab3e880",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Sentry Error Monitoring"
+        },
+        "7/0/init/body/11/argument/1/5/5/expression/right/1/1/3/3": {
+          "type": "element",
+          "hash": "04c7487822e3f47ae21ad36390046ad6",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Monitor and track errors in real-time with Sentry integration"
+        },
+        "7/0/init/body/11/argument/1/5/5/expression/right/1/1/3/5/1/1": {
+          "type": "element",
+          "hash": "d446cf86d44091a95cf579174d924df2",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Test Error Reporting"
+        },
+        "7/0/init/body/11/argument/1/5/5/expression/right/1/1/3/5/1/3/1/1": {
+          "type": "element",
+          "hash": "bc14958f10b752f465bc69a1f166a253",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Handled Error"
+        },
+        "7/0/init/body/11/argument/1/5/5/expression/right/1/1/3/5/1/3/1/3": {
+          "type": "element",
+          "hash": "e296efbea103cead859ddb198681330c",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Unhandled Error"
+        },
+        "7/0/init/body/11/argument/1/5/5/expression/right/1/1/3/5/1/3/3": {
+          "type": "element",
+          "hash": "60be85bc362a29dc7be496adedd06898",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Test Error"
+        },
+        "7/0/init/body/11/argument/1/5/5/expression/right/1/1/3/5/3/1": {
+          "type": "element",
+          "hash": "42175ecc19eea173dd450ba859e34c08",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Test Message Capture"
+        },
+        "7/0/init/body/11/argument/1/5/5/expression/right/1/1/3/5/3/3/1": {
+          "type": "element",
+          "hash": "45306e76f61e3c0756adb18348778c6f",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Send Test Message"
+        },
+        "7/0/init/body/11/argument/1/5/5/expression/right/1/1/3/7": {
+          "type": "element",
+          "hash": "aabf3740e48c15d519f2f6b93745fe05",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:BarChart2></element:BarChart2> Open Sentry Dashboard"
+        },
+        "7/0/init/body/11/argument/1/5/5/expression/right/3/1/3/1": {
+          "type": "element",
+          "hash": "1ddce79342ca97114a72da5cdfe6e1e8",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Performance Monitoring"
+        },
+        "7/0/init/body/11/argument/1/5/5/expression/right/3/1/3/3": {
+          "type": "element",
+          "hash": "73406409c70f939ca40de3306e1b53e4",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Track application performance metrics"
+        },
+        "7/0/init/body/11/argument/1/5/5/expression/right/3/1/3/5/1/1": {
+          "type": "element",
+          "hash": "833afaaaed0ba37c350562228dcf5b0f",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Page Load Time"
+        },
+        "7/0/init/body/11/argument/1/5/5/expression/right/3/1/3/5/1/3": {
+          "type": "element",
+          "hash": "33c87a32df2319bd8a5da7d3d1dd9385",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "1.2s"
+        },
+        "7/0/init/body/11/argument/1/5/5/expression/right/3/1/3/5/3/1": {
+          "type": "element",
+          "hash": "3712569be496f22ed877d45c0b283bb4",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "API Response"
+        },
+        "7/0/init/body/11/argument/1/5/5/expression/right/3/1/3/5/3/3": {
+          "type": "element",
+          "hash": "ab612f7b1717d79c71addacf295bef2a",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "320ms"
+        },
+        "7/0/init/body/11/argument/1/5/5/expression/right/3/1/3/5/5/1": {
+          "type": "element",
+          "hash": "5229ac7921edf40e68feb88757608311",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Error Rate"
+        },
+        "7/0/init/body/11/argument/1/5/5/expression/right/3/1/3/5/5/3": {
+          "type": "element",
+          "hash": "0ddd0afbdc80d182d398c7bdd7f61732",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "0.2%"
+        },
+        "7/0/init/body/11/argument/1/5/5/expression/right/5/1/3/1": {
+          "type": "element",
+          "hash": "34b92f80ad26706816cad50da888c136",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Real-time Monitoring"
+        },
+        "7/0/init/body/11/argument/1/5/5/expression/right/5/1/3/3": {
+          "type": "element",
+          "hash": "b48c377fe71976322ebfcc8795faf074",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "View active users and current system status"
+        },
+        "7/0/init/body/11/argument/1/5/5/expression/right/5/1/3/5/1/1": {
+          "type": "element",
+          "hash": "561a1f7ef3881ed535efdf1609868f93",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Active Users"
+        },
+        "7/0/init/body/11/argument/1/5/5/expression/right/5/1/3/5/1/3": {
+          "type": "element",
+          "hash": "f3f89f2af2a1b824dc30c7137e6f9690",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "24"
+        },
+        "7/0/init/body/11/argument/1/5/5/expression/right/5/1/3/5/3/1": {
+          "type": "element",
+          "hash": "adb5f703c5d24e20858be2e89d4d59ba",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Active Tasks"
+        },
+        "7/0/init/body/11/argument/1/5/5/expression/right/5/1/3/5/3/3": {
+          "type": "element",
+          "hash": "d877598cb4fab5944dfbc84151a0f231",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "12"
+        },
+        "7/0/init/body/11/argument/1/5/5/expression/right/5/1/3/5/5/1": {
+          "type": "element",
+          "hash": "8e43ad3eef22915121d711ea3c1cc9fe",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "System Status"
+        },
+        "7/0/init/body/11/argument/1/5/5/expression/right/5/1/3/5/5/3": {
+          "type": "element",
+          "hash": "fd8b9f7bec3802d2d46d764bf4571175",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:div></element:div> Healthy"
+        },
+        "7/0/init/body/11/argument/1/5/7/expression/right/1/1/3/1": {
+          "type": "element",
+          "hash": "82b1e7d9d4c8a8592d956c2ef21bd58c",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "User Management"
+        },
+        "7/0/init/body/11/argument/1/5/7/expression/right/1/1/3/3": {
+          "type": "element",
+          "hash": "5f8a4683b6ca867ba70d79bfac5d234e",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Manage users, permissions, and account status"
+        },
+        "7/0/init/body/11/argument/1/5/7/expression/right/1/1/3/5/1/1": {
+          "type": "element",
+          "hash": "6909485d66e5e6a9e9b8391996f3cf41",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Total Users"
+        },
+        "7/0/init/body/11/argument/1/5/7/expression/right/1/1/3/5/1/3": {
+          "type": "element",
+          "hash": "a37197911dea4baaadc09fb9416783e0",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "128"
+        },
+        "7/0/init/body/11/argument/1/5/7/expression/right/1/1/3/5/3/1": {
+          "type": "element",
+          "hash": "19212c49f4e8449bc05ae73b2d96f91e",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Active Today"
+        },
+        "7/0/init/body/11/argument/1/5/7/expression/right/1/1/3/5/3/3": {
+          "type": "element",
+          "hash": "0911038510dab60ffbf10a632c319db1",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "42"
+        },
+        "7/0/init/body/11/argument/1/5/7/expression/right/1/1/3/5/5/1": {
+          "type": "element",
+          "hash": "aa72778664b43722779b5301bc970cf0",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "New This Week"
+        },
+        "7/0/init/body/11/argument/1/5/7/expression/right/1/1/3/5/5/3": {
+          "type": "element",
+          "hash": "3511a12194bafa913e6d6340475daeec",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "15"
+        },
+        "7/0/init/body/11/argument/1/5/7/expression/right/1/1/3/7": {
+          "type": "element",
+          "hash": "9f707a9053a6d9b242bb621c2888e0e1",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:Users></element:Users> Manage Users in Firebase"
+        },
+        "7/0/init/body/11/argument/1/5/7/expression/right/3/1/3/1": {
+          "type": "element",
+          "hash": "04ccd7f36eea7b2647eda7c7b785a892",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "User Analytics"
+        },
+        "7/0/init/body/11/argument/1/5/7/expression/right/3/1/3/3": {
+          "type": "element",
+          "hash": "0be12ec9f6b3f7014a41d5d2a8836141",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "View user engagement and activity metrics"
+        },
+        "7/0/init/body/11/argument/1/5/7/expression/right/3/1/3/5/1": {
+          "type": "element",
+          "hash": "83beb5b4adb8c6ebabe68584aa2e1c36",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Top User Activities"
+        },
+        "7/0/init/body/11/argument/1/5/7/expression/right/3/1/3/5/3/1/1": {
+          "type": "element",
+          "hash": "bedaabd003c3ff89b56398b2cb3daad0",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Task Creation"
+        },
+        "7/0/init/body/11/argument/1/5/7/expression/right/3/1/3/5/3/1/3": {
+          "type": "element",
+          "hash": "2cf8b0760e9120d204fbb3d403cef31c",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "42%"
+        },
+        "7/0/init/body/11/argument/1/5/7/expression/right/3/1/3/5/3/5/1": {
+          "type": "element",
+          "hash": "43901593a3bc1dc934d3ff721e405037",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Task Acceptance"
+        },
+        "7/0/init/body/11/argument/1/5/7/expression/right/3/1/3/5/3/5/3": {
+          "type": "element",
+          "hash": "ae3bb67aa2779256c61cb610da1bab71",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "35%"
+        },
+        "7/0/init/body/11/argument/1/5/7/expression/right/3/1/3/5/3/9/1": {
+          "type": "element",
+          "hash": "84ef090280dd156c702e414598704083",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Messaging"
+        },
+        "7/0/init/body/11/argument/1/5/7/expression/right/3/1/3/5/3/9/3": {
+          "type": "element",
+          "hash": "21eca5bd679b34a0f9be6c70a79a713d",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "23%"
+        }
+      }
+    },
+    "components/Auth.tsx": {
+      "scopes": {
+        "9/0/init/body/15/consequent/0/argument/1/expression/right/1": {
+          "type": "element",
+          "hash": "52ec990b25991808a4f49db84986eefc",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Reset Password"
+        },
+        "9/0/init/body/15/consequent/0/argument/3/1/expression/right/1/1/1-alt": {
+          "type": "attribute",
+          "hash": "d6aeaf59c2ca6320b80698751ccb9826",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Hustl Logo"
+        },
+        "9/0/init/body/15/consequent/0/argument/3/1/expression/right/3": {
+          "type": "element",
+          "hash": "52ec990b25991808a4f49db84986eefc",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Reset Password"
+        },
+        "9/0/init/body/15/consequent/0/argument/3/3/1": {
+          "type": "element",
+          "hash": "26a8e1c10de87b64675caff4c49ba4f3",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Enter your email address and we'll send you a link to reset your password."
+        },
+        "9/0/init/body/15/consequent/0/argument/3/5/1/1": {
+          "type": "element",
+          "hash": "59facca6a2a301efd5e95cf58eec48a5",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Email Address"
+        },
+        "9/0/init/body/15/consequent/0/argument/3/5/1/3/1-placeholder": {
+          "type": "attribute",
+          "hash": "ff0c193abc60ceeb852db1f534d38e31",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "username@ufl.edu"
+        },
+        "9/0/init/body/15/consequent/0/argument/3/5/3/3": {
+          "type": "element",
+          "hash": "7cefbecc8d9ca67f2f51b1684c57abf4",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Back to Sign In"
+        },
+        "9/0/init/body/15/consequent/0/argument/3/7/1/3/1": {
+          "type": "element",
+          "hash": "04e7322f2d3ffb2d73ff2f64b71637c8",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Need help?"
+        },
+        "9/0/init/body/15/consequent/0/argument/3/7/3/1/1": {
+          "type": "element",
+          "hash": "4898257c6338a19fb17f5c012b790e87",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:AlertCircle></element:AlertCircle> Contact support"
+        },
+        "9/0/init/body/16/consequent/0/argument/1/expression/right/1": {
+          "type": "element",
+          "hash": "37f997b8f4acbcf5f2d6a59073ec0326",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Account Created"
+        },
+        "9/0/init/body/16/consequent/0/argument/3/3": {
+          "type": "element",
+          "hash": "0c5ec9a8e494cd48a6bf21394d922cd5",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Account Created Successfully!"
+        },
+        "9/0/init/body/16/consequent/0/argument/3/5": {
+          "type": "element",
+          "hash": "64478b18fecfc731748a8cfdc73d620b",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Your account has been created. You can now sign in with your credentials."
+        },
+        "9/0/init/body/16/consequent/0/argument/3/7": {
+          "type": "element",
+          "hash": "7f543c0a5a235ef2d59dbdd17d44fad6",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Sign In Now"
+        },
+        "9/0/init/body/17/argument/3/1/expression/right/1/1/1-alt": {
+          "type": "attribute",
+          "hash": "d6aeaf59c2ca6320b80698751ccb9826",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Hustl Logo"
+        },
+        "9/0/init/body/17/argument/3/5/1/expression/right/1/1": {
+          "type": "element",
+          "hash": "7f1f1597ef5e33907c56033c1dbadccb",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Full Name"
+        },
+        "9/0/init/body/17/argument/3/5/1/expression/right/3/1": {
+          "type": "element",
+          "hash": "41ba907491d3a87dcf89b3a94abfa3c8",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Major"
+        },
+        "9/0/init/body/17/argument/3/5/3/1": {
+          "type": "element",
+          "hash": "57c4459c381ec0a97139fe4fda36b086",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Email Address"
+        },
+        "9/0/init/body/17/argument/3/5/5/1": {
+          "type": "element",
+          "hash": "3e05f6f7502ce918c9eb30a3daa7590e",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Password"
+        },
+        "9/0/init/body/17/argument/3/5/7/expression/right/1": {
+          "type": "element",
+          "hash": "9643e79562c93908f492f65ab352f7c2",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Confirm Password"
+        },
+        "9/0/init/body/17/argument/3/7/expression/right/1/3/1": {
+          "type": "element",
+          "hash": "0baf970b4598f1af36623b714410dfae",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Forgot your password?"
+        },
+        "9/0/init/body/17/argument/3/7/expression/right/3/1": {
+          "type": "element",
+          "hash": "200cab9d74d20e15b404b92e52d85be0",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:KeyRound></element:KeyRound> Reset password"
+        },
+        "9/0/init/body/17/argument/3/7/expression/right/5/1/1": {
+          "type": "element",
+          "hash": "4898257c6338a19fb17f5c012b790e87",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:AlertCircle></element:AlertCircle> Contact support"
+        }
+      }
+    },
+    "components/ChatList.tsx": {
+      "scopes": {
+        "12/0/init/body/22/argument/3/1/1": {
+          "type": "element",
+          "hash": "fdcb861f463c5a5ae59a267a55779c39",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Messages"
+        },
+        "12/0/init/body/22/argument/3/1/3/1-placeholder": {
+          "type": "attribute",
+          "hash": "7dead413e5e7e09286f0aaa95a755d6a",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Search chats..."
+        },
+        "12/0/init/body/22/argument/3/3/1/expression/alternate/alternate/0/body/5/expression/right/1": {
+          "type": "element",
+          "hash": "85eb5791a7e655ee1258607f25726dc2",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:Eye></element:Eye> View Profile"
+        },
+        "12/0/init/body/22/argument/3/3/1/expression/alternate/alternate/0/body/5/expression/right/3": {
+          "type": "element",
+          "hash": "048dde7c647f21499642f732f0a72513",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:Info></element:Info> Task Details"
+        },
+        "12/0/init/body/22/argument/3/3/1/expression/alternate/alternate/0/body/5/expression/right/5": {
+          "type": "element",
+          "hash": "e706d61cf7da430dabed4fc2d9840957",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:Flag></element:Flag> Report Issue"
+        },
+        "12/0/init/body/22/argument/3/3/1/expression/alternate/consequent/3": {
+          "type": "element",
+          "hash": "f8bfd85ba23d078a13147ad042db6826",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "No messages yet"
+        },
+        "12/0/init/body/22/argument/3/3/1/expression/alternate/consequent/5": {
+          "type": "element",
+          "hash": "5044dd51cad9722a42e3352f0b266c93",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Accept a task or have someone accept your task to start chatting"
+        },
+        "12/0/init/body/22/argument/7/1/expression/alternate/1/3": {
+          "type": "element",
+          "hash": "7f61f00f793e443e651525236ca732f0",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Select a chat to start messaging"
+        },
+        "12/0/init/body/22/argument/7/1/expression/alternate/1/5": {
+          "type": "element",
+          "hash": "531f469ba127da9ff4d07e976127b553",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Choose a conversation from the list to view messages"
+        },
+        "12/0/init/body/22/argument/7/1/expression/consequent/3/expression/right/1/3": {
+          "type": "element",
+          "hash": "3b02141beeba8784e0ad2f77a1e3647a",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Back to messages"
+        }
+      }
+    },
+    "components/CreateTask.tsx": {
+      "scopes": {
+        "18/0/init/body/46/argument/1/1/1": {
+          "type": "element",
+          "hash": "d4932d2bd19f873b7ec81b5025df64bb",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:Zap></element:Zap> Create New Task"
+        },
+        "18/0/init/body/46/argument/1/3/1/expression/alternate/consequent/1/1": {
+          "type": "element",
+          "hash": "d11c6225e84c01e6411d74473504cc03",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:Package></element:Package> Task Details"
+        },
+        "18/0/init/body/46/argument/1/3/1/expression/alternate/consequent/1/3/1/1": {
+          "type": "element",
+          "hash": "7c3399f98fb9d0dcb65ee940b3d19d51",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:Tag></element:Tag> Title"
+        },
+        "18/0/init/body/46/argument/1/3/1/expression/alternate/consequent/1/3/1/3-placeholder": {
+          "type": "attribute",
+          "hash": "2e1ff902241cac19c2937c524b05835e",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "What do you need help with?"
+        },
+        "18/0/init/body/46/argument/1/3/1/expression/alternate/consequent/1/3/3/1": {
+          "type": "element",
+          "hash": "b1f86ca6d449dbb0690bc3892d875a62",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:Info></element:Info> Description"
+        },
+        "18/0/init/body/46/argument/1/3/1/expression/alternate/consequent/1/3/3/3-placeholder": {
+          "type": "attribute",
+          "hash": "83dd9414c23f4ccebc130bdb36985733",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Provide details about your task..."
+        },
+        "18/0/init/body/46/argument/1/3/1/expression/alternate/consequent/1/3/5/1": {
+          "type": "element",
+          "hash": "0e5409112a64a0ca4e16e9012d734baa",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:Tag></element:Tag> Category"
+        },
+        "18/0/init/body/46/argument/1/3/1/expression/alternate/consequent/1/3/5/3/1/1": {
+          "type": "element",
+          "hash": "98ca8052046b0ef74e0094b115c3be0b",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Delivery"
+        },
+        "18/0/init/body/46/argument/1/3/1/expression/alternate/consequent/1/3/5/3/1/11": {
+          "type": "element",
+          "hash": "79acaa6cd481262bea4e743a422529d2",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Other"
+        },
+        "18/0/init/body/46/argument/1/3/1/expression/alternate/consequent/1/3/5/3/1/3": {
+          "type": "element",
+          "hash": "1056b36112a207bfa472b207401ca585",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Academic Help"
+        },
+        "18/0/init/body/46/argument/1/3/1/expression/alternate/consequent/1/3/5/3/1/5": {
+          "type": "element",
+          "hash": "fc6f8c7ce9b52344d6acb45074deb295",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Pet Care"
+        },
+        "18/0/init/body/46/argument/1/3/1/expression/alternate/consequent/1/3/5/3/1/7": {
+          "type": "element",
+          "hash": "6e507e9e08691014f86f2bd34762f192",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Meal Exchange"
+        },
+        "18/0/init/body/46/argument/1/3/1/expression/alternate/consequent/1/3/5/3/1/9": {
+          "type": "element",
+          "hash": "675b716c9072073eb14409e2fa0ee62a",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Coffee Run"
+        },
+        "18/0/init/body/46/argument/1/3/1/expression/alternate/consequent/3/1": {
+          "type": "element",
+          "hash": "38d3caa436d5fff6c1bf46b0a146c7ff",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:MapPin></element:MapPin> Location"
+        },
+        "18/0/init/body/46/argument/1/3/1/expression/alternate/consequent/3/3/1/1": {
+          "type": "element",
+          "hash": "1f0cb491891c53d7eaa7bcac242f3ab4",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Task Location"
+        },
+        "18/0/init/body/46/argument/1/3/1/expression/alternate/consequent/3/3/1/3-placeholder": {
+          "type": "attribute",
+          "hash": "1f89475f7ec3deaa8aa2ae63999dee9f",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Enter task location or click on the map"
+        },
+        "18/0/init/body/46/argument/1/3/1/expression/alternate/consequent/5/1": {
+          "type": "element",
+          "hash": "abec58a840b1a4f6738892749a3bb3e7",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:Clock></element:Clock> Time & Pricing"
+        },
+        "18/0/init/body/46/argument/1/3/1/expression/alternate/consequent/5/3/3/3": {
+          "type": "element",
+          "hash": "8ca4e8a3a81fb468fb0cf5197fa96808",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "This is a free task (no payment required)"
+        },
+        "18/0/init/body/46/argument/1/3/1/expression/alternate/consequent/5/3/5/1": {
+          "type": "element",
+          "hash": "dc599e0781bd46bedc5bd430659a6169",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Estimated Time"
+        },
+        "18/0/init/body/46/argument/1/3/1/expression/alternate/consequent/5/3/5/3/3-placeholder": {
+          "type": "attribute",
+          "hash": "e48e9054d7a16e12ab7ba98d56b34bed",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "e.g. 30 minutes"
+        },
+        "18/0/init/body/46/argument/1/3/1/expression/alternate/consequent/5/3/7/expression/right/11/expression/right/1/3": {
+          "type": "element",
+          "hash": "5d005848e7ee71ae949f0520fed61f1f",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Set hourly rate instead of fixed price"
+        },
+        "18/0/init/body/46/argument/1/3/1/expression/alternate/consequent/5/3/7/expression/right/11/expression/right/3/expression/alternate/1": {
+          "type": "element",
+          "hash": "8d8ef1899e445760a87632797430a276",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Fixed Price ($)"
+        },
+        "18/0/init/body/46/argument/1/3/1/expression/alternate/consequent/5/3/7/expression/right/11/expression/right/3/expression/alternate/3/3-placeholder": {
+          "type": "attribute",
+          "hash": "d95988f0819de3f570e69d871fa6d691",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "e.g. 10.00"
+        },
+        "18/0/init/body/46/argument/1/3/1/expression/alternate/consequent/5/3/7/expression/right/11/expression/right/3/expression/alternate/5/1": {
+          "type": "element",
+          "hash": "6b3da919b9c4fc0cf27983b03398a820",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Set a fair price that reflects the effort and time required for your task."
+        },
+        "18/0/init/body/46/argument/1/3/1/expression/alternate/consequent/5/3/7/expression/right/11/expression/right/3/expression/consequent/1/1": {
+          "type": "element",
+          "hash": "d3d0549fc513a2dacaef3cda5c4eff5d",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Hourly Rate ($)"
+        },
+        "18/0/init/body/46/argument/1/3/1/expression/alternate/consequent/5/3/7/expression/right/11/expression/right/3/expression/consequent/1/3/3-placeholder": {
+          "type": "attribute",
+          "hash": "8bcde45998f4ccfe2b6c4659042faad3",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "e.g. 15.00"
+        },
+        "18/0/init/body/46/argument/1/3/1/expression/alternate/consequent/5/3/7/expression/right/11/expression/right/3/expression/consequent/3/1": {
+          "type": "element",
+          "hash": "7e32cd8a84b09d362d5c33f0afa5c770",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Estimated Hours"
+        },
+        "18/0/init/body/46/argument/1/3/1/expression/alternate/consequent/5/3/7/expression/right/11/expression/right/3/expression/consequent/3/3/3-placeholder": {
+          "type": "attribute",
+          "hash": "a2161ebdfaa6d965cc6cc1b8ee024786",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "e.g. 1.5"
+        },
+        "18/0/init/body/46/argument/1/3/1/expression/alternate/consequent/5/3/7/expression/right/11/expression/right/3/expression/consequent/5/1/1": {
+          "type": "element",
+          "hash": "ebbabf13ff010df195564e09ec4829ed",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Total Price:"
+        },
+        "18/0/init/body/46/argument/1/3/1/expression/alternate/consequent/5/3/7/expression/right/11/expression/right/3/expression/consequent/5/1/3": {
+          "type": "element",
+          "hash": "e42420c88426388cc132232c9952fb1b",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "$<expression/>"
+        },
+        "18/0/init/body/46/argument/1/3/1/expression/alternate/consequent/5/3/7/expression/right/11/expression/right/3/expression/consequent/5/3": {
+          "type": "element",
+          "hash": "4cab493dc619ede8bc801ace591c03ce",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "$<expression/>/hr × <expression/> hours"
+        },
+        "18/0/init/body/46/argument/1/3/1/expression/alternate/consequent/5/3/7/expression/right/13/expression/alternate/right/5/1": {
+          "type": "element",
+          "hash": "9b16606536c752d969bb63fe6f33f469",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:DollarSign></element:DollarSign> Payment Method"
+        },
+        "18/0/init/body/46/argument/1/3/1/expression/alternate/consequent/5/3/7/expression/right/13/expression/alternate/right/5/3/1/3": {
+          "type": "element",
+          "hash": "53594d8399a9a29a2c40dea4cc55dea6",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:DollarSign></element:DollarSign> Wallet Balance: $<function:walletBalance.toFixed/><expression/>"
+        },
+        "18/0/init/body/46/argument/1/3/1/expression/alternate/consequent/5/3/7/expression/right/13/expression/alternate/right/5/3/3/3": {
+          "type": "element",
+          "hash": "d075d1163cd1265614bfac7c7733adee",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:Shield></element:Shield> Credit/Debit Card (Stripe)"
+        },
+        "18/0/init/body/46/argument/1/3/1/expression/alternate/consequent/5/3/7/expression/right/13/expression/consequent/3": {
+          "type": "element",
+          "hash": "5327b73b60504f983590714013b43360",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Calculating price..."
+        },
+        "18/0/init/body/46/argument/1/3/1/expression/alternate/consequent/5/3/7/expression/right/3/1": {
+          "type": "element",
+          "hash": "3ca7c461f21f49825b2ccb93bf399606",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:DollarSign></element:DollarSign> Payment Options"
+        },
+        "18/0/init/body/46/argument/1/3/1/expression/alternate/consequent/5/3/7/expression/right/3/3/1/3/1": {
+          "type": "element",
+          "hash": "3305f43b03e2954f079f439340a0ccb5",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Automatic Pricing"
+        },
+        "18/0/init/body/46/argument/1/3/1/expression/alternate/consequent/5/3/7/expression/right/3/3/1/3/3": {
+          "type": "element",
+          "hash": "7d303568cb84d84443c80d7b6654a8c0",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Calculate price based on distance and urgency"
+        },
+        "18/0/init/body/46/argument/1/3/1/expression/alternate/consequent/5/3/7/expression/right/3/3/3/3/1": {
+          "type": "element",
+          "hash": "3c7cdf7c236aa84dfeaaf76d3f18934d",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Set Your Own Price"
+        },
+        "18/0/init/body/46/argument/1/3/1/expression/alternate/consequent/5/3/7/expression/right/3/3/3/3/3": {
+          "type": "element",
+          "hash": "cb7642f2c74ebbd45646845c7eb8b4d2",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Specify exactly how much you want to pay"
+        },
+        "18/0/init/body/46/argument/1/3/1/expression/alternate/consequent/5/3/7/expression/right/7/expression/right/1": {
+          "type": "element",
+          "hash": "e7303dbe98da92d8d37407f0e1602add",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Urgency Level"
+        },
+        "18/0/init/body/46/argument/1/3/1/expression/alternate/consequent/5/3/7/expression/right/7/expression/right/3/3/1": {
+          "type": "element",
+          "hash": "acb509d81533a7801b0839c3066e92d1",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:span></element:span> Low"
+        },
+        "18/0/init/body/46/argument/1/3/1/expression/alternate/consequent/5/3/7/expression/right/7/expression/right/3/3/3": {
+          "type": "element",
+          "hash": "9f425208b6c771a591030baf9382b7ea",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:span></element:span> Medium"
+        },
+        "18/0/init/body/46/argument/1/3/1/expression/alternate/consequent/5/3/7/expression/right/7/expression/right/3/3/5": {
+          "type": "element",
+          "hash": "c015e20c36e595c4dcb933a291a6401f",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:span></element:span> High"
+        },
+        "18/0/init/body/46/argument/1/3/1/expression/alternate/consequent/5/3/9/expression/right/1/3": {
+          "type": "element",
+          "hash": "7cbf0daf1d80452b68719448fdc6c9d7",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Free Task"
+        },
+        "18/0/init/body/46/argument/1/3/1/expression/alternate/consequent/5/3/9/expression/right/3": {
+          "type": "element",
+          "hash": "9811ac64257d6b96446eb24058e7ecaf",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "This task is free and will be posted immediately without payment."
+        },
+        "18/0/init/body/46/argument/1/3/1/expression/alternate/consequent/7/1/1/1/expression/consequent": {
+          "type": "element",
+          "hash": "2f7cae48ed8f509b5460a4ec057019c6",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:div></element:div> Creating..."
+        },
+        "18/0/init/body/46/argument/1/3/1/expression/consequent/1/1": {
+          "type": "element",
+          "hash": "29bf513767f7273267c942745e73192c",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Choose a Task Type"
+        },
+        "18/0/init/body/46/argument/1/3/1/expression/consequent/1/3": {
+          "type": "element",
+          "hash": "257d4750d5f723e5ed06826534888808",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Create Custom Task<element:Zap></element:Zap>"
+        },
+        "18/0/init/body/46/argument/1/3/1/expression/consequent/3/1/expression/0/body/7/3/1/expression/alternate": {
+          "type": "element",
+          "hash": "ce3025799d70859c869af0b2fea2ad8a",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "$<function:category.price.toFixed/>"
+        },
+        "18/0/init/body/46/argument/1/3/1/expression/consequent/3/1/expression/0/body/7/3/1/expression/consequent": {
+          "type": "element",
+          "hash": "34cf730008b7101f4594527da22d7bd6",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "FREE"
+        }
+      }
+    },
+    "components/FAQSupport.tsx": {
+      "scopes": {
+        "4/0/init/body/3/argument/1/1/1": {
+          "type": "element",
+          "hash": "d8dbd60b763a317896721feb4d2612cd",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:HelpCircle></element:HelpCircle> Help & Support"
+        },
+        "4/0/init/body/3/argument/1/3/1/1-description": {
+          "type": "attribute",
+          "hash": "f3f982bb7686bfa20b58751ad47ed4d0",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Get instant answers from our AI assistant"
+        },
+        "4/0/init/body/3/argument/1/3/1/1-title": {
+          "type": "attribute",
+          "hash": "1c7c875e8850c0977408da93d89a8465",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "AI Chat Support"
+        },
+        "4/0/init/body/3/argument/1/3/1/3-description": {
+          "type": "attribute",
+          "hash": "38e33eb867cb237b2420a6b37384c41a",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Send us an email for detailed assistance"
+        },
+        "4/0/init/body/3/argument/1/3/1/3-title": {
+          "type": "attribute",
+          "hash": "947fb7c5c665079804df41c61161e722",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Email Support"
+        },
+        "4/0/init/body/3/argument/1/3/3/1/1": {
+          "type": "element",
+          "hash": "212c5c784d5580b2f8b9481cb102cb4c",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Frequently Asked Questions"
+        },
+        "4/0/init/body/3/argument/1/3/3/3/1": {
+          "type": "element",
+          "hash": "08f01a139568423a460c7d664b2be95e",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Quick Links"
+        },
+        "4/0/init/body/3/argument/1/3/3/3/3/1-title": {
+          "type": "attribute",
+          "hash": "00bac3053d314c6e89c54d22095a1ea0",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Safety Guidelines"
+        },
+        "4/0/init/body/3/argument/1/3/3/3/3/3-title": {
+          "type": "attribute",
+          "hash": "400f42b2f096ab5c5067448402c46bf2",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Payment Info"
+        },
+        "4/0/init/body/3/argument/1/3/3/3/3/5-title": {
+          "type": "attribute",
+          "hash": "a214a6584d94a8a0f088dd7c4a58ff80",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Community Rules"
+        },
+        "4/0/init/body/3/argument/1/3/3/3/3/7-title": {
+          "type": "attribute",
+          "hash": "52e8542f12fe0685b13d150af943e54d",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Tutorial"
+        },
+        "4/0/init/body/3/argument/1/3/3/5/1": {
+          "type": "element",
+          "hash": "69e963644f8daa3605497c9e17b13dc6",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Still need help?"
+        },
+        "4/0/init/body/3/argument/1/3/3/5/3": {
+          "type": "element",
+          "hash": "860089c1046fc22db09538bb0fc86ef5",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Our support team is available 24/7 to assist you"
+        },
+        "4/0/init/body/3/argument/1/3/3/5/5/1": {
+          "type": "element",
+          "hash": "fd93feb85e641b4416af8663fd28709b",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Chat with AI"
+        },
+        "4/0/init/body/3/argument/1/3/3/5/5/3": {
+          "type": "element",
+          "hash": "644ad9ea2690ad635f3b1f883066fe88",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Email Support"
+        },
+        "5/0/init/body/7": {
+          "type": "element",
+          "hash": "a12d88ab2dc6ff757e8af31912470f6e",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "{action} →"
+        }
+      }
+    },
+    "components/LearnMoreModal.tsx": {
+      "scopes": {
+        "3/0/init/body/2/argument/1/1/1": {
+          "type": "element",
+          "hash": "33fce5defc9d825af334d9e09b4395fd",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:Zap></element:Zap> About Hustl"
+        },
+        "3/0/init/body/2/argument/1/3/1/1/1/1": {
+          "type": "element",
+          "hash": "fb26253a5d2f4cd8ed4d6c78b73bc0d2",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Connecting Gators, One Task at a Time"
+        },
+        "3/0/init/body/2/argument/1/3/1/1/1/3": {
+          "type": "element",
+          "hash": "7b09b879445385d9dc3414a1d3e090f2",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Hustl is a platform designed specifically for UF students, making it easy to find help or earn money by helping others with various tasks around campus."
+        },
+        "3/0/init/body/2/argument/1/3/1/1/3/1-alt": {
+          "type": "attribute",
+          "hash": "6e9bfc15422486b87dff40aa96f66721",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Students helping each other"
+        },
+        "3/0/init/body/2/argument/1/3/3/1": {
+          "type": "element",
+          "hash": "e3415f76e09aec1747bfd25e00f64fb0",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Why Choose Hustl?"
+        },
+        "3/0/init/body/2/argument/1/3/3/3/1-description": {
+          "type": "attribute",
+          "hash": "86c0b9062c9443ed328273830f418e49",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Verified UF students only, with built-in safety features and secure payments."
+        },
+        "3/0/init/body/2/argument/1/3/3/3/1-title": {
+          "type": "attribute",
+          "hash": "8e37c03d00ef5d6436d39ca95932ab1c",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Safe & Secure"
+        },
+        "3/0/init/body/2/argument/1/3/3/3/3-description": {
+          "type": "attribute",
+          "hash": "23b3a6e24973947061c4073d2499b716",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Connect with fellow Gators in a trusted, campus-focused environment."
+        },
+        "3/0/init/body/2/argument/1/3/3/3/3-title": {
+          "type": "attribute",
+          "hash": "1a27c81a9a155f7562a139901a50fda0",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Campus Community"
+        },
+        "3/0/init/body/2/argument/1/3/3/3/5-description": {
+          "type": "attribute",
+          "hash": "8db9f14ccee9fccab10b01cf236bc42f",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Set your own schedule and earn money helping other students."
+        },
+        "3/0/init/body/2/argument/1/3/3/3/5-title": {
+          "type": "attribute",
+          "hash": "c552f8721b40407424464e05e847ab22",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Flexible Earnings"
+        },
+        "3/0/init/body/2/argument/1/3/5/1": {
+          "type": "element",
+          "hash": "f0be71e62d493362a83cdcb7a0f6c21c",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "How It Works"
+        },
+        "3/0/init/body/2/argument/1/3/5/3/1-description": {
+          "type": "attribute",
+          "hash": "a4eda168de2c743e4dffae71d571e7d7",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Sign up with your UF email and complete verification."
+        },
+        "3/0/init/body/2/argument/1/3/5/3/1-title": {
+          "type": "attribute",
+          "hash": "ca6fff459d2a609246282be825db455c",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Create Your Account"
+        },
+        "3/0/init/body/2/argument/1/3/5/3/3-description": {
+          "type": "attribute",
+          "hash": "5cd85de7c79d1305b48e28cb9a12f80a",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Find tasks you can help with or post your own needs."
+        },
+        "3/0/init/body/2/argument/1/3/5/3/3-title": {
+          "type": "attribute",
+          "hash": "ca7e3a71d098836ecdff54762b079593",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Browse or Post Tasks"
+        },
+        "3/0/init/body/2/argument/1/3/5/3/5-description": {
+          "type": "attribute",
+          "hash": "718f35360774dd4cd2f356a5c942b828",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Chat with others, agree on details, and complete tasks."
+        },
+        "3/0/init/body/2/argument/1/3/5/3/5-title": {
+          "type": "attribute",
+          "hash": "87e92ae205f89851ed1f469d07cfaa27",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Connect & Complete"
+        },
+        "3/0/init/body/2/argument/1/3/5/3/7-description": {
+          "type": "attribute",
+          "hash": "5dc40f8a3ee6786301c3187190fb5d34",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Get paid securely and build your reputation through ratings."
+        },
+        "3/0/init/body/2/argument/1/3/5/3/7-title": {
+          "type": "attribute",
+          "hash": "c927b35873ae94117a187f9bb7cc631e",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Rate & Earn"
+        },
+        "3/0/init/body/2/argument/1/3/7/1": {
+          "type": "element",
+          "hash": "d1e7f222d1077154f1e63dd3354701a9",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Popular Task Categories"
+        },
+        "3/0/init/body/2/argument/1/3/7/3/1-description": {
+          "type": "attribute",
+          "hash": "06ee2b7865bbfefde5118081b0b69838",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Campus dining, coffee runs, and meal exchanges"
+        },
+        "3/0/init/body/2/argument/1/3/7/3/1-title": {
+          "type": "attribute",
+          "hash": "385b954b0acefbfc6f56fdd1de6a0348",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Food Delivery"
+        },
+        "3/0/init/body/2/argument/1/3/7/3/3-description": {
+          "type": "attribute",
+          "hash": "fdbfb2a1bbba3ed7b229e23f65e2430f",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Study groups, notes sharing, and tutoring"
+        },
+        "3/0/init/body/2/argument/1/3/7/3/3-title": {
+          "type": "attribute",
+          "hash": "1056b36112a207bfa472b207401ca585",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Academic Help"
+        },
+        "3/0/init/body/2/argument/1/3/7/3/5-description": {
+          "type": "attribute",
+          "hash": "ffbc1c7270bedb2fa973bde04f6b1cc8",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Dog walking, pet sitting, and care assistance"
+        },
+        "3/0/init/body/2/argument/1/3/7/3/5-title": {
+          "type": "attribute",
+          "hash": "fc6f8c7ce9b52344d6acb45074deb295",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Pet Care"
+        },
+        "3/0/init/body/2/argument/1/3/9/1": {
+          "type": "element",
+          "hash": "2dbf25c6a9e17042c50e1438ad6b62c0",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Ready to Get Started?"
+        },
+        "3/0/init/body/2/argument/1/3/9/3": {
+          "type": "element",
+          "hash": "cbf4da0705419b92e50a55e5184c92e9",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Join thousands of UF students already using Hustl to connect and help each other."
+        },
+        "3/0/init/body/2/argument/1/3/9/5/1": {
+          "type": "element",
+          "hash": "b229fa5b7dbbfe5c74373896ec871500",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Start Using Hustl"
+        },
+        "3/0/init/body/2/argument/1/3/9/5/3": {
+          "type": "element",
+          "hash": "31bd89fb80b13e8959252412b9872284",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:Mail></element:Mail> Contact Us"
+        }
+      }
+    },
+    "components/NotificationsModal.tsx": {
+      "scopes": {
+        "6/0/init/body/9/argument/1/1/1": {
+          "type": "element",
+          "hash": "a6ae85aee414a91abd7bed95f02c545e",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:Bell></element:Bell> Notifications"
+        },
+        "6/0/init/body/9/argument/1/3/1/1": {
+          "type": "element",
+          "hash": "64392bcedf0f988f9a2ad6fca32d4050",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "All"
+        },
+        "6/0/init/body/9/argument/1/3/1/3": {
+          "type": "element",
+          "hash": "5eed2d34a1102130a1111f0b729bf010",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Unread<expression/>"
+        },
+        "6/0/init/body/9/argument/1/5/1/expression/alternate/alternate/1/expression/0/body/1/3/5/expression/right": {
+          "type": "element",
+          "hash": "cfa923b7d2d68d5ce97f97108f8d743e",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "View Task"
+        },
+        "6/0/init/body/9/argument/1/5/1/expression/alternate/consequent/3": {
+          "type": "element",
+          "hash": "8cd21c8ab25acacb740772c7ff7f5ae5",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "No notifications yet"
+        },
+        "6/0/init/body/9/argument/1/7/1": {
+          "type": "element",
+          "hash": "cba1205249020634b8f3b25105b9712b",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Close"
+        }
+      }
+    },
+    "components/QuickStartGuide.tsx": {
+      "scopes": {
+        "6/0/init/body/13/argument/1/1/1/1/1-alt": {
+          "type": "attribute",
+          "hash": "d6aeaf59c2ca6320b80698751ccb9826",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Hustl Logo"
+        },
+        "6/0/init/body/13/argument/1/1/1/3/1": {
+          "type": "element",
+          "hash": "f0faba67c2c1f6d31a6730ffebbbb594",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Welcome to Hustl"
+        },
+        "6/0/init/body/13/argument/1/1/1/3/3": {
+          "type": "element",
+          "hash": "4646858aea0b8d4355b0ba13a390a27a",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Your campus task marketplace - get help or earn money helping others"
+        },
+        "6/0/init/body/13/argument/1/1/3/3-aria-label": {
+          "type": "attribute",
+          "hash": "ff7ee21ca2daa5cec1d6e1fb16f1906a",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Close guide"
+        },
+        "6/0/init/body/13/argument/1/11/1/expression/alternate": {
+          "type": "element",
+          "hash": "47b34f202b95872f04ec5e3269d8d349",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Skip Guide"
+        },
+        "6/0/init/body/13/argument/1/11/1/expression/consequent": {
+          "type": "element",
+          "hash": "d7dbe0a075c0d46ac5551390be9eccc1",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:ChevronLeft></element:ChevronLeft> Back"
+        },
+        "6/0/init/body/13/argument/1/11/3/expression/alternate": {
+          "type": "element",
+          "hash": "f3d31b25d643f122e94bab1936cc9bc4",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Get Started<element:ArrowRight></element:ArrowRight>"
+        },
+        "6/0/init/body/13/argument/1/11/3/expression/consequent": {
+          "type": "element",
+          "hash": "f5eb2ed46772d1d5dfaf08b10ce125eb",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Next<element:ArrowRight></element:ArrowRight>"
+        },
+        "6/0/init/body/13/argument/1/9/1/expression/right/1": {
+          "type": "element",
+          "hash": "2db53eedb31d38913ccd8c2cb08713e3",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "What would you like to do?"
+        },
+        "6/0/init/body/13/argument/1/9/1/expression/right/3/1/3": {
+          "type": "element",
+          "hash": "a23a210f0920ed13fab3c510265e3fa5",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Post a Task"
+        },
+        "6/0/init/body/13/argument/1/9/1/expression/right/3/1/5": {
+          "type": "element",
+          "hash": "db9a912c257522ae0a407271b3dca966",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Need help with something? Create a task and find someone to help you."
+        },
+        "6/0/init/body/13/argument/1/9/1/expression/right/3/3/3": {
+          "type": "element",
+          "hash": "ef5c23243a5a68083d78b5ca7b2ee038",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Browse Tasks"
+        },
+        "6/0/init/body/13/argument/1/9/1/expression/right/3/3/5": {
+          "type": "element",
+          "hash": "adad673c3ecc4fd240b6e99d1b710a2b",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Want to earn money? Find tasks you can help with around campus."
+        },
+        "6/0/init/body/13/argument/1/9/3/expression/right/1": {
+          "type": "element",
+          "hash": "d1e7f222d1077154f1e63dd3354701a9",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Popular Task Categories"
+        },
+        "6/0/init/body/13/argument/1/9/5/expression/right/1": {
+          "type": "element",
+          "hash": "5dfd3b089661e355611a9b17d5a47a78",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Key Features"
+        },
+        "6/0/init/body/13/argument/1/9/5/expression/right/3/1/3": {
+          "type": "element",
+          "hash": "8e37c03d00ef5d6436d39ca95932ab1c",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Safe & Secure"
+        },
+        "6/0/init/body/13/argument/1/9/5/expression/right/3/1/5": {
+          "type": "element",
+          "hash": "18486337f645061ae548b98a358825d1",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Verified UF students only with built-in safety features."
+        },
+        "6/0/init/body/13/argument/1/9/5/expression/right/3/3/3": {
+          "type": "element",
+          "hash": "61bbd0efe0cb9d765967314985e42338",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Earn Points"
+        },
+        "6/0/init/body/13/argument/1/9/5/expression/right/3/3/5": {
+          "type": "element",
+          "hash": "3d584ad9adafdfb7d63a67b9fdf6e9dd",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Complete tasks to earn points and unlock rewards."
+        },
+        "6/0/init/body/13/argument/1/9/5/expression/right/3/5/3": {
+          "type": "element",
+          "hash": "c552f8721b40407424464e05e847ab22",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Flexible Earnings"
+        },
+        "6/0/init/body/13/argument/1/9/5/expression/right/3/5/5": {
+          "type": "element",
+          "hash": "c2a4b7ddd2e46b2da01a97316727106e",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Set your schedule and earn between classes."
+        },
+        "6/0/init/body/13/argument/1/9/5/expression/right/5/1/3": {
+          "type": "element",
+          "hash": "81a94ad8770dca9c3cbb5a88329b6a6f",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Voice Assistant"
+        },
+        "6/0/init/body/13/argument/1/9/5/expression/right/5/3": {
+          "type": "element",
+          "hash": "518b102f96be9fc67c1970d2c04d3743",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Use our voice assistant to create tasks, find help, and navigate the app hands-free."
+        }
+      }
+    },
+    "components/SafeWalkRequestForm.tsx": {
+      "scopes": {
+        "8/0/init/body/17/consequent/0/argument/1/3": {
+          "type": "element",
+          "hash": "3952102cf22e6232e12f4d2bd2d728e6",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Request Confirmed"
+        },
+        "8/0/init/body/17/consequent/0/argument/1/5": {
+          "type": "element",
+          "hash": "3ba968264d809e08c706d4970e7a6529",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Your SafeWalk request has been submitted"
+        },
+        "8/0/init/body/17/consequent/0/argument/1/7/1": {
+          "type": "element",
+          "hash": "f8424941cbbe01eacc66e9b5972a090f",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Request ID: {requestId}"
+        },
+        "8/0/init/body/17/consequent/0/argument/1/7/3": {
+          "type": "element",
+          "hash": "6042edc598dac3eb703afca0ea7c1bc0",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Estimated wait time: {estimatedWaitTime}"
+        },
+        "8/0/init/body/17/consequent/0/argument/3/1": {
+          "type": "element",
+          "hash": "ed810222d68a013cc674ce4f32e55e1d",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:AlertTriangle></element:AlertTriangle> Safety Tips While Waiting"
+        },
+        "8/0/init/body/17/consequent/0/argument/5/1": {
+          "type": "element",
+          "hash": "a79aaa9210ef2352be1d2d45c71fda4f",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Emergency Contacts"
+        },
+        "8/0/init/body/17/consequent/0/argument/5/3/1/1": {
+          "type": "element",
+          "hash": "807c637c0b48c093a4f969c50f8d775f",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Campus Police:"
+        },
+        "8/0/init/body/17/consequent/0/argument/5/3/1/3": {
+          "type": "element",
+          "hash": "14eed88d29de6a6c4435b34d3cde8151",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "(352) 392-1111"
+        },
+        "8/0/init/body/17/consequent/0/argument/5/3/3/1": {
+          "type": "element",
+          "hash": "1c14e123dd696708e1eed66e75275439",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "UFPD Non-Emergency:"
+        },
+        "8/0/init/body/17/consequent/0/argument/5/3/3/3": {
+          "type": "element",
+          "hash": "b7e71f5b9a8115d14a0b63045f8f4e5a",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "(352) 392-5447"
+        },
+        "8/0/init/body/17/consequent/0/argument/7/1": {
+          "type": "element",
+          "hash": "1970553db4db21248ed648b78b7a204a",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Cancel Request"
+        },
+        "8/0/init/body/17/consequent/0/argument/7/3": {
+          "type": "element",
+          "hash": "cba1205249020634b8f3b25105b9712b",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Close"
+        },
+        "8/0/init/body/18/argument/1/1": {
+          "type": "element",
+          "hash": "7dfbb4d53bb2e66a317e53d228b69ac1",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:Shield></element:Shield> Request SafeWalk"
+        },
+        "8/0/init/body/18/argument/3/1/3/1": {
+          "type": "element",
+          "hash": "0989a047c6d33fd5d7e270bc350f21c4",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "SafeWalk provides a walking companion for your safety on and around campus. Your request will be matched with verified volunteers."
+        },
+        "8/0/init/body/18/argument/5/1/1": {
+          "type": "element",
+          "hash": "f5f807d1f75aa02c31144a43fe0e73ae",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Current Location (Optional)"
+        },
+        "8/0/init/body/18/argument/5/1/3/1/expression/alternate/alternate/3": {
+          "type": "element",
+          "hash": "bef8d9b9a7ec11656aa6cd62f59b96e1",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Get Current Location"
+        },
+        "8/0/init/body/18/argument/5/1/3/1/expression/alternate/consequent/3": {
+          "type": "element",
+          "hash": "0aa02f7db0e223fbcdf0c7137d997c91",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Refresh"
+        },
+        "8/0/init/body/18/argument/5/1/3/1/expression/consequent/3": {
+          "type": "element",
+          "hash": "7d79c5cc9855d73ee351a2f2f6a240b7",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Getting your location..."
+        },
+        "8/0/init/body/18/argument/5/11/1/1/expression/alternate": {
+          "type": "element",
+          "hash": "6336564050ecccece853cc8d158ae8c5",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:Send></element:Send> Submit Request"
+        },
+        "8/0/init/body/18/argument/5/11/3": {
+          "type": "element",
+          "hash": "806df1c96f83121893c2a72a5ca8e443",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Cancel"
+        },
+        "8/0/init/body/18/argument/5/3/1": {
+          "type": "element",
+          "hash": "ecd073b5bdf86930e60f10cb3a07e313",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Destination (Required)"
+        },
+        "8/0/init/body/18/argument/5/3/3-placeholder": {
+          "type": "attribute",
+          "hash": "e171e234b69ef913159ce7dafa0104eb",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Enter your destination"
+        },
+        "8/0/init/body/18/argument/5/5/1": {
+          "type": "element",
+          "hash": "de411d47879ff0389e8d0707b59a03e4",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Preferred Departure Time (Required)"
+        },
+        "8/0/init/body/18/argument/5/5/3/1": {
+          "type": "element",
+          "hash": "5edaedc2a7424746325e7cda9f64a7b9",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Select a time"
+        },
+        "8/0/init/body/18/argument/5/7/1": {
+          "type": "element",
+          "hash": "5654545838b8348ce48aa4a5491e2e71",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Special Requirements (Optional)"
+        },
+        "8/0/init/body/18/argument/5/7/3-placeholder": {
+          "type": "attribute",
+          "hash": "b60cfff99046356f522155bfc9ba9490",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Any special requirements or notes for the SafeWalk volunteer..."
+        },
+        "8/0/init/body/18/argument/5/9/1/3/1": {
+          "type": "element",
+          "hash": "a0cfacdf4e264f6872482b68fa067078",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Important Information"
+        },
+        "8/0/init/body/18/argument/5/9/1/3/3/1": {
+          "type": "element",
+          "hash": "fb5c3cf60df1ed924f2870155471091f",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "• Your identity will remain anonymous throughout the process"
+        },
+        "8/0/init/body/18/argument/5/9/1/3/3/3": {
+          "type": "element",
+          "hash": "5f7be732f06e8b0ef4a904e98c47eeb6",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "• Request expires automatically after 30 minutes if unmatched"
+        },
+        "8/0/init/body/18/argument/5/9/1/3/3/5": {
+          "type": "element",
+          "hash": "269e9fea171f41ed86604382b0b692e5",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "• For immediate emergencies, call Campus Police at (352) 392-1111"
+        }
+      }
+    },
+    "components/SafetyFeatures.tsx": {
+      "scopes": {
+        "4/0/init/body/3/argument/1/1/expression/alternate/1/1": {
+          "type": "element",
+          "hash": "bd7ea78897749d8b384dd0cd0fd4411e",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:Shield></element:Shield> Safety Features"
+        },
+        "4/0/init/body/3/argument/1/1/expression/alternate/3/1/1": {
+          "type": "element",
+          "hash": "88279d80f61fe2f4aac8304d3ee1534c",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Your Safety is Our Priority"
+        },
+        "4/0/init/body/3/argument/1/1/expression/alternate/3/1/3": {
+          "type": "element",
+          "hash": "656e2eb537c1a51eeaf9c195ece28d09",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "We've implemented comprehensive safety measures to ensure a secure environment for all users."
+        },
+        "4/0/init/body/3/argument/1/1/expression/alternate/3/11/1": {
+          "type": "element",
+          "hash": "627cd3ee7e0bf66cddc581ef0dc3288a",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Have Safety Questions?"
+        },
+        "4/0/init/body/3/argument/1/1/expression/alternate/3/11/3": {
+          "type": "element",
+          "hash": "e0b12d4fc863dcfee742bb183b3b9508",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Our safety team is available 24/7 to assist you"
+        },
+        "4/0/init/body/3/argument/1/1/expression/alternate/3/11/5": {
+          "type": "element",
+          "hash": "67c3934fec862d8c66aee9d29f818c49",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:Mail></element:Mail> Contact Safety Team"
+        },
+        "4/0/init/body/3/argument/1/1/expression/alternate/3/3/1-description": {
+          "type": "attribute",
+          "hash": "bf5ec4fe4842412be1aa62d40aa63102",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "All users undergo a verification process including student ID verification and optional background checks."
+        },
+        "4/0/init/body/3/argument/1/1/expression/alternate/3/3/1-title": {
+          "type": "attribute",
+          "hash": "8be61ea862226db9d08e891d3653afe2",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "User Verification"
+        },
+        "4/0/init/body/3/argument/1/1/expression/alternate/3/3/3-description": {
+          "type": "attribute",
+          "hash": "e337cf038f224ce137bc0b6e808fbf1b",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Optional real-time location sharing during task completion for added security."
+        },
+        "4/0/init/body/3/argument/1/1/expression/alternate/3/3/3-title": {
+          "type": "attribute",
+          "hash": "cdb43755ae73dee8d233b503a7b6f224",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Location Tracking"
+        },
+        "4/0/init/body/3/argument/1/1/expression/alternate/3/3/5-description": {
+          "type": "attribute",
+          "hash": "521e62d045fb48ba212770a99e2a0e8a",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Quick access to emergency services and campus security with one-tap alert system."
+        },
+        "4/0/init/body/3/argument/1/1/expression/alternate/3/3/5-title": {
+          "type": "attribute",
+          "hash": "f0cd267b6afec654af253fc42f028e0f",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Emergency Alerts"
+        },
+        "4/0/init/body/3/argument/1/1/expression/alternate/3/3/7-description": {
+          "type": "attribute",
+          "hash": "4deb451683dc45c110f7c073c231eedf",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Easy-to-use reporting system for flagging suspicious behavior or safety concerns."
+        },
+        "4/0/init/body/3/argument/1/1/expression/alternate/3/3/7-title": {
+          "type": "attribute",
+          "hash": "20e5bfe35cb5216279b1ff932877792a",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Report System"
+        },
+        "4/0/init/body/3/argument/1/1/expression/alternate/3/5/1": {
+          "type": "element",
+          "hash": "3b72c44117152679781199ca5e69b9c6",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Safe Walk Feature"
+        },
+        "4/0/init/body/3/argument/1/1/expression/alternate/3/5/3": {
+          "type": "element",
+          "hash": "f8977aaec553a7acbe80066c8bc6fd8c",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Need someone to walk with you? Use our Safe Walk feature to connect with verified student companions."
+        },
+        "4/0/init/body/3/argument/1/1/expression/alternate/3/5/5": {
+          "type": "element",
+          "hash": "3f7a3db401615d172c48fc79133e279a",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Request Safe Walk"
+        },
+        "4/0/init/body/3/argument/1/1/expression/alternate/3/7/1": {
+          "type": "element",
+          "hash": "a79aaa9210ef2352be1d2d45c71fda4f",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Emergency Contacts"
+        },
+        "4/0/init/body/3/argument/1/1/expression/alternate/3/7/3/1-title": {
+          "type": "attribute",
+          "hash": "f69a3bc222de49f8b4f68d85476933c2",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Campus Police"
+        },
+        "4/0/init/body/3/argument/1/1/expression/alternate/3/7/3/3-title": {
+          "type": "attribute",
+          "hash": "5700d2deeb9217efff6d45b31a343e3c",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "UFPD Non-Emergency"
+        },
+        "4/0/init/body/3/argument/1/1/expression/alternate/3/7/3/5-title": {
+          "type": "attribute",
+          "hash": "86a3fba6a98be119a981c0453c0a611d",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Student Nighttime Auxiliary Patrol"
+        },
+        "4/0/init/body/3/argument/1/1/expression/alternate/3/9/1": {
+          "type": "element",
+          "hash": "1ee6839d5cc427288fc628a42f25d2a2",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Safety Tips"
+        },
+        "4/0/init/body/3/argument/1/1/expression/alternate/3/9/3/1/3": {
+          "type": "element",
+          "hash": "56f49499c9382a4bad5dd1260d6dc660",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Always meet in public, well-lit areas on campus"
+        },
+        "4/0/init/body/3/argument/1/1/expression/alternate/3/9/3/3/3": {
+          "type": "element",
+          "hash": "74f66844efbf496e4d3277de79d89f2e",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Share your task details and location with a friend"
+        },
+        "4/0/init/body/3/argument/1/1/expression/alternate/3/9/3/5/3": {
+          "type": "element",
+          "hash": "b7b3fdf0ee0444192d78adf46e1c373b",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Trust your instincts - if something feels off, report it"
+        },
+        "4/0/init/body/3/argument/1/1/expression/alternate/3/9/3/7/3": {
+          "type": "element",
+          "hash": "4c5662cdd95f5986b4cb27ca3fe50563",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Keep your personal information private"
+        }
+      }
+    },
+    "components/SentryTest.tsx": {
+      "scopes": {
+        "4/0/init/body/5/argument/1/3": {
+          "type": "element",
+          "hash": "1ccaf71ac76fe6c30e7c60642f327b20",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Sentry Integration Test"
+        },
+        "4/0/init/body/5/argument/3/1/3/1": {
+          "type": "element",
+          "hash": "d729400117fa36d83cb20affffdde669",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "This component allows you to test if Sentry is properly integrated. Click the buttons below to trigger different types of events that should be captured by Sentry."
+        },
+        "4/0/init/body/5/argument/3/1/3/3": {
+          "type": "element",
+          "hash": "a13e4377826ee4ec4d49744d8383b767",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "After triggering events, check your Sentry dashboard to verify they were captured."
+        },
+        "4/0/init/body/5/argument/5/1": {
+          "type": "element",
+          "hash": "83ff3b695bad48c2c160da00c35ed7bd",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Test Translation Error"
+        },
+        "4/0/init/body/5/argument/5/3": {
+          "type": "element",
+          "hash": "d62b4958b56be75791e2ad09940d8ba1",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Test Unhandled Error"
+        },
+        "4/0/init/body/5/argument/5/5": {
+          "type": "element",
+          "hash": "dadfc421e08b1bdafca9ca9a0beee561",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Send Test Message"
+        },
+        "4/0/init/body/5/argument/9/1": {
+          "type": "element",
+          "hash": "8e7021cdab0381ba622e7b02bafe0b4a",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Note: The translation error test simulates what would happen if a user tried to translate content to French but the service failed."
+        }
+      }
+    },
+    "components/TaskCheckoutSuccess.tsx": {
+      "scopes": {
+        "6/0/init/body/4/consequent/0/argument/1/3": {
+          "type": "element",
+          "hash": "3a4c537661f18670d859910460237f0f",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Loading task details..."
+        },
+        "6/0/init/body/6/argument/1/1/3": {
+          "type": "element",
+          "hash": "09a7207589fbff36daec2a0aeca980b7",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Payment Successful!"
+        },
+        "6/0/init/body/6/argument/1/1/5": {
+          "type": "element",
+          "hash": "0b16350ec7deb48be7d68388b5208bbe",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Your task has been created and is now visible to potential helpers."
+        },
+        "6/0/init/body/6/argument/1/5/1": {
+          "type": "element",
+          "hash": "e18ee6f27c603d14fdadab2973c5c953",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "View Task Details<element:ArrowRight></element:ArrowRight>"
+        },
+        "6/0/init/body/6/argument/1/5/3": {
+          "type": "element",
+          "hash": "cba1205249020634b8f3b25105b9712b",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Close"
+        }
+      }
+    },
+    "components/TaskMarketplace.tsx": {
+      "scopes": {
+        "13/0/init/body/37/0/init/body/3/argument/3": {
+          "type": "element",
+          "hash": "7fb51c40651f5c123e75faa7d6a7a30e",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "$<function:hourlyRate.toFixed/>/hr × {estimatedHours}h"
+        },
+        "13/0/init/body/38/argument/1/1/3/expression/right": {
+          "type": "element",
+          "hash": "c1c95b05b8143881f49a43769ee5174e",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Live"
+        },
+        "13/0/init/body/38/argument/1/3/expression/right": {
+          "type": "element",
+          "hash": "46a7f40c0ff7dbe357e6611e972dfd2e",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Tasks posted in the last hour within walking distance"
+        },
+        "13/0/init/body/38/argument/13/1/1-placeholder": {
+          "type": "attribute",
+          "hash": "0139d53d369bdc0afa6996b5c2a074ff",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Search tasks..."
+        },
+        "13/0/init/body/38/argument/13/5/1": {
+          "type": "element",
+          "hash": "23d5742df36f85407e878abd19ce10f6",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Nearest First"
+        },
+        "13/0/init/body/38/argument/13/5/3": {
+          "type": "element",
+          "hash": "0346f7abe9bd36e2c22b0008256e3eda",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Most Urgent"
+        },
+        "13/0/init/body/38/argument/13/5/5": {
+          "type": "element",
+          "hash": "51c1a11106be8af4dfb57d8d7b5a3ac2",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Highest Price"
+        },
+        "13/0/init/body/38/argument/13/5/7": {
+          "type": "element",
+          "hash": "dbb97869d7b7f4bfaa7c441aa3e4b649",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Lowest Price"
+        },
+        "13/0/init/body/38/argument/15/expression/alternate/alternate/alternate/1/expression/0/body/5/19/1/3/3/expression/right": {
+          "type": "element",
+          "hash": "50364cd320c75d9149be269b43fd6035",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:CheckCircle></element:CheckCircle> Verified"
+        },
+        "13/0/init/body/38/argument/15/expression/alternate/alternate/alternate/1/expression/0/body/5/19/3/expression/right": {
+          "type": "element",
+          "hash": "f13b918d73232a3e6df5e92a522f6e0f",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<function:formatDistance/> away"
+        },
+        "13/0/init/body/38/argument/15/expression/alternate/alternate/alternate/1/expression/0/body/5/23/1/expression/right/1": {
+          "type": "element",
+          "hash": "2d7c765e73d14e6d02d93d86906f82eb",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:CheckCircle></element:CheckCircle> Accept Task"
+        },
+        "13/0/init/body/38/argument/15/expression/alternate/alternate/alternate/1/expression/0/body/5/23/3/expression/right": {
+          "type": "element",
+          "hash": "2b55a155d466a920a070fc3d437c401f",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Pending Acceptance"
+        },
+        "13/0/init/body/38/argument/15/expression/alternate/alternate/alternate/1/expression/0/body/5/23/5/expression/right/1": {
+          "type": "element",
+          "hash": "41e5a23c6f882dbd5ec803b52b4afc83",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:MapPin></element:MapPin> Track Progress"
+        },
+        "13/0/init/body/38/argument/15/expression/alternate/alternate/alternate/1/expression/0/body/5/23/7/expression/right/1/1": {
+          "type": "element",
+          "hash": "8062d20b2e8e0d7160f50e262050cb82",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:ArrowRight></element:ArrowRight> Update Status"
+        },
+        "13/0/init/body/38/argument/15/expression/alternate/alternate/alternate/1/expression/0/body/5/3/3/1": {
+          "type": "element",
+          "hash": "ce3025799d70859c869af0b2fea2ad8a",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "${task.price}"
+        },
+        "13/0/init/body/38/argument/15/expression/alternate/alternate/consequent/3": {
+          "type": "element",
+          "hash": "69b08213a90d92787ae30be2d606ca0f",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "No tasks found"
+        },
+        "13/0/init/body/38/argument/15/expression/alternate/alternate/consequent/7/expression/right/1": {
+          "type": "element",
+          "hash": "817329742db463da8b17d1874a154cba",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:PlusCircle></element:PlusCircle> Create a New Task"
+        },
+        "13/0/init/body/38/argument/21/expression/right/1/1/1": {
+          "type": "element",
+          "hash": "e0743c7a4564aecad86b49585f96827c",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Live Task Tracker"
+        },
+        "13/0/init/body/38/argument/23/expression/right/1/1/1": {
+          "type": "element",
+          "hash": "f8703646f3561a3539bb78c84c8b6ebb",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Accept Task Bundle"
+        },
+        "13/0/init/body/38/argument/23/expression/right/1/3/1/1/1": {
+          "type": "element",
+          "hash": "90652c7e695469bec0de4461ae39f1c3",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Total Earnings"
+        },
+        "13/0/init/body/38/argument/23/expression/right/1/3/1/1/3": {
+          "type": "element",
+          "hash": "c4db5dd02d50aaa276f5478caea4fc84",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "${selectedBundle.totalEarnings}"
+        },
+        "13/0/init/body/38/argument/23/expression/right/1/3/1/3/1": {
+          "type": "element",
+          "hash": "dc599e0781bd46bedc5bd430659a6169",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Estimated Time"
+        },
+        "13/0/init/body/38/argument/23/expression/right/1/3/1/5/1": {
+          "type": "element",
+          "hash": "2b5644d6f0241e15c566c91035220633",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Total Distance"
+        },
+        "13/0/init/body/38/argument/23/expression/right/1/3/1/5/3": {
+          "type": "element",
+          "hash": "32c9c74f17ec611af9275481ade3234e",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<function:selectedBundle.totalDistance.toFixed/>km"
+        },
+        "13/0/init/body/38/argument/23/expression/right/1/3/3/1": {
+          "type": "element",
+          "hash": "824de67022206b200fdfea131fe14c89",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Tasks in this bundle:"
+        },
+        "13/0/init/body/38/argument/23/expression/right/1/3/3/3/expression/0/body/3": {
+          "type": "element",
+          "hash": "ce3025799d70859c869af0b2fea2ad8a",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "${task.price}"
+        },
+        "13/0/init/body/38/argument/23/expression/right/1/3/5/1": {
+          "type": "element",
+          "hash": "b651cc83cfebf1a1699254562aba2f3e",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:CheckCircle></element:CheckCircle> Accept All Tasks"
+        },
+        "13/0/init/body/38/argument/5/1/1": {
+          "type": "element",
+          "hash": "90b31384acd7a9bb1c331afc98d18e39",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Available Tasks"
+        },
+        "13/0/init/body/38/argument/5/1/3": {
+          "type": "element",
+          "hash": "1622cccf03cdbf40542b32209c2e80a5",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Tasks You're Doing<expression/>"
+        },
+        "13/0/init/body/38/argument/5/1/5": {
+          "type": "element",
+          "hash": "6889c08477f31c0dda7d15fae3775cac",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Your Posted Tasks"
+        },
+        "13/0/init/body/38/argument/9/1/1/1-placeholder": {
+          "type": "attribute",
+          "hash": "0139d53d369bdc0afa6996b5c2a074ff",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Search tasks..."
+        },
+        "13/0/init/body/38/argument/9/3/expression/right/1/1": {
+          "type": "element",
+          "hash": "1b0340cd175aa5a2be745a0d54908466",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Category"
+        },
+        "13/0/init/body/38/argument/9/3/expression/right/3/1": {
+          "type": "element",
+          "hash": "f1035fcc660691aa9c6e1043e81d1d88",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Sort By"
+        },
+        "13/0/init/body/38/argument/9/3/expression/right/3/3/1": {
+          "type": "element",
+          "hash": "23d5742df36f85407e878abd19ce10f6",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Nearest First"
+        },
+        "13/0/init/body/38/argument/9/3/expression/right/3/3/3": {
+          "type": "element",
+          "hash": "0346f7abe9bd36e2c22b0008256e3eda",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Most Urgent"
+        },
+        "13/0/init/body/38/argument/9/3/expression/right/3/3/5": {
+          "type": "element",
+          "hash": "51c1a11106be8af4dfb57d8d7b5a3ac2",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Highest Price"
+        },
+        "13/0/init/body/38/argument/9/3/expression/right/3/3/7": {
+          "type": "element",
+          "hash": "dbb97869d7b7f4bfaa7c441aa3e4b649",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Lowest Price"
+        }
+      }
+    },
+    "components/TaskPreview.tsx": {
+      "scopes": {
+        "5/0/init/body/4/argument/3/9/expression/alternate/1/3": {
+          "type": "element",
+          "hash": "c0088e9dbb036617394833a58e436dd3",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Starting from $<expression/>"
+        },
+        "5/0/init/body/4/argument/3/9/expression/alternate/3": {
+          "type": "element",
+          "hash": "cc052874596cb5f1d1b1342d582b0ac0",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<expression/> miles away"
+        }
+      }
+    },
+    "components/TaskTemplates.tsx": {
+      "scopes": {
+        "8/0/init/body/24/argument/13/1/1-placeholder": {
+          "type": "attribute",
+          "hash": "0139d53d369bdc0afa6996b5c2a074ff",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Search tasks..."
+        },
+        "8/0/init/body/24/argument/15/expression/alternate/alternate/1/expression/0/body/3/1/3/3": {
+          "type": "element",
+          "hash": "0c7d44df5bdc5606db8ab9d8a33ae054",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "4.9"
+        },
+        "8/0/init/body/24/argument/15/expression/alternate/alternate/1/expression/0/body/3/5/3/3": {
+          "type": "element",
+          "hash": "7c834c2112072cdefd7c158c2428fc42",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<expression/> locations"
+        },
+        "8/0/init/body/24/argument/15/expression/alternate/alternate/1/expression/0/body/3/7/expression/right/1/1": {
+          "type": "element",
+          "hash": "74ca7e6181b3e086abcf3c72fb1fce4a",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Popular Locations"
+        },
+        "8/0/init/body/24/argument/15/expression/alternate/alternate/1/expression/0/body/3/7/expression/right/3/expression/right/3/expression/right": {
+          "type": "element",
+          "hash": "8118858c47c0cb753723e3abc89987be",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "View All {template.locations.length} Locations"
+        },
+        "8/0/init/body/24/argument/15/expression/alternate/alternate/1/expression/0/body/3/9": {
+          "type": "element",
+          "hash": "f6e244fac3cf2dba4b502fd6896122c0",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:Zap></element:Zap> Select Task"
+        },
+        "8/0/init/body/24/argument/15/expression/alternate/consequent/3": {
+          "type": "element",
+          "hash": "c3030640b43b551e591b273fa1eff07f",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "No templates found"
+        },
+        "8/0/init/body/24/argument/15/expression/alternate/consequent/5": {
+          "type": "element",
+          "hash": "e3d3227f98e359be6b40ba60ce0a717d",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Try adjusting your search or filters"
+        },
+        "8/0/init/body/24/argument/19/5/3": {
+          "type": "element",
+          "hash": "790e07e0f69870266b1d616ea0861e1c",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Need Something Else?"
+        },
+        "8/0/init/body/24/argument/19/5/5": {
+          "type": "element",
+          "hash": "b3b5584c3f1881b0e4132ee88ccefc3a",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Create a custom task for anything you need help with on campus."
+        },
+        "8/0/init/body/24/argument/19/5/7": {
+          "type": "element",
+          "hash": "b4f19d670be1980270054c77f5ee7c45",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:Zap></element:Zap> Create Custom Task<element:ArrowRight></element:ArrowRight>"
+        },
+        "8/0/init/body/24/argument/23/1": {
+          "type": "element",
+          "hash": "a247a6fcda472b6155d253f39b171dc4",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:Award></element:Award> How Hustl Works"
+        },
+        "8/0/init/body/24/argument/23/3": {
+          "type": "element",
+          "hash": "087784f08a2663977f03f3db2fc20551",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Help is just a few clicks away!"
+        },
+        "8/0/init/body/24/argument/23/5/11/3": {
+          "type": "element",
+          "hash": "2571b95e1a70b2428d1d7327b0650859",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Task Complete"
+        },
+        "8/0/init/body/24/argument/23/5/11/5": {
+          "type": "element",
+          "hash": "ab4e9d9975bec6d3b73cb3b3cb49f88d",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Chat with your helper, track progress, and rate your experience"
+        },
+        "8/0/init/body/24/argument/23/5/3/3": {
+          "type": "element",
+          "hash": "90227063b31bde37fabdf4e7aa04e3f8",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Post Your Task"
+        },
+        "8/0/init/body/24/argument/23/5/3/5": {
+          "type": "element",
+          "hash": "3181f69f0d46d2496d835067ee31b993",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Describe what you need help with and set your budget"
+        },
+        "8/0/init/body/24/argument/23/5/7/3": {
+          "type": "element",
+          "hash": "4e47a287356422fdd4afb6689647111e",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Get Matched"
+        },
+        "8/0/init/body/24/argument/23/5/7/5": {
+          "type": "element",
+          "hash": "2df43c32896226f3bb4e4bd84d7a2298",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Ready students will see your task and offer to help"
+        },
+        "8/0/init/body/24/argument/27/1/1": {
+          "type": "element",
+          "hash": "8197c4b5977dc5ca37e82fcdf5a86cbf",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:Star></element:Star> What Students Are Saying"
+        },
+        "8/0/init/body/24/argument/27/1/3": {
+          "type": "element",
+          "hash": "b03dbc7751bd404112f3d067f9204dc4",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Join thousands of UF students already using Hustl to connect, help each other, and build a stronger campus community."
+        },
+        "8/0/init/body/24/argument/27/1/5/1/3": {
+          "type": "element",
+          "hash": "08cbe1b145e43b381c59d935d27cc902",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Student ID verification required"
+        },
+        "8/0/init/body/24/argument/27/1/5/3/3": {
+          "type": "element",
+          "hash": "ae6a09243fa90b31680677455b66ce2d",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Real-time chat and tracking"
+        },
+        "8/0/init/body/24/argument/27/1/5/5/3": {
+          "type": "element",
+          "hash": "13aa85b2d1012d1733c9b0837dea4e07",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Community ratings and reviews"
+        },
+        "8/0/init/body/24/argument/27/1/5/7/3": {
+          "type": "element",
+          "hash": "9c8beeb7f707b5d2801d89b519f23385",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "24/7 support team"
+        },
+        "8/0/init/body/24/argument/27/3/5/1/3/3": {
+          "type": "element",
+          "hash": "5570d3ba6ca4c9bca1cab1acb78d3c0c",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "{currentTestimonial.major} • {currentTestimonial.year}"
+        },
+        "8/0/init/body/24/argument/27/3/5/7": {
+          "type": "element",
+          "hash": "712d52b25352646fa2dda7f60229ab86",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "\"{currentTestimonial.quote}\""
+        },
+        "8/0/init/body/24/argument/3/1/1/5/5": {
+          "type": "element",
+          "hash": "6b765b35af4837626f8a01540d0ba188",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Campus errands, covered. Coffee runs, printing, pet care — Hustl connects Gators in minutes."
+        },
+        "8/0/init/body/24/argument/3/1/1/5/7/1": {
+          "type": "element",
+          "hash": "24382dff14065096c5d890021fcaa6a0",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Post a Task<element:ArrowRight></element:ArrowRight>"
+        },
+        "8/0/init/body/24/argument/3/1/1/5/7/3": {
+          "type": "element",
+          "hash": "2d0bad555c98083b578ab509102fad3c",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Browse Tasks"
+        },
+        "8/0/init/body/24/argument/3/1/3/5/1/1/3/3": {
+          "type": "element",
+          "hash": "5570d3ba6ca4c9bca1cab1acb78d3c0c",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "{currentHero.tagTime} • {currentHero.tagPrice}"
+        },
+        "8/0/init/body/24/argument/31/1": {
+          "type": "element",
+          "hash": "429dacf0aa0c1162e4013f4a4577d1fb",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:Trophy></element:Trophy> Why Choose Hustl"
+        },
+        "8/0/init/body/24/argument/31/3/1/3": {
+          "type": "element",
+          "hash": "8e37c03d00ef5d6436d39ca95932ab1c",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Safe & Secure"
+        },
+        "8/0/init/body/24/argument/31/3/1/5": {
+          "type": "element",
+          "hash": "f6228fb7978551b5d658a98a81fec3bd",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Verified UF students only with built-in safety features and secure payments."
+        },
+        "8/0/init/body/24/argument/31/3/3/3": {
+          "type": "element",
+          "hash": "1a27c81a9a155f7562a139901a50fda0",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Campus Community"
+        },
+        "8/0/init/body/24/argument/31/3/3/5": {
+          "type": "element",
+          "hash": "23b3a6e24973947061c4073d2499b716",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Connect with fellow Gators in a trusted, campus-focused environment."
+        },
+        "8/0/init/body/24/argument/31/3/5/3": {
+          "type": "element",
+          "hash": "c552f8721b40407424464e05e847ab22",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Flexible Earnings"
+        },
+        "8/0/init/body/24/argument/31/3/5/5": {
+          "type": "element",
+          "hash": "8db9f14ccee9fccab10b01cf236bc42f",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Set your own schedule and earn money helping other students."
+        },
+        "8/0/init/body/24/argument/35/3": {
+          "type": "element",
+          "hash": "2dbf25c6a9e17042c50e1438ad6b62c0",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Ready to Get Started?"
+        },
+        "8/0/init/body/24/argument/35/5": {
+          "type": "element",
+          "hash": "87862c88db12e6866723d9afef4a2017",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Join thousands of UF students already using Hustl to connect and help each other."
+        },
+        "8/0/init/body/24/argument/35/7/1": {
+          "type": "element",
+          "hash": "a0c82ee412b2cde263308b4729db915d",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:Zap></element:Zap> Post a Task"
+        },
+        "8/0/init/body/24/argument/35/7/3": {
+          "type": "element",
+          "hash": "c27a48c0987b3121219a5bd692d049ab",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:Search></element:Search> Browse Tasks"
+        },
+        "8/0/init/body/24/argument/39/1/3": {
+          "type": "element",
+          "hash": "186a199096d63a0b65c2b532b105c564",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Need Help?"
+        },
+        "8/0/init/body/24/argument/39/1/5": {
+          "type": "element",
+          "hash": "a08bb5c3b669709384752b4bba80a47b",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Our support team is available 24/7"
+        },
+        "8/0/init/body/24/argument/39/3/1/3": {
+          "type": "element",
+          "hash": "dc36d7992372ccd419b39ef51cf5b16c",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "FAQs"
+        },
+        "8/0/init/body/24/argument/39/3/3/3": {
+          "type": "element",
+          "hash": "fcbd9e317c7286b3e08752eb73eb1a81",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Contact Support"
+        },
+        "8/0/init/body/24/argument/39/3/5/3": {
+          "type": "element",
+          "hash": "72445612b4014710b6ffeb25d51c2028",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Safety Center"
+        },
+        "8/0/init/body/24/argument/5/1": {
+          "type": "element",
+          "hash": "bbd02680f063c887b8532589fc19a29d",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:Zap></element:Zap> Popular Tasks"
+        },
+        "8/0/init/body/24/argument/5/3": {
+          "type": "element",
+          "hash": "f9365ebe67adbf7dcb0e013185832c5d",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Choose from our most popular task templates or create your own"
+        },
+        "8/0/init/body/24/argument/9/1/1/1-placeholder": {
+          "type": "attribute",
+          "hash": "0139d53d369bdc0afa6996b5c2a074ff",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Search tasks..."
+        }
+      }
+    },
+    "components/UserProfile.tsx": {
+      "scopes": {
+        "8/0/init/body/23/argument/1/11/1/expression/right/1/1": {
+          "type": "element",
+          "hash": "5c261be5e4ff8dff492f301ebc2b70d8",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Profile Information"
+        },
+        "8/0/init/body/23/argument/1/11/1/expression/right/1/3/1/expression/alternate": {
+          "type": "element",
+          "hash": "a3a669e1d974d447d6015f8252f6f3ff",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:Edit></element:Edit> Edit"
+        },
+        "8/0/init/body/23/argument/1/11/1/expression/right/1/3/1/expression/consequent": {
+          "type": "element",
+          "hash": "a837726f20b53d6d6d5ac0602d2a0eb1",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:X></element:X> Cancel"
+        },
+        "8/0/init/body/23/argument/1/11/1/expression/right/3/expression/alternate/1/3/1": {
+          "type": "element",
+          "hash": "ba3094a10db2bb9234cb7e0dc86e40fd",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Full Name"
+        },
+        "8/0/init/body/23/argument/1/11/1/expression/right/3/expression/alternate/13/3/1": {
+          "type": "element",
+          "hash": "b5b60d11132a7d937ac10c519a262d85",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Default Hourly Rate"
+        },
+        "8/0/init/body/23/argument/1/11/1/expression/right/3/expression/alternate/13/3/3/expression/alternate/1/expression/alternate/1": {
+          "type": "element",
+          "hash": "380482630d60ee2d1531b31246caa467",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Not set"
+        },
+        "8/0/init/body/23/argument/1/11/1/expression/right/3/expression/alternate/13/3/3/expression/alternate/1/expression/alternate/3": {
+          "type": "element",
+          "hash": "df3e734f7ca30b3eecda4c53566c444b",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:Edit></element:Edit> Set Rate"
+        },
+        "8/0/init/body/23/argument/1/11/1/expression/right/3/expression/alternate/13/3/3/expression/alternate/1/expression/consequent/1": {
+          "type": "element",
+          "hash": "ce3025799d70859c869af0b2fea2ad8a",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "$<function:profile.hourly_rate.toFixed/>"
+        },
+        "8/0/init/body/23/argument/1/11/1/expression/right/3/expression/alternate/13/3/3/expression/alternate/1/expression/consequent/3": {
+          "type": "element",
+          "hash": "f399901d4ba1d8880a604717f762e2c5",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "per hour"
+        },
+        "8/0/init/body/23/argument/1/11/1/expression/right/3/expression/alternate/13/3/3/expression/consequent/1/3-placeholder": {
+          "type": "attribute",
+          "hash": "8bcde45998f4ccfe2b6c4659042faad3",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "e.g. 15.00"
+        },
+        "8/0/init/body/23/argument/1/11/1/expression/right/3/expression/alternate/13/3/5": {
+          "type": "element",
+          "hash": "7e854a18d6b3c2de5c6a130bed24618c",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "This rate will be suggested as the default when creating new tasks"
+        },
+        "8/0/init/body/23/argument/1/11/1/expression/right/3/expression/alternate/3/3/1": {
+          "type": "element",
+          "hash": "e7f34943a0c2fb849db1839ff6ef5cb5",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Email"
+        },
+        "8/0/init/body/23/argument/1/11/1/expression/right/3/expression/alternate/5/3/1": {
+          "type": "element",
+          "hash": "993df9103565c3bfec22894246ff78ec",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Major"
+        },
+        "8/0/init/body/23/argument/1/11/1/expression/right/3/expression/alternate/7/3/1": {
+          "type": "element",
+          "hash": "68f13de9a1bc207db0d8b62c6b433052",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Member Since"
+        },
+        "8/0/init/body/23/argument/1/11/1/expression/right/3/expression/alternate/9/3/1": {
+          "type": "element",
+          "hash": "c60ff4cd8194441e6629b411d2ef390c",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Verification Status"
+        },
+        "8/0/init/body/23/argument/1/11/1/expression/right/3/expression/alternate/9/3/3/1/expression/alternate": {
+          "type": "element",
+          "hash": "aaa0242ec44cf43f463521b0d3ae4671",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Unverified"
+        },
+        "8/0/init/body/23/argument/1/11/1/expression/right/3/expression/alternate/9/3/3/1/expression/consequent": {
+          "type": "element",
+          "hash": "0d08e9e81ed9cad603ce206c3b9837e8",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:CheckSquare></element:CheckSquare> Verified"
+        },
+        "8/0/init/body/23/argument/1/11/1/expression/right/3/expression/consequent/1/1": {
+          "type": "element",
+          "hash": "3f9e63964fb955bcb49dcc87d1f80ec4",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Full Name"
+        },
+        "8/0/init/body/23/argument/1/11/1/expression/right/3/expression/consequent/3/1": {
+          "type": "element",
+          "hash": "0f2270232cc1a15781427530ba3c0326",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Email"
+        },
+        "8/0/init/body/23/argument/1/11/1/expression/right/3/expression/consequent/3/5": {
+          "type": "element",
+          "hash": "d11a0207233d99533968d894c8cfd658",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Email cannot be changed"
+        },
+        "8/0/init/body/23/argument/1/11/1/expression/right/3/expression/consequent/5/1": {
+          "type": "element",
+          "hash": "41429c7a444b0befc92b95bd2db2af48",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Major"
+        },
+        "8/0/init/body/23/argument/1/11/1/expression/right/3/expression/consequent/7/1": {
+          "type": "element",
+          "hash": "d2a7713d8f2cb1037cbb3a8465540890",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<expression/> Save Changes"
+        },
+        "8/0/init/body/23/argument/1/11/3/expression/right/1/1": {
+          "type": "element",
+          "hash": "a7ee197303ddfbadb2b948a3975d603a",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "My Tasks"
+        },
+        "8/0/init/body/23/argument/1/11/3/expression/right/1/3/1": {
+          "type": "element",
+          "hash": "1b3ecd5bdd6ca267c96da508a8922119",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Create New Task"
+        },
+        "8/0/init/body/23/argument/1/11/3/expression/right/3/expression/alternate/1/expression/0/body/7/1/3": {
+          "type": "element",
+          "hash": "ce3025799d70859c869af0b2fea2ad8a",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "${task.price}"
+        },
+        "8/0/init/body/23/argument/1/11/3/expression/right/3/expression/alternate/1/expression/0/body/7/1/5/expression/right": {
+          "type": "element",
+          "hash": "9a7f819a102c63a68072b18febf9826a",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "(${task.hourly_rate}/hr × <expression/>h)"
+        },
+        "8/0/init/body/23/argument/1/11/3/expression/right/3/expression/consequent/3": {
+          "type": "element",
+          "hash": "364405a7adc069060224ba5389f570fb",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "No tasks yet"
+        },
+        "8/0/init/body/23/argument/1/11/3/expression/right/3/expression/consequent/5": {
+          "type": "element",
+          "hash": "afddc03f4d22b8cbc6f2592f037200bc",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "You haven't created any tasks yet. Click the button above to create your first task."
+        },
+        "8/0/init/body/23/argument/1/11/7/expression/right/1": {
+          "type": "element",
+          "hash": "537678f5102b94e3267b61b30eae4ac6",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Stats & Achievements"
+        },
+        "8/0/init/body/23/argument/1/11/7/expression/right/3/1/1/1": {
+          "type": "element",
+          "hash": "d886d1e833ae03db5c92193bc5ebec04",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Tasks Completed"
+        },
+        "8/0/init/body/23/argument/1/11/7/expression/right/3/3/1/1": {
+          "type": "element",
+          "hash": "90652c7e695469bec0de4461ae39f1c3",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Total Earnings"
+        },
+        "8/0/init/body/23/argument/1/11/7/expression/right/3/3/3": {
+          "type": "element",
+          "hash": "ce3025799d70859c869af0b2fea2ad8a",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "$<expression/>"
+        },
+        "8/0/init/body/23/argument/1/11/7/expression/right/3/5/1/1": {
+          "type": "element",
+          "hash": "c9fa231054678af1362b7f9c6ab35e23",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Rating"
+        },
+        "8/0/init/body/23/argument/1/11/7/expression/right/5": {
+          "type": "element",
+          "hash": "b8630556f011d979c83adde81fb028ff",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Achievements"
+        },
+        "8/0/init/body/23/argument/1/11/7/expression/right/7/1/1/3/1": {
+          "type": "element",
+          "hash": "9ede78c7375eec28c6bd5fef5eac9224",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "First Task"
+        },
+        "8/0/init/body/23/argument/1/11/7/expression/right/7/1/1/3/3": {
+          "type": "element",
+          "hash": "32ca3032e8f117e27e7728810d538223",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Complete your first task"
+        },
+        "8/0/init/body/23/argument/1/11/7/expression/right/7/3/1/3/1": {
+          "type": "element",
+          "hash": "bff92982885588ed1352a8ee9d5121d9",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Task Master"
+        },
+        "8/0/init/body/23/argument/1/11/7/expression/right/7/3/1/3/3": {
+          "type": "element",
+          "hash": "2ed2f217d0acc2f40afbe77114df9faf",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Complete 5 tasks"
+        },
+        "8/0/init/body/23/argument/1/11/7/expression/right/7/5/1/3/1": {
+          "type": "element",
+          "hash": "ef7b8fe339844a53a8e0d98c5c511f78",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Verified Student"
+        },
+        "8/0/init/body/23/argument/1/11/7/expression/right/7/5/1/3/3": {
+          "type": "element",
+          "hash": "324faa87c6262fae2607ef82b1b3181c",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Verify your student status"
+        },
+        "8/0/init/body/23/argument/1/11/7/expression/right/7/7/1/3/1": {
+          "type": "element",
+          "hash": "2fddb4880767fe24cde26b58952c25aa",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Money Maker"
+        },
+        "8/0/init/body/23/argument/1/11/7/expression/right/7/7/1/3/3": {
+          "type": "element",
+          "hash": "4ad0e60f1e2fd77cbbf5a8fa5bf2ac81",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Earn $50 from tasks"
+        },
+        "8/0/init/body/23/argument/1/3/1/3/7/expression/right/3": {
+          "type": "element",
+          "hash": "ef7b8fe339844a53a8e0d98c5c511f78",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Verified Student"
+        },
+        "8/0/init/body/23/argument/1/3/1/7/1/1/3": {
+          "type": "element",
+          "hash": "5c261be5e4ff8dff492f301ebc2b70d8",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Profile Information"
+        },
+        "8/0/init/body/23/argument/1/3/1/7/1/3/3": {
+          "type": "element",
+          "hash": "a7ee197303ddfbadb2b948a3975d603a",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "My Tasks"
+        },
+        "8/0/init/body/23/argument/1/3/1/7/1/5/3": {
+          "type": "element",
+          "hash": "1d4f983077058856f46d48dbde691ce0",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Task History"
+        },
+        "8/0/init/body/23/argument/1/3/1/7/1/7/3": {
+          "type": "element",
+          "hash": "537678f5102b94e3267b61b30eae4ac6",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Stats & Achievements"
+        },
+        "8/0/init/body/23/argument/1/7/expression/right/1": {
+          "type": "element",
+          "hash": "3d49e2a2eb83469639fb78a9159156a5",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Profile"
+        },
+        "8/0/init/body/23/argument/1/7/expression/right/3": {
+          "type": "element",
+          "hash": "8b004b342fdfe292eadf45c954119d03",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Tasks"
+        },
+        "8/0/init/body/23/argument/1/7/expression/right/5": {
+          "type": "element",
+          "hash": "b5bb260462e6e643dbe824c0e7e1714b",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "History"
+        },
+        "8/0/init/body/23/argument/1/7/expression/right/7": {
+          "type": "element",
+          "hash": "b8559ea6f9f0962d9ad86b3aa8157a74",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Stats"
+        }
+      }
+    },
+    "components/VoiceAssistant.tsx": {
+      "scopes": {
+        "8/declaration/body/17/argument/1/11/1/1/3": {
+          "type": "element",
+          "hash": "043f25245562ce3f592ec94c9383ee98",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Create Task"
+        },
+        "8/declaration/body/17/argument/1/11/1/3/3": {
+          "type": "element",
+          "hash": "5cafec88adc34fa606e40b1a8b61caa9",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Find Tasks"
+        },
+        "8/declaration/body/17/argument/1/11/1/5/3": {
+          "type": "element",
+          "hash": "4599a5c87198f2113d1e54d435a24cd5",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Wallet"
+        },
+        "8/declaration/body/17/argument/1/3/1/1/3": {
+          "type": "element",
+          "hash": "81a94ad8770dca9c3cbb5a88329b6a6f",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Voice Assistant"
+        },
+        "8/declaration/body/17/argument/1/7/11/expression/right/1": {
+          "type": "element",
+          "hash": "ba98bfcf09c6799f8fa6cfe21169f179",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:div></element:div> Processing your request..."
+        },
+        "8/declaration/body/17/argument/1/7/13/expression/right/1": {
+          "type": "element",
+          "hash": "fed9c67b7698e68c44acb77cac9a0baf",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:Volume2></element:Volume2> Speaking..."
+        },
+        "8/declaration/body/17/argument/1/7/5/expression/right/1/1": {
+          "type": "element",
+          "hash": "d67c649e3fafbedd8f3545ae374fdfb3",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Voice Note:"
+        },
+        "8/declaration/body/17/argument/1/7/9/expression/right/1/3/1": {
+          "type": "element",
+          "hash": "5665e058f3da68b26c1ea68af5ed160d",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "You said:"
+        }
+      }
+    },
+    "components/WalletModal.tsx": {
+      "scopes": {
+        "15/0/init/body/18/argument/1/1/1": {
+          "type": "element",
+          "hash": "7cc5a3ac238a07a4ea990a9e2e9ae584",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:WalletIcon></element:WalletIcon> Your Wallet"
+        },
+        "15/0/init/body/18/argument/1/3/3/1": {
+          "type": "element",
+          "hash": "e7ad0586c48c7632883c0b0804937ff9",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Overview"
+        },
+        "15/0/init/body/18/argument/1/3/3/3": {
+          "type": "element",
+          "hash": "a090b9e90a5535441033bd12670dbaa4",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Payment Methods"
+        },
+        "15/0/init/body/18/argument/1/3/3/5": {
+          "type": "element",
+          "hash": "1f3050ce10ad87d81efac8893247960b",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Transactions"
+        },
+        "15/0/init/body/18/argument/1/3/5/expression/alternate/1/expression/right/11/1/1": {
+          "type": "element",
+          "hash": "c1adc026ca419c2e105271ce9155f17a",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Recent Transactions"
+        },
+        "15/0/init/body/18/argument/1/3/5/expression/alternate/1/expression/right/11/1/3": {
+          "type": "element",
+          "hash": "e7f214f9b856255334e992cefee34231",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "View All"
+        },
+        "15/0/init/body/18/argument/1/3/5/expression/alternate/1/expression/right/11/3/1/expression/0/body/3": {
+          "type": "element",
+          "hash": "ac5743893a6d088103979e146c33d1a6",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<expression/>$<function:Math.abs/>"
+        },
+        "15/0/init/body/18/argument/1/3/5/expression/alternate/1/expression/right/11/3/3/expression/right/3": {
+          "type": "element",
+          "hash": "2fe6d0151988d3a1e4271524f3aae8f1",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "No transactions yet"
+        },
+        "15/0/init/body/18/argument/1/3/5/expression/alternate/1/expression/right/15/1/1": {
+          "type": "element",
+          "hash": "1f20db3180fd9cfc984e707987c7c01b",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Payment Methods"
+        },
+        "15/0/init/body/18/argument/1/3/5/expression/alternate/1/expression/right/15/1/3": {
+          "type": "element",
+          "hash": "dba5efe6f6a8e6326c7d5698fbcc9c99",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Manage"
+        },
+        "15/0/init/body/18/argument/1/3/5/expression/alternate/1/expression/right/15/3/1/expression/0/body/1/3/3/expression/right": {
+          "type": "element",
+          "hash": "d9c6dc5c412fe94143dfd1d332ec81d4",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Default"
+        },
+        "15/0/init/body/18/argument/1/3/5/expression/alternate/1/expression/right/15/3/3/expression/right/3": {
+          "type": "element",
+          "hash": "27dd4338c88cff27127dba80b12b2646",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "No payment methods added yet"
+        },
+        "15/0/init/body/18/argument/1/3/5/expression/alternate/1/expression/right/7/1": {
+          "type": "element",
+          "hash": "b032d0d28f20151b7281f42dea41f731",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:Plus></element:Plus> Add Funds"
+        },
+        "15/0/init/body/18/argument/1/3/5/expression/alternate/1/expression/right/7/3": {
+          "type": "element",
+          "hash": "adb60a5fa4e290a46761f2e5c22f98fb",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:ArrowDownLeft></element:ArrowDownLeft> Withdraw"
+        },
+        "15/0/init/body/18/argument/1/3/5/expression/alternate/3/expression/right/1/1": {
+          "type": "element",
+          "hash": "1f20db3180fd9cfc984e707987c7c01b",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Payment Methods"
+        },
+        "15/0/init/body/18/argument/1/3/5/expression/alternate/3/expression/right/1/3": {
+          "type": "element",
+          "hash": "8845d0e6f80dce309f143eef44214553",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "+ Add New"
+        },
+        "15/0/init/body/18/argument/1/3/5/expression/alternate/3/expression/right/3/expression/alternate/1/expression/0/body/1/3/3/expression/right": {
+          "type": "element",
+          "hash": "d9c6dc5c412fe94143dfd1d332ec81d4",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Default"
+        },
+        "15/0/init/body/18/argument/1/3/5/expression/alternate/3/expression/right/3/expression/alternate/1/expression/0/body/3/1/expression/right": {
+          "type": "element",
+          "hash": "44fd746d448dd4537e1d5a2b05783e88",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Make Default"
+        },
+        "15/0/init/body/18/argument/1/3/5/expression/alternate/3/expression/right/3/expression/alternate/1/expression/0/body/3/3": {
+          "type": "element",
+          "hash": "d2c84525b4a7a10836ac5133afdc5c89",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Remove"
+        },
+        "15/0/init/body/18/argument/1/3/5/expression/alternate/3/expression/right/3/expression/alternate/3/expression/right/3": {
+          "type": "element",
+          "hash": "27dd4338c88cff27127dba80b12b2646",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "No payment methods added yet"
+        },
+        "15/0/init/body/18/argument/1/3/5/expression/alternate/3/expression/right/3/expression/alternate/3/expression/right/5": {
+          "type": "element",
+          "hash": "d28634266cbe18e98522f0c2da36b11a",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Add a payment method"
+        },
+        "15/0/init/body/18/argument/1/3/5/expression/alternate/5/expression/right/1/1": {
+          "type": "element",
+          "hash": "7dc0729b2cd4d854f57348269d495010",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Transaction History"
+        },
+        "15/0/init/body/18/argument/1/3/5/expression/alternate/5/expression/right/1/3": {
+          "type": "element",
+          "hash": "0c708a2df067805db23dff502d7c90d7",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:RefreshCw></element:RefreshCw> Refresh"
+        },
+        "15/0/init/body/18/argument/1/3/5/expression/alternate/5/expression/right/3/1/expression/0/body/3": {
+          "type": "element",
+          "hash": "b2569cc0874d320430f48782dd8f41ba",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<expression/>$<function:Math.abs/>"
+        },
+        "15/0/init/body/18/argument/1/3/5/expression/alternate/5/expression/right/3/3/expression/right/3": {
+          "type": "element",
+          "hash": "2fe6d0151988d3a1e4271524f3aae8f1",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "No transactions yet"
+        }
+      }
+    },
     "main.tsx": {
       "scopes": {
         "9/expression/0/1/openingElement/0/value/expression": {

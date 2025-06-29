@@ -1,5 +1,5 @@
 import React from 'react';
-import { X, Zap, Shield, DollarSign, Users, Star, Clock, Mail, Award, Trophy, BookOpen, Briefcase, GraduationCap, Coffee } from 'lucide-react';
+import { X, Zap, Shield, DollarSign, Users, Star, Clock, Mail, Award, Trophy, BookOpen, Briefcase, GraduationCap, Coffee, Package } from 'lucide-react';
 
 interface LearnMoreModalProps {
   onClose: () => void;

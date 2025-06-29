@@ -15,7 +15,8 @@ import {
   setDoc,
   runTransaction,
   writeBatch,
-  DocumentReference
+  DocumentReference,
+  GetOptions
 } from 'firebase/firestore';
 import { db, auth } from './firebase';
 import * as Sentry from "@sentry/react";
@@ -211,7 +212,13 @@ export const profileService = {
   async getProfile(userId: string): Promise<any> {
     try {
       const docRef = doc(db, 'profiles', userId);
-      const docSnap = await getDoc(docRef);
+      
+      // Check if client is offline and use cache if available
+      const options: GetOptions = {
+        source: !navigator.onLine ? 'cache' : 'default'
+      };
+      
+      const docSnap = await getDoc(docRef, options);
       
       if (!docSnap.exists()) {
         return null;

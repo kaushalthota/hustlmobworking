@@ -21,12 +21,8 @@ interface Message {
   sender_id: string;
   recipient_id?: string;
   image_url?: string;
-  file_url?: string;
-  file_name?: string;
-  file_type?: string;
   is_read?: boolean;
-  is_delivered?: boolean;
-  message_type?: 'text' | 'image' | 'file' | 'status_update';
+  message_type?: 'text' | 'image' | 'status_update';
   status_update?: {
     status: string;
     notes?: string;
@@ -45,64 +41,52 @@ const TaskChat: React.FC<TaskChatProps> = ({ taskId, currentUser, otherUser, onS
   const [progressUpdates, setProgressUpdates] = useState<any[]>([]);
   const [showStatusOptions, setShowStatusOptions] = useState(false);
   const [statusNote, setStatusNote] = useState('');
+  const [chatThreadId, setChatThreadId] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (!taskId || !currentUser?.uid || !otherUser?.id) {
-      console.warn('TaskChat missing required props:', { taskId, currentUserUid: currentUser?.uid, otherUserId: otherUser?.id });
+      console.warn('TaskChat component missing required props:', { taskId, currentUserUid: currentUser?.uid, otherUserId: otherUser?.id });
       return;
     }
     
-    const unsubscribe = loadMessages();
+    // Initialize chat thread
+    const initializeChat = async () => {
+      try {
+        const threadId = await messageService.findOrCreateChatThread(
+          currentUser.uid,
+          otherUser.id,
+          taskId
+        );
+        setChatThreadId(threadId);
+        
+        // Now load messages from this thread
+        const unsubscribe = messageService.subscribeToMessages(threadId, (messageData) => {
+          setMessages(messageData);
+          
+          // Mark messages as read
+          markMessagesAsRead(messageData);
+          
+          scrollToBottom();
+          setConnectionStatus('connected');
+        });
+        
+        return unsubscribe;
+      } catch (error) {
+        console.error('Error initializing chat:', error);
+        return () => {};
+      }
+    };
+    
     loadTaskData();
     loadProgressUpdates();
-    
-    // Subscribe to task progress updates
-    const progressUnsubscribe = taskProgressService.subscribeToTaskProgress(taskId, (progress) => {
-      setProgressUpdates(progress);
-      
-      // Create status update messages for new progress updates
-      if (progress.length > 0) {
-        const latestProgress = progress[progress.length - 1];
-        
-        // Check if we already have a message for this progress update
-        const existingStatusMessage = messages.find(
-          msg => 
-            msg.message_type === 'status_update' && 
-            msg.status_update?.status === latestProgress.status &&
-            new Date(msg.created_at).getTime() === new Date(latestProgress.created_at).getTime()
-        );
-        
-        if (!existingStatusMessage) {
-          // Create a new status update message
-          const statusMessage: Message = {
-            id: `status-${Date.now()}`,
-            content: `Status updated to: ${formatStatus(latestProgress.status)}`,
-            created_at: latestProgress.created_at,
-            sender_id: latestProgress.user_id || 'system',
-            message_type: 'status_update',
-            status_update: {
-              status: latestProgress.status,
-              notes: latestProgress.notes
-            }
-          };
-          
-          // Add the status message to the messages array
-          setMessages(prev => [...prev, statusMessage].sort((a, b) => {
-            const dateA = new Date(a.created_at).getTime();
-            const dateB = new Date(b.created_at).getTime();
-            return dateA - dateB;
-          }));
-        }
-      }
-    });
-    
-    setConnectionStatus('connected');
+    const unsubscribePromise = initializeChat();
     
     return () => {
-      if (unsubscribe) unsubscribe();
-      if (progressUnsubscribe) progressUnsubscribe();
+      unsubscribePromise.then(unsubscribe => {
+        if (unsubscribe) unsubscribe();
+      });
     };
   }, [taskId, currentUser, otherUser]);
 
@@ -128,60 +112,8 @@ const TaskChat: React.FC<TaskChatProps> = ({ taskId, currentUser, otherUser, onS
     }
   };
 
-  const loadMessages = () => {
-    if (!taskId || !currentUser?.uid || !otherUser?.id) {
-      console.warn('Cannot load messages: missing required data');
-      return () => {};
-    }
-
-    // Use the messageService to get messages
-    return messageService.subscribeToMessages(taskId, (messageData) => {
-      // Combine regular messages with status update messages
-      let allMessages = [...messageData];
-      
-      // Add status update messages if they don't exist already
-      progressUpdates.forEach(update => {
-        const existingStatusMessage = allMessages.find(
-          msg => 
-            msg.message_type === 'status_update' && 
-            msg.status_update?.status === update.status &&
-            new Date(msg.created_at).getTime() === new Date(update.created_at).getTime()
-        );
-        
-        if (!existingStatusMessage) {
-          allMessages.push({
-            id: `status-${update.id}`,
-            content: `Status updated to: ${formatStatus(update.status)}`,
-            created_at: update.created_at,
-            sender_id: update.user_id || 'system',
-            message_type: 'status_update',
-            status_update: {
-              status: update.status,
-              notes: update.notes
-            }
-          });
-        }
-      });
-      
-      // Sort messages by timestamp
-      allMessages.sort((a, b) => {
-        const dateA = new Date(a.created_at).getTime();
-        const dateB = new Date(b.created_at).getTime();
-        return dateA - dateB;
-      });
-      
-      setMessages(allMessages);
-      
-      // Mark messages as read
-      markMessagesAsRead(messageData);
-      
-      scrollToBottom();
-      setConnectionStatus('connected');
-    });
-  };
-
   const markMessagesAsRead = async (messageList: Message[]) => {
-    if (!currentUser?.uid) return;
+    if (!currentUser?.uid || !chatThreadId) return;
     
     const unreadMessages = messageList.filter(
       msg => msg.sender_id !== currentUser.uid && !msg.is_read
@@ -189,7 +121,7 @@ const TaskChat: React.FC<TaskChatProps> = ({ taskId, currentUser, otherUser, onS
     
     for (const message of unreadMessages) {
       try {
-        await messageService.markAsRead(taskId, message.id);
+        await messageService.markAsRead(chatThreadId, message.id);
       } catch (error) {
         console.error('Error marking message as read:', error);
       }
@@ -244,7 +176,7 @@ const TaskChat: React.FC<TaskChatProps> = ({ taskId, currentUser, otherUser, onS
 
       const fileExt = file.name.split('.').pop();
       const fileName = `${Math.random().toString(36).substring(2, 15)}.${fileExt}`;
-      const filePath = `chat/${taskId}/${fileName}`;
+      const filePath = `chat/${chatThreadId}/${fileName}`;
 
       const storageRef = ref(storage, filePath);
       await uploadBytes(storageRef, file);
@@ -264,7 +196,7 @@ const TaskChat: React.FC<TaskChatProps> = ({ taskId, currentUser, otherUser, onS
       return;
     }
     
-    if (!currentUser?.uid || !otherUser?.id || !taskId) {
+    if (!currentUser?.uid || !otherUser?.id || !chatThreadId) {
       toast.error('Missing required information to send message');
       return;
     }
@@ -277,7 +209,6 @@ const TaskChat: React.FC<TaskChatProps> = ({ taskId, currentUser, otherUser, onS
       created_at: new Date(),
       sender_id: currentUser.uid,
       recipient_id: otherUser.id,
-      task_id: taskId,
       image_url: imagePreview,
       is_read: false
     };
@@ -306,8 +237,7 @@ const TaskChat: React.FC<TaskChatProps> = ({ taskId, currentUser, otherUser, onS
         is_read: false
       };
 
-      // Use messageService to send the message
-      await messageService.sendMessage(taskId, messageData);
+      await messageService.sendMessage(chatThreadId, messageData);
       
       // Remove optimistic message since real one will come through subscription
       setMessages(prev => prev.filter(msg => msg.id !== optimisticId));
@@ -362,6 +292,9 @@ const TaskChat: React.FC<TaskChatProps> = ({ taskId, currentUser, otherUser, onS
       toast.success(`Task status updated to ${formatStatus(status)}`);
       setShowStatusOptions(false);
       setStatusNote('');
+      
+      // Reload progress updates
+      loadProgressUpdates();
     } catch (error) {
       console.error('Error updating task status:', error);
       toast.error('Error updating task status');
@@ -414,6 +347,8 @@ const TaskChat: React.FC<TaskChatProps> = ({ taskId, currentUser, otherUser, onS
         return <Flag className="w-5 h-5 text-green-500" />;
       case 'completed':
         return <CheckCircle className="w-5 h-5 text-green-500" />;
+      case 'cancelled':
+        return <AlertTriangle className="w-5 h-5 text-red-500" />;
       default:
         return <Clock className="w-5 h-5 text-gray-500" />;
     }
@@ -421,15 +356,6 @@ const TaskChat: React.FC<TaskChatProps> = ({ taskId, currentUser, otherUser, onS
 
   const isOwnMessage = (message: Message) => {
     return currentUser?.uid && message.sender_id === currentUser.uid;
-  };
-
-  const getConnectionStatusColor = () => {
-    switch (connectionStatus) {
-      case 'connected': return 'text-green-500';
-      case 'connecting': return 'text-yellow-500';
-      case 'disconnected': return 'text-red-500';
-      default: return 'text-gray-500';
-    }
   };
 
   const getNextStatus = () => {
@@ -588,10 +514,9 @@ const TaskChat: React.FC<TaskChatProps> = ({ taskId, currentUser, otherUser, onS
           messages.map((message, index) => {
             const isOwn = isOwnMessage(message);
             const showAvatar = index === 0 || messages[index - 1].sender_id !== message.sender_id;
-            const isStatusUpdate = message.message_type === 'status_update';
             
-            if (isStatusUpdate) {
-              // Render status update message
+            // Handle status update
+            if (message.message_type === 'status_update') {
               return (
                 <div key={message.id} className="flex justify-center">
                   <div className="bg-blue-50 rounded-lg px-4 py-2 inline-flex items-center shadow-sm border border-blue-100">

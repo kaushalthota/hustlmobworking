@@ -17,6 +17,7 @@ const DirectMessageModal: React.FC<DirectMessageModalProps> = ({ onClose }) => {
   const [selectedContact, setSelectedContact] = useState<any | null>(null);
   const [message, setMessage] = useState('');
   const [sendingMessage, setSendingMessage] = useState(false);
+  const [chatThreadId, setChatThreadId] = useState<string | null>(null);
 
   useEffect(() => {
     loadContacts();
@@ -45,35 +46,18 @@ const DirectMessageModal: React.FC<DirectMessageModalProps> = ({ onClose }) => {
       const chatThreads = await messageService.getUserChatThreads(user.uid);
       
       // Extract unique user IDs from chat threads
-      const contactIds = new Set<string>();
-      chatThreads.forEach(thread => {
-        // Get the other user's ID
-        const otherUserId = thread.other_user.id;
-        if (otherUserId) {
-          contactIds.add(otherUserId);
-        }
-      });
-
-      // Load profiles for all contacts
-      const contactProfiles = await Promise.all(
-        Array.from(contactIds).map(async (userId) => {
-          try {
-            const profile = await profileService.getProfile(userId);
-            return profile;
-          } catch (error) {
-            console.error(`Error loading profile for user ${userId}:`, error);
-            return null;
-          }
-        })
+      const contactProfiles = chatThreads.map(thread => thread.other_user).filter(Boolean);
+      
+      // Remove duplicates by ID
+      const uniqueContacts = Array.from(
+        new Map(contactProfiles.map(profile => [profile.id, profile])).values()
       );
-
-      // Filter out null profiles and sort by name
-      const validContacts = contactProfiles
-        .filter(profile => profile !== null)
-        .sort((a, b) => a.full_name.localeCompare(b.full_name));
-
-      setContacts(validContacts);
-      setFilteredContacts(validContacts);
+      
+      // Sort by name
+      uniqueContacts.sort((a, b) => a.full_name.localeCompare(b.full_name));
+      
+      setContacts(uniqueContacts);
+      setFilteredContacts(uniqueContacts);
     } catch (error) {
       console.error('Error loading contacts:', error);
       toast.error('Error loading contacts');
@@ -82,12 +66,31 @@ const DirectMessageModal: React.FC<DirectMessageModalProps> = ({ onClose }) => {
     }
   };
 
-  const handleContactSelect = (contact: any) => {
+  const handleContactSelect = async (contact: any) => {
     setSelectedContact(contact);
+    
+    try {
+      // Find or create a chat thread between the users
+      const user = auth.currentUser;
+      if (!user) {
+        throw new Error('Not authenticated');
+      }
+      
+      const threadId = await messageService.findOrCreateChatThread(
+        user.uid,
+        contact.id
+      );
+      
+      setChatThreadId(threadId);
+    } catch (error) {
+      console.error('Error initializing chat thread:', error);
+      toast.error('Error initializing chat');
+    }
   };
 
-  const handleSendMessage = async () => {
-    if (!message.trim() || !selectedContact) return;
+  const handleSendMessage = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!message.trim() || !selectedContact || !chatThreadId) return;
 
     try {
       setSendingMessage(true);
@@ -95,12 +98,6 @@ const DirectMessageModal: React.FC<DirectMessageModalProps> = ({ onClose }) => {
       if (!user) {
         throw new Error('Not authenticated');
       }
-
-      // Find or create a chat thread between the users
-      const chatThreadId = await messageService.findOrCreateChatThread(
-        user.uid,
-        selectedContact.id
-      );
 
       // Send the message
       await messageService.sendMessage(chatThreadId, {
@@ -110,10 +107,11 @@ const DirectMessageModal: React.FC<DirectMessageModalProps> = ({ onClose }) => {
         message_type: 'text',
         is_read: false
       });
-
+      
       toast.success('Message sent successfully');
       setMessage('');
       onClose();
+      
     } catch (error) {
       console.error('Error sending message:', error);
       toast.error('Error sending message');
@@ -138,25 +136,27 @@ const DirectMessageModal: React.FC<DirectMessageModalProps> = ({ onClose }) => {
         <div className="flex flex-col h-[70vh]">
           {selectedContact ? (
             <div className="flex flex-col h-full">
-              <div className="p-4 border-b bg-gray-50 flex items-center">
-                <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center mr-3">
-                  {selectedContact.avatar_url ? (
-                    <img
-                      src={selectedContact.avatar_url}
-                      alt={selectedContact.full_name}
-                      className="w-10 h-10 rounded-full object-cover"
-                    />
-                  ) : (
-                    <User className="w-5 h-5 text-gray-400" />
-                  )}
-                </div>
-                <div>
-                  <h3 className="font-medium">{selectedContact.full_name}</h3>
-                  <p className="text-xs text-gray-500">{selectedContact.major || 'UF Student'}</p>
+              <div className="p-4 border-b bg-gray-50 flex items-center justify-between">
+                <div className="flex items-center">
+                  <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center mr-3">
+                    {selectedContact.avatar_url ? (
+                      <img
+                        src={selectedContact.avatar_url}
+                        alt={selectedContact.full_name}
+                        className="w-10 h-10 rounded-full object-cover"
+                      />
+                    ) : (
+                      <User className="w-5 h-5 text-gray-400" />
+                    )}
+                  </div>
+                  <div>
+                    <h3 className="font-medium">{selectedContact.full_name}</h3>
+                    <p className="text-xs text-gray-500">{selectedContact.major || 'UF Student'}</p>
+                  </div>
                 </div>
                 <button
                   onClick={() => setSelectedContact(null)}
-                  className="ml-auto text-gray-500 hover:text-gray-700 p-2"
+                  className="text-gray-500 hover:text-gray-700 p-2"
                 >
                   <X className="w-5 h-5" />
                 </button>
@@ -164,7 +164,7 @@ const DirectMessageModal: React.FC<DirectMessageModalProps> = ({ onClose }) => {
 
               <div className="flex-1 p-4 bg-gray-50">
                 <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 h-full flex flex-col">
-                  <p className="text-gray-500 text-center mb-4">
+                  <p className="text-center text-gray-500 mb-4">
                     This is the beginning of your conversation with {selectedContact.full_name}.
                   </p>
                   

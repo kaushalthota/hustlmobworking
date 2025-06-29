@@ -4,7 +4,7 @@ import toast from 'react-hot-toast';
 import { collection, query, orderBy, onSnapshot, addDoc, serverTimestamp, updateDoc, doc, getDoc } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { db, storage } from '../lib/firebase';
-import { taskService, taskProgressService, messageService } from '../lib/database';
+import { taskService, taskProgressService, messageService, notificationService } from '../lib/database';
 import TaskStatusMessage from './TaskStatusMessage';
 import { StarBorder } from './ui/star-border';
 

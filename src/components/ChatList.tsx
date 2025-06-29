@@ -300,7 +300,7 @@ const ChatList: React.FC<ChatListProps> = ({ userId, currentUser }) => {
               </div>
             )}
             <GameChat
-              taskId={selectedChatData.id}
+              taskId={selectedChat}
               otherUser={selectedChatData.other_user}
               currentUser={currentUser}
             />

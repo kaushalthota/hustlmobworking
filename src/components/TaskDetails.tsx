@@ -53,6 +53,7 @@ const TaskDetails: React.FC<TaskDetailsProps> = ({ task, onClose, onAccept, onTa
   const [messages, setMessages] = useState<any[]>([]);
   const [chatLoading, setChatLoading] = useState(true);
   const [showCancelModal, setShowCancelModal] = useState(false);
+  const [chatThreadId, setChatThreadId] = useState<string | null>(null);
 
   useEffect(() => {
     getCurrentUser();
@@ -75,7 +76,7 @@ const TaskDetails: React.FC<TaskDetailsProps> = ({ task, onClose, onAccept, onTa
   useEffect(() => {
     // Load chat messages when the chat tab is active
     if (activeTab === 'chat' && taskData && currentUser && otherUserProfile) {
-      loadChatMessages();
+      initializeChat();
     }
   }, [activeTab, taskData, currentUser, otherUserProfile]);
 
@@ -127,16 +128,25 @@ const TaskDetails: React.FC<TaskDetailsProps> = ({ task, onClose, onAccept, onTa
     }
   };
 
-  const loadChatMessages = async () => {
-    if (!taskData || !currentUser) return;
+  const initializeChat = async () => {
+    if (!taskData || !currentUser || !otherUserProfile) return;
     
     setChatLoading(true);
     try {
-      const chatMessages = await messageService.getMessages(taskData.id);
+      // Find or create a chat thread between the users
+      const threadId = await messageService.findOrCreateChatThread(
+        currentUser.id,
+        otherUserProfile.id,
+        taskData.id
+      );
+      setChatThreadId(threadId);
+      
+      // Load messages from this thread
+      const chatMessages = await messageService.getMessages(threadId);
       setMessages(chatMessages);
     } catch (error) {
-      console.error('Error loading chat messages:', error);
-      toast.error('Error loading chat messages');
+      console.error('Error initializing chat:', error);
+      toast.error('Error loading chat');
     } finally {
       setChatLoading(false);
     }
@@ -237,6 +247,16 @@ const TaskDetails: React.FC<TaskDetailsProps> = ({ task, onClose, onAccept, onTa
       // Call the onAccept callback if provided
       if (onAccept) {
         onAccept();
+      }
+      
+      // Initialize chat with the task creator
+      const otherUserId = taskData.created_by;
+      if (otherUserId) {
+        const otherProfile = await profileService.getProfile(otherUserId);
+        setOtherUserProfile(otherProfile || { id: otherUserId, full_name: 'User' });
+        
+        // Switch to chat tab
+        setActiveTab('chat');
       }
     } catch (error) {
       console.error('Error accepting task:', error);
@@ -921,10 +941,7 @@ const TaskDetails: React.FC<TaskDetailsProps> = ({ task, onClose, onAccept, onTa
                     {isTaskParticipant && !showChat && activeTab === 'details' && (
                       <StarBorder color="#0038FF">
                         <button
-                          onClick={() => {
-                            setShowChat(true);
-                            setActiveTab('chat');
-                          }}
+                          onClick={() => setActiveTab('chat')}
                           className="w-full bg-gradient-to-r from-[#0038FF] to-[#0021A5] text-white px-4 py-3 rounded-lg font-bold hover:opacity-90 transition duration-200 flex items-center justify-center"
                         >
                           <MessageSquare className="w-5 h-5 mr-2" />
@@ -980,7 +997,7 @@ const TaskDetails: React.FC<TaskDetailsProps> = ({ task, onClose, onAccept, onTa
                   </button>
                 </div>
                 <div className="flex-1">
-                  <TaskProgressChat
+                  <GameChat
                     taskId={taskData.id}
                     currentUser={currentUser}
                     otherUser={otherUserProfile}

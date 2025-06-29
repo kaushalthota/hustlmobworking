@@ -18,6 +18,7 @@ interface GameChatProps {
   showTypingIndicator?: boolean;
   enableFileSharing?: boolean;
   showUserProfile?: boolean;
+  onStatusUpdate?: (status: string) => void;
 }
 
 interface Message {
@@ -66,7 +67,8 @@ const GameChat: React.FC<GameChatProps> = ({
   otherUser, 
   showTypingIndicator = true,
   enableFileSharing = true,
-  showUserProfile = true
+  showUserProfile = true,
+  onStatusUpdate
 }) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState('');
@@ -83,7 +85,7 @@ const GameChat: React.FC<GameChatProps> = ({
   const [otherUserTyping, setOtherUserTyping] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
   const [translatedMessages, setTranslatedMessages] = useState<{[key: string]: string}>({});
-  const [chatThreadId, setChatThreadId] = useState<string>(taskId);
+  const [chatThreadId, setChatThreadId] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -202,7 +204,7 @@ const GameChat: React.FC<GameChatProps> = ({
   };
 
   const markMessagesAsReadAndDelivered = async (messageList: Message[]) => {
-    if (!currentUser?.uid) return;
+    if (!currentUser?.uid || !chatThreadId) return;
     
     const unreadMessages = messageList.filter(
       msg => msg.sender_id !== currentUser.uid && (!msg.is_read || !msg.is_delivered)
@@ -321,7 +323,7 @@ const GameChat: React.FC<GameChatProps> = ({
       return;
     }
     
-    if (!currentUser?.uid || !otherUser?.id) {
+    if (!currentUser?.uid || !otherUser?.id || !chatThreadId) {
       toast.error('Missing required information to send message');
       return;
     }
@@ -342,7 +344,7 @@ const GameChat: React.FC<GameChatProps> = ({
       created_at: new Date(),
       reactions: {},
       message_type: filePreview?.type === 'image' ? 'image' : filePreview?.type === 'file' ? 'file' : 'text',
-      task_id: taskId // Include task ID for reference
+      task_id: taskId
     };
 
     setMessages(prev => [...prev, optimisticMessage]);
@@ -403,6 +405,7 @@ const GameChat: React.FC<GameChatProps> = ({
 
   const addReaction = async (messageId: string, emoji: string) => {
     try {
+      if (!chatThreadId) return;
       await messageService.addReaction(chatThreadId, messageId, currentUser.uid, emoji);
       setShowReactions(null);
     } catch (error) {
@@ -598,7 +601,11 @@ const GameChat: React.FC<GameChatProps> = ({
 
       {/* Messages */}
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
-        {messages.length === 0 ? (
+        {loading ? (
+          <div className="flex items-center justify-center h-full">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#0038FF]"></div>
+          </div>
+        ) : messages.length === 0 ? (
           <div className="text-center text-gray-500 py-8">
             <div className="w-20 h-20 bg-gradient-to-br from-[#0038FF] to-[#FF5A1F] rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
               <MessageSquare className="w-10 h-10 text-white" />

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Languages, Loader } from 'lucide-react';
-import { translationService } from '../lib/translationService';
 import { useTranslation } from './TranslationProvider';
 
 interface TranslatableTextProps {
@@ -30,34 +29,15 @@ const TranslatableText: React.FC<TranslatableTextProps> = ({
     
     setIsTranslating(true);
     try {
-      // First try to use Lingo.dev's built-in translation
-      try {
-        const translated = t(text);
-        if (translated !== text) {
-          setTranslatedText(translated);
-          setIsTranslated(true);
-          return;
-        }
-      } catch (e) {
-        console.warn('Lingo.dev translation failed, falling back to API:', e);
-      }
-      
-      // Fall back to API translation
-      const detectedLanguage = await translationService.detectLanguage(text);
-      
-      // If text is already in target language, don't translate
-      if (detectedLanguage === currentLanguage) {
+      // Try to use the t function from context
+      const translated = t(text);
+      if (translated !== text) {
+        setTranslatedText(translated);
         setIsTranslated(true);
         return;
       }
       
-      // Translate the text
-      const result = await translationService.translateText(text, {
-        targetLanguage: currentLanguage,
-        sourceLanguage: detectedLanguage
-      });
-      
-      setTranslatedText(result);
+      // If no translation found, show original text
       setIsTranslated(true);
     } catch (error) {
       console.error('Translation error:', error);
@@ -76,7 +56,8 @@ const TranslatableText: React.FC<TranslatableTextProps> = ({
   
   // If auto-translate is enabled, translate on mount
   useEffect(() => {
-    if (currentLanguage !== 'en' && text) {
+    const autoTranslate = localStorage.getItem('autoTranslate') === 'true';
+    if (autoTranslate && currentLanguage !== 'en' && text) {
       handleTranslate();
     }
   }, []);
@@ -90,7 +71,7 @@ const TranslatableText: React.FC<TranslatableTextProps> = ({
         </div>
         
         {/* Translation button */}
-        {showTranslateButton && text && (
+        {showTranslateButton && text && currentLanguage !== 'en' && (
           <button
             onClick={toggleTranslation}
             disabled={isTranslating}

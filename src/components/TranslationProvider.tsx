@@ -40,6 +40,9 @@ export const TranslationProvider: React.FC<TranslationProviderProps> = ({ childr
         setDictionary(dictionaryModule.default);
       } catch (error) {
         console.warn('Could not load dictionary:', error);
+        captureException(error, {
+          tags: { component: "TranslationProvider", action: "loadDictionary" }
+        });
       }
     };
     
@@ -138,23 +141,23 @@ export const TranslationProvider: React.FC<TranslationProviderProps> = ({ childr
       t: (text: string) => {
         try {
           // First try to use the dictionary directly
-          if (lingo.dictionary && lingo.locale) {
-            const translations = lingo.dictionary[lingo.locale];
-            if (translations && translations[text]) {
-              return translations[text];
-            }
-          }
-          
-          // Fall back to lingo.t if available
-          if (lingo.t) {
-            return lingo.t(text);
-          }
-          
-          // If all else fails, use our loaded dictionary
           if (dictionary && dictionary[currentLanguage] && dictionary[currentLanguage][text]) {
             return dictionary[currentLanguage][text];
           }
           
+          // Fall back to lingo.t if available
+          if (lingo.t) {
+            try {
+              const translated = lingo.t(text);
+              if (translated !== text) {
+                return translated;
+              }
+            } catch (lingoError) {
+              // Silently fail and continue to next method
+            }
+          }
+          
+          // If all else fails, return original text
           return text;
         } catch (e) {
           // Capture translation errors in Sentry

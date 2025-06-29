@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Languages, ChevronDown, Check, X, Search } from 'lucide-react';
 import { translationService } from '../lib/translationService';
-import toast from 'react-hot-toast';
 import { useLingo } from 'lingo.dev/react/client';
 
 interface LanguageSelectorProps {
@@ -32,17 +31,7 @@ const LanguageSelector: React.FC<LanguageSelectorProps> = ({
     { code: 'es', name: 'Spanish' },
     { code: 'fr', name: 'French' },
     { code: 'de', name: 'German' },
-    { code: 'zh', name: 'Chinese' },
-    { code: 'ja', name: 'Japanese' },
-    { code: 'ko', name: 'Korean' },
-    { code: 'ar', name: 'Arabic' },
-    { code: 'ru', name: 'Russian' },
-    { code: 'pt', name: 'Portuguese' },
-    { code: 'it', name: 'Italian' },
-    { code: 'nl', name: 'Dutch' },
-    { code: 'hi', name: 'Hindi' },
-    { code: 'tr', name: 'Turkish' },
-    { code: 'vi', name: 'Vietnamese' }
+    { code: 'ja', name: 'Japanese' }
   ];
   
   useEffect(() => {

@@ -17,6 +17,7 @@ import { StarBorder } from './ui/star-border';
 import TranslatableText from './TranslatableText';
 import TranslateButton from './TranslateButton';
 import { useTranslation } from './TranslationProvider';
+import TaskStatusUpdate from './TaskStatusUpdate';
 
 interface TaskDetailsProps {
   task: any;
@@ -42,7 +43,6 @@ const TaskDetails: React.FC<TaskDetailsProps> = ({ task, onClose, onAccept, onTa
   const [showPaymentOptions, setShowPaymentOptions] = useState(false);
   const [hasReviewed, setHasReviewed] = useState(false);
   const [activeTab, setActiveTab] = useState<'details' | 'chat' | 'tracker'>(initialTab);
-  const [statusUpdateNote, setStatusUpdateNote] = useState('');
   const [showStatusUpdateForm, setShowStatusUpdateForm] = useState(false);
   const [translatedTitle, setTranslatedTitle] = useState<string | null>(null);
   const [translatedDescription, setTranslatedDescription] = useState<string | null>(null);
@@ -286,7 +286,7 @@ const TaskDetails: React.FC<TaskDetailsProps> = ({ task, onClose, onAccept, onTa
       await taskProgressService.createProgress({
         task_id: task.id,
         status,
-        notes: notes || statusUpdateNote
+        notes: notes
       });
       
       // Update task status
@@ -313,7 +313,6 @@ const TaskDetails: React.FC<TaskDetailsProps> = ({ task, onClose, onAccept, onTa
       refreshTaskData();
       loadProgressUpdates();
       setShowStatusUpdateForm(false);
-      setStatusUpdateNote('');
       
       // If task was completed, call the onTaskCompleted callback
       if (status === 'completed' && onTaskCompleted) {
@@ -704,66 +703,6 @@ const TaskDetails: React.FC<TaskDetailsProps> = ({ task, onClose, onAccept, onTa
                   </div>
                 )}
 
-                {/* Status Update Form for Task Performer */}
-                {isTaskPerformer && taskData.status !== 'open' && taskData.status !== 'completed' && showStatusUpdateForm && (
-                  <div className="bg-green-50 rounded-2xl p-4 border border-green-100 shadow-md">
-                    <h4 className="font-bold text-green-800 mb-3">Update Task Status</h4>
-                    
-                    <div className="space-y-3">
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
-                          Current Status: <span className="font-bold">{getLatestProgressStatus().replace('_', ' ').charAt(0).toUpperCase() + getLatestProgressStatus().replace('_', ' ').slice(1)}</span>
-                        </label>
-                        
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
-                          Add a note (optional)
-                        </label>
-                        <textarea
-                          value={statusUpdateNote}
-                          onChange={(e) => setStatusUpdateNote(e.target.value)}
-                          placeholder="Add details about this status update..."
-                          className="w-full rounded-lg border-gray-300 shadow-sm focus:border-[#0038FF] focus:ring focus:ring-[#0038FF] focus:ring-opacity-50"
-                          rows={2}
-                        />
-                      </div>
-                      
-                      <div className="grid grid-cols-2 gap-2">
-                        {getProgressSteps().map((step, index) => {
-                          const currentIndex = getCurrentStepIndex();
-                          // Only show steps that are next or future steps
-                          if (index <= currentIndex) return null;
-                          
-                          const Icon = step.icon;
-                          return (
-                            <button
-                              key={step.key}
-                              onClick={() => updateTaskProgress(step.key)}
-                              disabled={loading || index !== currentIndex + 1}
-                              className={`p-3 rounded-lg flex items-center justify-center ${
-                                index === currentIndex + 1
-                                  ? 'bg-green-600 text-white hover:bg-green-700'
-                                  : 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                              } transition-colors`}
-                            >
-                              <Icon className="w-5 h-5 mr-2" />
-                              {step.label}
-                            </button>
-                          );
-                        })}
-                      </div>
-                      
-                      <div className="flex justify-end">
-                        <button
-                          onClick={() => setShowStatusUpdateForm(false)}
-                          className="text-gray-600 hover:text-gray-800 text-sm"
-                        >
-                          Cancel
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                )}
-
                 {/* Safety Tips */}
                 <div className="bg-yellow-50 rounded-2xl p-4 border border-yellow-100 shadow-md">
                   <div className="flex items-start">
@@ -794,7 +733,7 @@ const TaskDetails: React.FC<TaskDetailsProps> = ({ task, onClose, onAccept, onTa
                 )}
 
                 {/* Update Status Button (for task performer) */}
-                {isTaskPerformer && taskData.status !== 'open' && taskData.status !== 'completed' && !showStatusUpdateForm && (
+                {isTaskPerformer && taskData.status !== 'open' && taskData.status !== 'completed' && (
                   <StarBorder color="#0038FF">
                     <button
                       onClick={() => setShowStatusUpdateForm(true)}
@@ -971,6 +910,19 @@ const TaskDetails: React.FC<TaskDetailsProps> = ({ task, onClose, onAccept, onTa
         <ViewReviewsModal
           taskId={taskData.id}
           onClose={() => setShowViewReviews(false)}
+        />
+      )}
+
+      {/* Status Update Modal */}
+      {showStatusUpdateForm && (
+        <TaskStatusUpdate
+          task={taskData}
+          onClose={() => setShowStatusUpdateForm(false)}
+          onStatusUpdated={() => {
+            setShowStatusUpdateForm(false);
+            refreshTaskData();
+            loadProgressUpdates();
+          }}
         />
       )}
     </div>

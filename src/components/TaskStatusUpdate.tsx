@@ -73,6 +73,7 @@ const TaskStatusUpdate: React.FC<TaskStatusUpdateProps> = ({ task, onClose, onSt
   const [xpGained, setXpGained] = useState(0);
   const [isPlayingAudio, setIsPlayingAudio] = useState(false);
   const [hasPlayedAudio, setHasPlayedAudio] = useState<{[key: string]: boolean}>({});
+  const [openChatAfterUpdate, setOpenChatAfterUpdate] = useState(false);
 
   useEffect(() => {
     const user = auth.currentUser;
@@ -236,9 +237,10 @@ const TaskStatusUpdate: React.FC<TaskStatusUpdateProps> = ({ task, onClose, onSt
       await playStatusAnnouncement(newStatus);
       
       // If the user wants to chat, show the chat interface
-      if (showChat) {
+      if (openChatAfterUpdate) {
         // Keep the modal open but reset the form
         setStatusNote('');
+        setShowChat(true);
       } else {
         // Close the modal and notify parent
         onStatusUpdated();
@@ -453,8 +455,8 @@ const TaskStatusUpdate: React.FC<TaskStatusUpdateProps> = ({ task, onClose, onSt
                     <input
                       type="checkbox"
                       id="openChat"
-                      checked={showChat}
-                      onChange={(e) => setShowChat(e.target.checked)}
+                      checked={openChatAfterUpdate}
+                      onChange={(e) => setOpenChatAfterUpdate(e.target.checked)}
                       className="h-4 w-4 text-[#0038FF] focus:ring-[#0038FF] border-gray-300 rounded"
                     />
                     <label htmlFor="openChat" className="ml-2 block text-sm text-gray-700">

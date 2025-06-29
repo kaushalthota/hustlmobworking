@@ -26,10 +26,12 @@ const LearnMoreModal: React.FC<LearnMoreModalProps> = ({ onClose }) => {
           <section className="mb-12">
             <div className="flex flex-col md:flex-row items-center mb-8">
               <div className="md:w-1/2 md:pr-8">
-                <h3 className="text-3xl font-bold mb-4">Connecting Gators, One Task at a Time</h3>
+                <h3 className="text-3xl font-bold mb-4">About Us</h3>
+                <p className="text-gray-600 mb-4">
+                  Hustl was founded by UF students Kaushal and Aryan, who experienced firsthand the everyday inconveniences of campus life. They created Hustl as a platform for students by students, connecting Gators to help each other with daily tasks.
+                </p>
                 <p className="text-gray-600">
-                  Hustl is a platform designed specifically for UF students, making it easy to find help
-                  or earn money by helping others with various tasks around campus.
+                  What started as a simple idea to help fellow students has grown into a thriving community where Gators can earn money helping others or get assistance with tasks they don't have time for. Our mission is to make campus life easier by bringing students together.
                 </p>
               </div>
               <div className="md:w-1/2 mt-6 md:mt-0">
@@ -116,15 +118,15 @@ const LearnMoreModal: React.FC<LearnMoreModalProps> = ({ onClose }) => {
               Join thousands of UF students already using Hustl to connect and help each other.
             </p>
             <div className="flex flex-col sm:flex-row justify-center gap-4">
-              <button
+              <button 
                 onClick={onClose}
-                className="bg-[#0F2557] text-white px-8 py-3 rounded-lg font-semibold hover:bg-[#0A1B3D] transition duration-200"
+                className="bg-[#0F2557] text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-[#0A1B3D] transition duration-200 shadow-md"
               >
                 Start Using Hustl
               </button>
               <a
                 href={supportMailto}
-                className="bg-white border border-[#0F2557] text-[#0F2557] px-8 py-3 rounded-lg font-semibold hover:bg-gray-50 transition duration-200 inline-flex items-center justify-center"
+                className="bg-white border border-[#0F2557] text-[#0F2557] px-8 py-4 rounded-lg font-semibold text-lg hover:bg-gray-50 transition duration-200 inline-flex items-center justify-center"
               >
                 <Mail className="w-5 h-5 mr-2" />
                 Contact Us

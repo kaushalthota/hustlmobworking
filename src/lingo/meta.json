@@ -534,6 +534,162 @@
         }
       }
     },
+    "components/AddFundsModal.tsx": {
+      "scopes": {
+        "12/0/init/body/15/consequent/0/argument/3": {
+          "type": "element",
+          "hash": "6458499ee3add4bc018e3940f6b8089f",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Scan with <expression/> to add funds"
+        },
+        "12/0/init/body/15/consequent/0/argument/5": {
+          "type": "element",
+          "hash": "67698e029191127aedf2f037cd705998",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "After completing the payment, your wallet will be updated within a few minutes"
+        },
+        "12/0/init/body/15/consequent/0/argument/7/1": {
+          "type": "element",
+          "hash": "cbbd1435d979ffb51400d1b07067da11",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Back"
+        },
+        "12/0/init/body/15/consequent/0/argument/7/3": {
+          "type": "element",
+          "hash": "486189d8ac1d5c6d36f8787b0caa415c",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Done"
+        },
+        "12/0/init/body/16/argument/1/1": {
+          "type": "element",
+          "hash": "20cab0116312f931d0127ac459d6e882",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Select Amount"
+        },
+        "12/0/init/body/16/argument/1/3/1/expression/0/body": {
+          "type": "element",
+          "hash": "a282e50ac27f95544784d1e8fe17ebea",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "${presetAmount}"
+        },
+        "12/0/init/body/16/argument/1/5/3-placeholder": {
+          "type": "attribute",
+          "hash": "82a0616751dbe4d35ec554e7bfdde5e1",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Custom amount"
+        },
+        "12/0/init/body/16/argument/3/1": {
+          "type": "element",
+          "hash": "f2368f57000b7f172b24e32014c87398",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Payment Method"
+        },
+        "12/0/init/body/16/argument/3/3/1/3": {
+          "type": "element",
+          "hash": "bba0beaced7ea954ceb980f2b022ffee",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Card"
+        },
+        "12/0/init/body/16/argument/3/3/3/3": {
+          "type": "element",
+          "hash": "0dcb5987485e53d01c3c27cdb0d194ed",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Apple Pay"
+        },
+        "12/0/init/body/16/argument/3/3/5/3": {
+          "type": "element",
+          "hash": "aadf165f06187a52d380e6e21ff5cb55",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Venmo"
+        },
+        "12/0/init/body/16/argument/3/3/7/3": {
+          "type": "element",
+          "hash": "91aecba803cb9e6fd5620c7388175bf9",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Cash App"
+        },
+        "12/0/init/body/16/argument/5/expression/right/1/1": {
+          "type": "element",
+          "hash": "26b70b641bb6e778ea61f34326f96655",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Cardholder Name"
+        },
+        "12/0/init/body/16/argument/5/expression/right/1/3-placeholder": {
+          "type": "attribute",
+          "hash": "06dc28f3ad06b38e24399528c0d5fe23",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Name on card"
+        },
+        "12/0/init/body/16/argument/5/expression/right/3/1": {
+          "type": "element",
+          "hash": "aef67a910a27f9df842333ad54f2a9b3",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Card Details"
+        },
+        "12/0/init/body/16/argument/7/expression/right/3": {
+          "type": "element",
+          "hash": "6ea0827e233fb5477315935e62f1f995",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Pay with Apple Pay"
+        },
+        "12/0/init/body/16/argument/7/expression/right/5": {
+          "type": "element",
+          "hash": "ba163cb55fbb171ccb0d79118dc2e297",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "You'll be prompted to confirm payment with Face ID, Touch ID, or your passcode"
+        },
+        "12/0/init/body/16/argument/9/3": {
+          "type": "element",
+          "hash": "e9503e06a84b67576a3dc533990ed361",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Cancel"
+        },
+        "13/0/init/body/0/argument/1/1/1": {
+          "type": "element",
+          "hash": "7007425ca0b41871018c4e94ff7d8289",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:DollarSign></element:DollarSign> Add Funds to Wallet"
+        }
+      }
+    },
     "components/AdminTools.tsx": {
       "scopes": {
         "7/0/init/body/11/argument/1/1/1": {
@@ -1274,6 +1430,34 @@
         }
       }
     },
+    "components/ChatbotSupport.tsx": {
+      "scopes": {
+        "5/0/init/body/13/argument/1/11/1/3": {
+          "type": "element",
+          "hash": "921b0160f416cddf416bb30103b2bd99",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Email Support Team"
+        },
+        "5/0/init/body/13/argument/1/15/1/1-placeholder": {
+          "type": "attribute",
+          "hash": "4008b1f253209d175716ab5b78014cd6",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Type your message..."
+        },
+        "5/0/init/body/13/argument/1/3/1/3": {
+          "type": "element",
+          "hash": "f4ab3ab26ac3f03e69715402ac7ff0ed",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Hustl Support"
+        }
+      }
+    },
     "components/CreateTask.tsx": {
       "scopes": {
         "18/0/init/body/46/argument/1/1/1": {
@@ -1818,6 +2002,126 @@
         }
       }
     },
+    "components/FoodLocationModal.tsx": {
+      "scopes": {
+        "4/0/init/body/0/argument/1/3/1/expression/consequent/1": {
+          "type": "element",
+          "hash": "adc206071c926a74669fb45802f408c2",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "No locations available"
+        }
+      }
+    },
+    "components/GameChat.tsx": {
+      "scopes": {
+        "15/0/init/body/45/consequent/0/argument/1": {
+          "type": "element",
+          "hash": "67302a66695fb454073cbf6d1550b3c0",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Unable to load chat. Please refresh the page."
+        },
+        "15/0/init/body/46/argument/11/expression/right/1/1/expression/consequent-alt": {
+          "type": "attribute",
+          "hash": "c5285a22118aaa4897c68b0cec196f6d",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Upload preview"
+        },
+        "15/0/init/body/46/argument/15/1/3/1-placeholder": {
+          "type": "attribute",
+          "hash": "163c631eee2cf50fbcfe1adcd4847ed3",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Type a message..."
+        },
+        "15/0/init/body/46/argument/3/1/1/3": {
+          "type": "element",
+          "hash": "dd0c6a6509faabf402fa2fa1dcbf4b55",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "L<expression/>"
+        },
+        "15/0/init/body/46/argument/3/1/5/5/3/expression/right/1": {
+          "type": "element",
+          "hash": "ff3432320b40a26eab14a2a5b9786f5d",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:Eye></element:Eye> View Profile"
+        },
+        "15/0/init/body/46/argument/3/1/5/5/3/expression/right/3": {
+          "type": "element",
+          "hash": "bc669988eb69b5960e48940dfd0da688",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:Info></element:Info> Task Details"
+        },
+        "15/0/init/body/46/argument/3/1/5/5/3/expression/right/5": {
+          "type": "element",
+          "hash": "7b633a638c7fb8fa17da57044f751a0b",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:Flag></element:Flag> Report Issue"
+        },
+        "15/0/init/body/46/argument/7/1/expression/alternate/0/body/4/argument/1/1/expression/right/3": {
+          "type": "element",
+          "hash": "9645cf5a70faca2d6d809df843095022",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "L<expression/>"
+        },
+        "15/0/init/body/46/argument/7/1/expression/alternate/0/body/4/argument/1/3/1/1/expression/right/1-alt": {
+          "type": "attribute",
+          "hash": "112973a2d2e8a279dcf72a54107c84af",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Shared image"
+        },
+        "15/0/init/body/46/argument/7/1/expression/alternate/0/body/4/argument/1/3/1/3/expression/right/3/3": {
+          "type": "element",
+          "hash": "d5d7b07462d57e732db7a66bdf5630b1",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Download"
+        },
+        "15/0/init/body/46/argument/7/1/expression/alternate/0/body/4/argument/1/3/1/5/expression/right/5/expression/right": {
+          "type": "element",
+          "hash": "35b0c8c702eba4834e9064b33d4862f5",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:Languages></element:Languages> Translated"
+        },
+        "15/0/init/body/46/argument/7/1/expression/consequent/3": {
+          "type": "element",
+          "hash": "a294933b178835a872e938fd310be876",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Start the conversation!"
+        },
+        "15/0/init/body/46/argument/7/1/expression/consequent/5": {
+          "type": "element",
+          "hash": "7ff7843ffe7f6e4f7286e9083aac3c92",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Send a message to <expression/> about the task."
+        }
+      }
+    },
     "components/InteractiveCampusMap.tsx": {
       "scopes": {
         "11/0/init/body/28/argument/3/1/expression/right-title": {
@@ -1891,6 +2195,26 @@
           "skip": false,
           "overrides": {},
           "content": "Get My Location"
+        }
+      }
+    },
+    "components/LanguageSelector.tsx": {
+      "scopes": {
+        "7/0/init/body/12/argument/3/expression/right/1/1/3-placeholder": {
+          "type": "attribute",
+          "hash": "edce4bebb4ee4fa7563c8ffd774bb260",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Search languages..."
+        },
+        "7/0/init/body/12/argument/3/expression/right/3/1/expression/alternate/consequent": {
+          "type": "element",
+          "hash": "5f94f488259c6d282fd2ffabb91e067c",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "No languages found"
         }
       }
     },
@@ -2146,6 +2470,18 @@
         }
       }
     },
+    "components/LocationInput.tsx": {
+      "scopes": {
+        "6/0/init/body/8/argument/1/5/3-title": {
+          "type": "attribute",
+          "hash": "0bf06337451c00a45e13905833a09e8c",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Use current location"
+        }
+      }
+    },
     "components/NotificationsModal.tsx": {
       "scopes": {
         "6/0/init/body/9/argument/1/1/1": {
@@ -2195,6 +2531,314 @@
           "skip": false,
           "overrides": {},
           "content": "Close"
+        }
+      }
+    },
+    "components/PaymentMethodForm.tsx": {
+      "scopes": {
+        "8/0/init/body/10/argument/1/1/1": {
+          "type": "element",
+          "hash": "45153c140469a235b8b9fa07d90b1a71",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Payment Type"
+        },
+        "8/0/init/body/10/argument/1/1/3/1/3": {
+          "type": "element",
+          "hash": "b0bf51fcfa5494c4f8aa84f8f59db4c2",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Credit Card"
+        },
+        "8/0/init/body/10/argument/1/1/3/3/3": {
+          "type": "element",
+          "hash": "0dcb5987485e53d01c3c27cdb0d194ed",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Apple Pay"
+        },
+        "8/0/init/body/10/argument/1/1/3/5/3": {
+          "type": "element",
+          "hash": "aadf165f06187a52d380e6e21ff5cb55",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Venmo"
+        },
+        "8/0/init/body/10/argument/1/1/3/7/3": {
+          "type": "element",
+          "hash": "91aecba803cb9e6fd5620c7388175bf9",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Cash App"
+        },
+        "8/0/init/body/10/argument/1/3/expression/alternate/alternate/1": {
+          "type": "element",
+          "hash": "a637b7b08bde1f2b178a9b088a4ed0b2",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<expression/> Username"
+        },
+        "8/0/init/body/10/argument/1/3/expression/alternate/consequent/3": {
+          "type": "element",
+          "hash": "f8f5199cfe0a3bb99ccbdaf11e6bab33",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Add Apple Pay to your wallet"
+        },
+        "8/0/init/body/10/argument/1/3/expression/alternate/consequent/5": {
+          "type": "element",
+          "hash": "7c133f02ad274c011274c8f0d88ae5e3",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "You'll be able to use Apple Pay for quick and secure payments"
+        },
+        "8/0/init/body/10/argument/1/3/expression/consequent/1/1": {
+          "type": "element",
+          "hash": "5cc4b47e45795db0d3f9e051c293815a",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Cardholder Name"
+        },
+        "8/0/init/body/10/argument/1/3/expression/consequent/1/3-placeholder": {
+          "type": "attribute",
+          "hash": "06dc28f3ad06b38e24399528c0d5fe23",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Name on card"
+        },
+        "8/0/init/body/10/argument/1/3/expression/consequent/3/1": {
+          "type": "element",
+          "hash": "6ec7f7f1a9d222b78776cf304b435c67",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Card Details"
+        },
+        "8/0/init/body/10/argument/1/3/expression/consequent/5/3": {
+          "type": "element",
+          "hash": "f23f8fbe965a6723022234f7348d7f32",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Save this card for future payments"
+        },
+        "8/0/init/body/10/argument/1/5/1/1/expression/alternate": {
+          "type": "element",
+          "hash": "3e257845292fcd89fec79e53db4dc88e",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<expression/> Add Payment Method"
+        },
+        "8/0/init/body/10/argument/1/5/3": {
+          "type": "element",
+          "hash": "806df1c96f83121893c2a72a5ca8e443",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Cancel"
+        }
+      }
+    },
+    "components/PaymentMethodIcons.tsx": {
+      "scopes": {
+        "10/declaration/0/init/body-alt": {
+          "type": "attribute",
+          "hash": "95142d3fd8b6a6f551aba771842e9c11",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Payment"
+        },
+        "2/declaration/0/init/body-alt": {
+          "type": "attribute",
+          "hash": "e13476d12a400298c8442307d4c6e3b6",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Credit/DebitCard"
+        },
+        "4/declaration/0/init/body-alt": {
+          "type": "attribute",
+          "hash": "aadf165f06187a52d380e6e21ff5cb55",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Venmo"
+        },
+        "5/declaration/0/init/body-alt": {
+          "type": "attribute",
+          "hash": "91aecba803cb9e6fd5620c7388175bf9",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Cash App"
+        },
+        "6/declaration/0/init/body-alt": {
+          "type": "attribute",
+          "hash": "0dcb5987485e53d01c3c27cdb0d194ed",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Apple Pay"
+        },
+        "7/declaration/0/init/body-alt": {
+          "type": "attribute",
+          "hash": "c35bb85d9507094c0fea7e0dc04b3d72",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Stripe"
+        },
+        "8/declaration/0/init/body-alt": {
+          "type": "attribute",
+          "hash": "7c2afc3dd4d76fbaf02c11d45182d7d5",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "PayPal"
+        },
+        "9/declaration/0/init/body-alt": {
+          "type": "attribute",
+          "hash": "a1356ba61c81130335e6be1f4fcafd74",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Bank Transfer"
+        }
+      }
+    },
+    "components/PriceBreakdown.tsx": {
+      "scopes": {
+        "3/0/init/body/0/argument/1/1": {
+          "type": "element",
+          "hash": "47dc3c189ed6ed55a9bf4deb834c4ce7",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:DollarSign></element:DollarSign> Price Breakdown"
+        },
+        "3/0/init/body/0/argument/1/3": {
+          "type": "element",
+          "hash": "ce3025799d70859c869af0b2fea2ad8a",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "$<function:breakdown.total.toFixed/>"
+        },
+        "3/0/init/body/0/argument/3/11/1/1": {
+          "type": "element",
+          "hash": "148b03c59e77177a740757e9562595ab",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:Clock></element:Clock> Urgency Fee"
+        },
+        "3/0/init/body/0/argument/3/11/1/3": {
+          "type": "element",
+          "hash": "d3a12bbc173fd24e148207d59506cd0f",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "{urgencyLevel} priority (×{breakdown.urgencyMultiplier})"
+        },
+        "3/0/init/body/0/argument/3/11/3": {
+          "type": "element",
+          "hash": "ce3025799d70859c869af0b2fea2ad8a",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "$<function:breakdown.urgencyFee.toFixed/>"
+        },
+        "3/0/init/body/0/argument/3/15/1/1": {
+          "type": "element",
+          "hash": "2aa486bb261fe1aa26f8798a5aaaa6c2",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:TrendingUp></element:TrendingUp> Service Fee"
+        },
+        "3/0/init/body/0/argument/3/15/1/3": {
+          "type": "element",
+          "hash": "61efae94ed8c4c4f49fbd509a03ddc0f",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "{breakdown.serviceFeePercentage}% platform fee"
+        },
+        "3/0/init/body/0/argument/3/15/3": {
+          "type": "element",
+          "hash": "ce3025799d70859c869af0b2fea2ad8a",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "$<function:breakdown.serviceFee.toFixed/>"
+        },
+        "3/0/init/body/0/argument/3/3/1/1": {
+          "type": "element",
+          "hash": "cded0e15def37b08c271d06ccd133d60",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Base Price"
+        },
+        "3/0/init/body/0/argument/3/3/1/3": {
+          "type": "element",
+          "hash": "2aa319c94404664926f0ee6032553b7a",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Standard task rate"
+        },
+        "3/0/init/body/0/argument/3/3/3": {
+          "type": "element",
+          "hash": "ce3025799d70859c869af0b2fea2ad8a",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "$<function:breakdown.basePrice.toFixed/>"
+        },
+        "3/0/init/body/0/argument/3/7/1/1": {
+          "type": "element",
+          "hash": "ba9f95b17dc3b8fb60cf5da2eff1a3fa",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:MapPin></element:MapPin> Distance Fee"
+        },
+        "3/0/init/body/0/argument/3/7/1/3": {
+          "type": "element",
+          "hash": "726a39e7ad18a5e958868775892810cb",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<function:breakdown.distance.toFixed/> miles (${breakdown.distanceRate}/0.5mi)"
+        },
+        "3/0/init/body/0/argument/3/7/3": {
+          "type": "element",
+          "hash": "ce3025799d70859c869af0b2fea2ad8a",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "$<function:breakdown.distanceFee.toFixed/>"
+        },
+        "3/0/init/body/0/argument/5/1/3": {
+          "type": "element",
+          "hash": "7414ff5b33c2332dbbb64bf0aa3c343a",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "The service fee supports platform maintenance and helps keep the Hustl community thriving. Distance fees are calculated in 0.5-mile increments."
         }
       }
     },
@@ -2383,6 +3027,122 @@
           "skip": false,
           "overrides": {},
           "content": "Use our voice assistant to create tasks, find help, and navigate the app hands-free."
+        }
+      }
+    },
+    "components/ReportModal.tsx": {
+      "scopes": {
+        "8/0/init/body/10/argument/1/1/1": {
+          "type": "element",
+          "hash": "f44b640a34d09b4af9289c4f732e78ee",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:Flag></element:Flag> Report Task"
+        },
+        "8/0/init/body/10/argument/1/3/11/1": {
+          "type": "element",
+          "hash": "e8b918e5b4b9ad84096793b2adfd6b56",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Detailed Explanation (Required)"
+        },
+        "8/0/init/body/10/argument/1/3/11/3-placeholder": {
+          "type": "attribute",
+          "hash": "cf5570d0b1e5f0d7941229ad731abadd",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Please provide specific details about the issue (minimum 20 characters)..."
+        },
+        "8/0/init/body/10/argument/1/3/15/1": {
+          "type": "element",
+          "hash": "c925096d30c13d5710015efb1fbf9af9",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Evidence (Optional)"
+        },
+        "8/0/init/body/10/argument/1/3/15/3/3": {
+          "type": "element",
+          "hash": "7bddf24d1de2cee890a2f0d4e5699a7b",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Click to upload screenshots or evidence"
+        },
+        "8/0/init/body/10/argument/1/3/15/3/5": {
+          "type": "element",
+          "hash": "3aa69c546ba751fa68a0700d26ca1708",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Max 10MB per file, any format"
+        },
+        "8/0/init/body/10/argument/1/3/15/7/expression/right/1": {
+          "type": "element",
+          "hash": "ce1fcc364b0fe98357edb090ffefaa64",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Attached Files:"
+        },
+        "8/0/init/body/10/argument/1/3/19/1/3/1": {
+          "type": "element",
+          "hash": "e57a797e745fb2a819543e58768d518d",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Email Notification"
+        },
+        "8/0/init/body/10/argument/1/3/19/1/3/3": {
+          "type": "element",
+          "hash": "fb92cae74d1bbef99e8b42cb84650c75",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "When you submit this report, an email will be sent to our support team at {supportEmail} with your report details."
+        },
+        "8/0/init/body/10/argument/1/3/23/1": {
+          "type": "element",
+          "hash": "07296eb8d91ad98e1b60cd7ab0def914",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Cancel"
+        },
+        "8/0/init/body/10/argument/1/3/23/3/1/expression/alternate": {
+          "type": "element",
+          "hash": "4cea7c9d39e4cc4632bb29e6488928a0",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:Shield></element:Shield> Submit Report"
+        },
+        "8/0/init/body/10/argument/1/3/3/1/3/1": {
+          "type": "element",
+          "hash": "deba044c1043f430ee11b8f0a08a23b6",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Safety First"
+        },
+        "8/0/init/body/10/argument/1/3/3/1/3/3": {
+          "type": "element",
+          "hash": "4189624337fda291393c5217e49243eb",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "If you feel unsafe or witness illegal activity, please contact campus police immediately. This reporting system is for platform-related issues only."
+        },
+        "8/0/init/body/10/argument/1/3/7/1": {
+          "type": "element",
+          "hash": "beabdd0f22792b7cb8ad93eda2c7b83d",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Reason for Reporting"
         }
       }
     },
@@ -2902,6 +3662,146 @@
         }
       }
     },
+    "components/StripeCheckout.tsx": {
+      "scopes": {
+        "10/0/init/body/0/argument/1/1/1": {
+          "type": "element",
+          "hash": "44f2b66625a11522ee84ab6912d3fbc6",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Complete Payment"
+        },
+        "9/0/init/body/14/consequent/0/argument/3": {
+          "type": "element",
+          "hash": "cd81f7f934753c89f74a0ad9cb8c99b7",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Scan with <expression/> to pay"
+        },
+        "9/0/init/body/14/consequent/0/argument/5": {
+          "type": "element",
+          "hash": "2d6ff520aee4f8e1bfad98ad22c6e228",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "After completing the payment, your task will be activated automatically"
+        },
+        "9/0/init/body/14/consequent/0/argument/7/1": {
+          "type": "element",
+          "hash": "cbbd1435d979ffb51400d1b07067da11",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Back"
+        },
+        "9/0/init/body/14/consequent/0/argument/7/3": {
+          "type": "element",
+          "hash": "d5bc12351b51ec6e36519cb59bea7764",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "I've Paid"
+        },
+        "9/0/init/body/15/argument/1/3": {
+          "type": "element",
+          "hash": "ce3025799d70859c869af0b2fea2ad8a",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "$<function:amount.toFixed/>"
+        },
+        "9/0/init/body/15/argument/11/expression/right/3": {
+          "type": "element",
+          "hash": "6ea0827e233fb5477315935e62f1f995",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Pay with Apple Pay"
+        },
+        "9/0/init/body/15/argument/11/expression/right/5": {
+          "type": "element",
+          "hash": "ba163cb55fbb171ccb0d79118dc2e297",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "You'll be prompted to confirm payment with Face ID, Touch ID, or your passcode"
+        },
+        "9/0/init/body/15/argument/3/1/3": {
+          "type": "element",
+          "hash": "7344371a46e8e6470ac95b1ed262c448",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Your payment is protected. If there's any issue with the task, our support team will help resolve it."
+        },
+        "9/0/init/body/15/argument/7/1": {
+          "type": "element",
+          "hash": "f2368f57000b7f172b24e32014c87398",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Payment Method"
+        },
+        "9/0/init/body/15/argument/7/3/1": {
+          "type": "element",
+          "hash": "f7fef9bc75e9f02b304d27319c38d807",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:CreditCard></element:CreditCard> Card"
+        },
+        "9/0/init/body/15/argument/7/3/3": {
+          "type": "element",
+          "hash": "12ef4de9d380d3ea33c55cec569c961e",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:Smartphone></element:Smartphone> Apple Pay"
+        },
+        "9/0/init/body/15/argument/7/3/5": {
+          "type": "element",
+          "hash": "d7f6bc308a1720feb57e4d65ff937ec4",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:QrCode></element:QrCode> Venmo"
+        },
+        "9/0/init/body/15/argument/7/3/7": {
+          "type": "element",
+          "hash": "730aef5b14f98e59529c30f18d71a354",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:QrCode></element:QrCode> Cash App"
+        },
+        "9/0/init/body/15/argument/9/expression/right/1/1": {
+          "type": "element",
+          "hash": "26b70b641bb6e778ea61f34326f96655",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Cardholder Name"
+        },
+        "9/0/init/body/15/argument/9/expression/right/1/3-placeholder": {
+          "type": "attribute",
+          "hash": "06dc28f3ad06b38e24399528c0d5fe23",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Name on card"
+        },
+        "9/0/init/body/15/argument/9/expression/right/3/1": {
+          "type": "element",
+          "hash": "aef67a910a27f9df842333ad54f2a9b3",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Card Details"
+        }
+      }
+    },
     "components/TaskCheckoutSuccess.tsx": {
       "scopes": {
         "6/0/init/body/4/consequent/0/argument/1/3": {
@@ -2943,6 +3843,106 @@
           "skip": false,
           "overrides": {},
           "content": "Close"
+        }
+      }
+    },
+    "components/TaskCreationSuccess.tsx": {
+      "scopes": {
+        "9/0/init/body/13/argument/5/11/1": {
+          "type": "element",
+          "hash": "4a86934b66ecbbc40eb6987034dd9945",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:Clock></element:Clock> What Happens Next"
+        },
+        "9/0/init/body/13/argument/5/11/3/1/expression/0/body/3/7/expression/right": {
+          "type": "element",
+          "hash": "d0d3e6fe6ee4669eabf76c2a1b3694d4",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:div></element:div> Current Status"
+        },
+        "9/0/init/body/13/argument/5/15/1": {
+          "type": "element",
+          "hash": "106c2b7311ffb65a8c522dc01ef8cf34",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "💡 Pro Tips for Success"
+        },
+        "9/0/init/body/13/argument/5/15/3/1": {
+          "type": "element",
+          "hash": "91e5095d24335862ff15d0f114554608",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:span></element:span> Respond quickly to messages from potential helpers"
+        },
+        "9/0/init/body/13/argument/5/15/3/3": {
+          "type": "element",
+          "hash": "24aff7f7b2c395850319a5061c5b7aa3",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:span></element:span> Be specific about meeting locations and timing"
+        },
+        "9/0/init/body/13/argument/5/15/3/5": {
+          "type": "element",
+          "hash": "7013a94757f9e2440650a0b88ee687a5",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:span></element:span> Rate your helper after completion to build community trust"
+        },
+        "9/0/init/body/13/argument/5/19/1/1/1": {
+          "type": "element",
+          "hash": "ae899b966b8f8e2c24a2179c80ef2847",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "View My Task<element:ArrowRight></element:ArrowRight>"
+        },
+        "9/0/init/body/13/argument/5/19/1/3": {
+          "type": "element",
+          "hash": "a655681d2ed8e7fefc50238a3fc76b1a",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Close"
+        },
+        "9/0/init/body/13/argument/5/19/3": {
+          "type": "element",
+          "hash": "7de5b7ca84beb537531ebe5e1c763280",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "You'll receive notifications when someone accepts your task"
+        },
+        "9/0/init/body/13/argument/5/3/1/1/3/1": {
+          "type": "element",
+          "hash": "a75779865a510801cc3ffe09a98805fe",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Task Created Successfully!<element:Sparkles></element:Sparkles>"
+        },
+        "9/0/init/body/13/argument/5/3/1/1/3/3": {
+          "type": "element",
+          "hash": "d80fe1fb941d31a46135b9ff2fd1ed8f",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Your task is now live and ready for helpers"
+        },
+        "9/0/init/body/13/argument/5/3/1/3/1-aria-label": {
+          "type": "attribute",
+          "hash": "86053158c66642a6ce6f8c0193b59df7",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Play audio message"
         }
       }
     },
@@ -3278,6 +4278,450 @@
         }
       }
     },
+    "components/TaskHistory.tsx": {
+      "scopes": {
+        "9/0/init/body/31/argument/11/1/1-placeholder": {
+          "type": "attribute",
+          "hash": "0139d53d369bdc0afa6996b5c2a074ff",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Search tasks..."
+        },
+        "9/0/init/body/31/argument/11/5/1": {
+          "type": "element",
+          "hash": "0c74212d6e146e76143cdf2c13a6ad16",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "All Time"
+        },
+        "9/0/init/body/31/argument/11/5/3": {
+          "type": "element",
+          "hash": "142173f9752e18e92109623a3ee68cad",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Today"
+        },
+        "9/0/init/body/31/argument/11/5/5": {
+          "type": "element",
+          "hash": "7be9cabf662844ea7b694bd8a9e48676",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Past Week"
+        },
+        "9/0/init/body/31/argument/11/5/7": {
+          "type": "element",
+          "hash": "1567ee23b496fc162dd082d5d04408ff",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Past Month"
+        },
+        "9/0/init/body/31/argument/11/5/9": {
+          "type": "element",
+          "hash": "d5f763b3a240f59ebe059e43bcd55ae2",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Past Year"
+        },
+        "9/0/init/body/31/argument/11/7/1": {
+          "type": "element",
+          "hash": "26d1f6b87f6a2843e7a040573f5be0e2",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "All Reviews"
+        },
+        "9/0/init/body/31/argument/11/7/3": {
+          "type": "element",
+          "hash": "7387d3303c204db754abedb340f3e641",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Reviewed"
+        },
+        "9/0/init/body/31/argument/11/7/5": {
+          "type": "element",
+          "hash": "8b92a320107c4966761915045df9c312",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Not Reviewed"
+        },
+        "9/0/init/body/31/argument/11/9/1": {
+          "type": "element",
+          "hash": "c3ce1dfbf5f2883cf61b81edcd16c9a9",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Most Recent"
+        },
+        "9/0/init/body/31/argument/11/9/3": {
+          "type": "element",
+          "hash": "85b4e5a9899d16d0726139d7391d6921",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Oldest First"
+        },
+        "9/0/init/body/31/argument/11/9/5": {
+          "type": "element",
+          "hash": "7c57b4d6459e729ae8a69697254f8643",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Highest Earning"
+        },
+        "9/0/init/body/31/argument/11/9/7": {
+          "type": "element",
+          "hash": "a5b147cd06f6367aebae5188331c8bf0",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Lowest Earning"
+        },
+        "9/0/init/body/31/argument/15/expression/alternate/11/expression/right/1": {
+          "type": "element",
+          "hash": "998e7d850794d0216949053707900fe7",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Showing <expression/> to <function:Math.min/> of {filteredTasks.length} tasks"
+        },
+        "9/0/init/body/31/argument/15/expression/alternate/11/expression/right/3/1": {
+          "type": "element",
+          "hash": "ef6db2a319b961ed3a067edb1b71bf09",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Previous"
+        },
+        "9/0/init/body/31/argument/15/expression/alternate/11/expression/right/3/5": {
+          "type": "element",
+          "hash": "ea5b8bda4a0bfa2f569451059117a856",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Next"
+        },
+        "9/0/init/body/31/argument/15/expression/alternate/3/1/expression/0/body/1/1/3": {
+          "type": "element",
+          "hash": "19fc88c76d379c6ec84fe50ddb647fb5",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<expression/>$<function:task.price.toFixed/>"
+        },
+        "9/0/init/body/31/argument/15/expression/alternate/3/1/expression/0/body/1/7/1/1/expression/alternate": {
+          "type": "element",
+          "hash": "54535b37720a289602331e85fcc23016",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Pending Review"
+        },
+        "9/0/init/body/31/argument/15/expression/alternate/3/1/expression/0/body/1/7/1/1/expression/consequent": {
+          "type": "element",
+          "hash": "6d53133dc6c68b14e753cbbcc79dabeb",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Reviewed"
+        },
+        "9/0/init/body/31/argument/15/expression/alternate/3/1/expression/0/body/1/7/3/1": {
+          "type": "element",
+          "hash": "9164af89c13688f2beb86dd27776b30a",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "View"
+        },
+        "9/0/init/body/31/argument/15/expression/alternate/3/1/expression/0/body/1/7/3/3/expression/right": {
+          "type": "element",
+          "hash": "59a3942c370b7149c77444abba3c178e",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Review"
+        },
+        "9/0/init/body/31/argument/15/expression/alternate/7/1/1/1/1": {
+          "type": "element",
+          "hash": "3f9a91cfb6e28a19e84a786238fc6a66",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Task"
+        },
+        "9/0/init/body/31/argument/15/expression/alternate/7/1/1/1/3": {
+          "type": "element",
+          "hash": "46ad12e10e7a5a7311ef32eae9fb5468",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Date Completed"
+        },
+        "9/0/init/body/31/argument/15/expression/alternate/7/1/1/1/5": {
+          "type": "element",
+          "hash": "a0ae9c6ff98b57475cdce56f66066aa4",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Amount"
+        },
+        "9/0/init/body/31/argument/15/expression/alternate/7/1/1/1/7": {
+          "type": "element",
+          "hash": "c53a23188e247564f9b1fa3515aeacb2",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Review Status"
+        },
+        "9/0/init/body/31/argument/15/expression/alternate/7/1/1/1/9": {
+          "type": "element",
+          "hash": "c46571856723b03262fd33f511116298",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Actions"
+        },
+        "9/0/init/body/31/argument/15/expression/alternate/7/1/3/1/expression/0/body/5/1": {
+          "type": "element",
+          "hash": "b4f3f55fe07d6d285653dd87536a04a8",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<expression/>$<function:task.price.toFixed/>"
+        },
+        "9/0/init/body/31/argument/15/expression/alternate/7/1/3/1/expression/0/body/7/1/expression/alternate": {
+          "type": "element",
+          "hash": "4a248eb5133a2d9c99577cd1eae4327a",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Pending"
+        },
+        "9/0/init/body/31/argument/15/expression/alternate/7/1/3/1/expression/0/body/7/1/expression/consequent": {
+          "type": "element",
+          "hash": "6d53133dc6c68b14e753cbbcc79dabeb",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Reviewed"
+        },
+        "9/0/init/body/31/argument/15/expression/alternate/7/1/3/1/expression/0/body/9/1/1": {
+          "type": "element",
+          "hash": "66a2e93d09df7f517e2c55e757ba6bd1",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "View"
+        },
+        "9/0/init/body/31/argument/15/expression/alternate/7/1/3/1/expression/0/body/9/1/3/expression/right": {
+          "type": "element",
+          "hash": "0107e5343e5f36f81a85b989f68089fa",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Review"
+        },
+        "9/0/init/body/31/argument/15/expression/consequent/3": {
+          "type": "element",
+          "hash": "3370c2268a3dc6ee1cdf406c922c7619",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "No completed tasks found"
+        },
+        "9/0/init/body/31/argument/3/1": {
+          "type": "element",
+          "hash": "c6307d46137372e4ce882534c2fb7db5",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Completed Tasks"
+        },
+        "9/0/init/body/31/argument/3/3": {
+          "type": "element",
+          "hash": "4bf799db7931f8b9397ad5c9291bdd8f",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "View your completed tasks and manage reviews"
+        },
+        "9/0/init/body/31/argument/3/7/1/1/1/1": {
+          "type": "element",
+          "hash": "96e7a42a8eed9f271399f89f0885891c",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Total Tasks Completed"
+        },
+        "9/0/init/body/31/argument/3/7/3/1/1/1": {
+          "type": "element",
+          "hash": "90652c7e695469bec0de4461ae39f1c3",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Total Earnings"
+        },
+        "9/0/init/body/31/argument/3/7/3/1/1/3": {
+          "type": "element",
+          "hash": "ce3025799d70859c869af0b2fea2ad8a",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "$<function:totalEarnings.toFixed/>"
+        },
+        "9/0/init/body/31/argument/3/7/5/1/1/1": {
+          "type": "element",
+          "hash": "c655cf4e9315b65be5fd2172b8dc80e1",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Reviews Given"
+        },
+        "9/0/init/body/31/argument/7/1/1/1-placeholder": {
+          "type": "attribute",
+          "hash": "0139d53d369bdc0afa6996b5c2a074ff",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Search tasks..."
+        },
+        "9/0/init/body/31/argument/7/3/expression/right/1/1": {
+          "type": "element",
+          "hash": "1b0340cd175aa5a2be745a0d54908466",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Category"
+        },
+        "9/0/init/body/31/argument/7/3/expression/right/3/1": {
+          "type": "element",
+          "hash": "9b3aa5954144de586931f60ef9594e99",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Date Range"
+        },
+        "9/0/init/body/31/argument/7/3/expression/right/3/3/1": {
+          "type": "element",
+          "hash": "0c74212d6e146e76143cdf2c13a6ad16",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "All Time"
+        },
+        "9/0/init/body/31/argument/7/3/expression/right/3/3/3": {
+          "type": "element",
+          "hash": "142173f9752e18e92109623a3ee68cad",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Today"
+        },
+        "9/0/init/body/31/argument/7/3/expression/right/3/3/5": {
+          "type": "element",
+          "hash": "7be9cabf662844ea7b694bd8a9e48676",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Past Week"
+        },
+        "9/0/init/body/31/argument/7/3/expression/right/3/3/7": {
+          "type": "element",
+          "hash": "1567ee23b496fc162dd082d5d04408ff",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Past Month"
+        },
+        "9/0/init/body/31/argument/7/3/expression/right/3/3/9": {
+          "type": "element",
+          "hash": "d5f763b3a240f59ebe059e43bcd55ae2",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Past Year"
+        },
+        "9/0/init/body/31/argument/7/3/expression/right/5/1": {
+          "type": "element",
+          "hash": "c53a23188e247564f9b1fa3515aeacb2",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Review Status"
+        },
+        "9/0/init/body/31/argument/7/3/expression/right/5/3/1": {
+          "type": "element",
+          "hash": "26d1f6b87f6a2843e7a040573f5be0e2",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "All Reviews"
+        },
+        "9/0/init/body/31/argument/7/3/expression/right/5/3/3": {
+          "type": "element",
+          "hash": "7387d3303c204db754abedb340f3e641",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Reviewed"
+        },
+        "9/0/init/body/31/argument/7/3/expression/right/5/3/5": {
+          "type": "element",
+          "hash": "8b92a320107c4966761915045df9c312",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Not Reviewed"
+        },
+        "9/0/init/body/31/argument/7/3/expression/right/7/1": {
+          "type": "element",
+          "hash": "f1035fcc660691aa9c6e1043e81d1d88",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Sort By"
+        },
+        "9/0/init/body/31/argument/7/3/expression/right/7/3/1": {
+          "type": "element",
+          "hash": "c3ce1dfbf5f2883cf61b81edcd16c9a9",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Most Recent"
+        },
+        "9/0/init/body/31/argument/7/3/expression/right/7/3/3": {
+          "type": "element",
+          "hash": "85b4e5a9899d16d0726139d7391d6921",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Oldest First"
+        },
+        "9/0/init/body/31/argument/7/3/expression/right/7/3/5": {
+          "type": "element",
+          "hash": "7c57b4d6459e729ae8a69697254f8643",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Highest Earning"
+        },
+        "9/0/init/body/31/argument/7/3/expression/right/7/3/7": {
+          "type": "element",
+          "hash": "a5b147cd06f6367aebae5188331c8bf0",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Lowest Earning"
+        }
+      }
+    },
     "components/TaskLiveTracker.tsx": {
       "scopes": {
         "8/0/init/body/20/consequent/0/argument/1": {
@@ -3439,6 +4883,98 @@
           "skip": false,
           "overrides": {},
           "content": "Start Location Sharing"
+        }
+      }
+    },
+    "components/TaskMap.tsx": {
+      "scopes": {
+        "8/0/init/body/20/argument/3/1/expression/right-title": {
+          "type": "attribute",
+          "hash": "0a93ee3152a1e7701270c13a59e73341",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Center on your location"
+        },
+        "8/0/init/body/20/argument/3/3-title": {
+          "type": "attribute",
+          "hash": "25744543e6ab31b6c27da8f37b9b3337",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Toggle fullscreen"
+        },
+        "8/0/init/body/20/argument/5/expression/right/1": {
+          "type": "element",
+          "hash": "ce1a78366789ac0942537ab5ef487507",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Map Settings"
+        },
+        "8/0/init/body/20/argument/5/expression/right/3/1/1": {
+          "type": "element",
+          "hash": "981fc8e404b426aa6eeff4410b301354",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Your Location"
+        },
+        "8/0/init/body/20/argument/5/expression/right/3/1/3/1-title": {
+          "type": "attribute",
+          "hash": "6dc5233a57b9d82970b0539481c1d140",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Your Location Marker Color"
+        },
+        "8/0/init/body/20/argument/5/expression/right/3/1/3/3/3-placeholder": {
+          "type": "attribute",
+          "hash": "a186eef6b52e03d94d583c681b822bb6",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Search your location"
+        },
+        "8/0/init/body/20/argument/5/expression/right/3/3/1": {
+          "type": "element",
+          "hash": "1f0cb491891c53d7eaa7bcac242f3ab4",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Task Location"
+        },
+        "8/0/init/body/20/argument/5/expression/right/3/3/3/1-title": {
+          "type": "attribute",
+          "hash": "7125182a9f54c24f3e8982551be6b819",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Task Location Marker Color"
+        },
+        "8/0/init/body/20/argument/5/expression/right/3/3/3/3/3-placeholder": {
+          "type": "attribute",
+          "hash": "d18be65734c0db26df089fc8b245595c",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Search task location"
+        },
+        "8/0/init/body/20/argument/5/expression/right/3/5/expression/right": {
+          "type": "element",
+          "hash": "1b2c1043b4bb81ffbe5ba2cd87775875",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Distance: <function:distance.toFixed/> miles"
+        },
+        "8/0/init/body/20/argument/5/expression/right/3/9": {
+          "type": "element",
+          "hash": "a2eda2dac0191692252a16f646f68525",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Drag markers or search to update locations"
         }
       }
     },
@@ -4710,6 +6246,218 @@
         }
       }
     },
+    "components/UserProfileModal.tsx": {
+      "scopes": {
+        "3/0/init/body/9/argument/1/3/5/1/3": {
+          "type": "element",
+          "hash": "a9c73f39f583615a917a424c868c9289",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "L<expression/>"
+        },
+        "3/0/init/body/9/argument/1/7/1/11/1/1": {
+          "type": "element",
+          "hash": "a02bb563837cf669f134fa06b19ea121",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Level <expression/>"
+        },
+        "3/0/init/body/9/argument/1/7/1/11/1/3": {
+          "type": "element",
+          "hash": "c10142f4f46eac72e082f228b77e4912",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<expression/> XP"
+        },
+        "3/0/init/body/9/argument/1/7/1/11/5": {
+          "type": "element",
+          "hash": "6337b97c61f128ea9d0bbb1566120c67",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<expression/> XP until Level <expression/>"
+        },
+        "3/0/init/body/9/argument/1/7/11/expression/right/1": {
+          "type": "element",
+          "hash": "fd2b004608116d51481da6610fa80321",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:Award></element:Award> Badges & Achievements"
+        },
+        "3/0/init/body/9/argument/1/7/11/expression/right/3/5/3": {
+          "type": "element",
+          "hash": "c57cfa892222bbff95a8e7e1b71554f4",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Top Gator"
+        },
+        "3/0/init/body/9/argument/1/7/11/expression/right/3/5/5": {
+          "type": "element",
+          "hash": "74a3932e420b40c771a61c6fb7c7ebc1",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Complete 10 tasks"
+        },
+        "3/0/init/body/9/argument/1/7/11/expression/right/3/7/3": {
+          "type": "element",
+          "hash": "195060c367810542d16d6b250748af20",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Speed Demon"
+        },
+        "3/0/init/body/9/argument/1/7/11/expression/right/3/7/5": {
+          "type": "element",
+          "hash": "cbf011a0b855e3f97db4999a6b9de926",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Complete 3 tasks in one day"
+        },
+        "3/0/init/body/9/argument/1/7/5/1": {
+          "type": "element",
+          "hash": "e7ad0586c48c7632883c0b0804937ff9",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Overview"
+        },
+        "3/0/init/body/9/argument/1/7/5/3": {
+          "type": "element",
+          "hash": "5dfc3a116823ed6d5fbe527127f64857",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Reviews"
+        },
+        "3/0/init/body/9/argument/1/7/5/5": {
+          "type": "element",
+          "hash": "dd0777536a728180d0df580f03dabb63",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Badges"
+        },
+        "3/0/init/body/9/argument/1/7/7/expression/right/11/1/1": {
+          "type": "element",
+          "hash": "4937b075e83d5df8f5c9b26e5a704f6e",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:Mail></element:Mail> Contact Information"
+        },
+        "3/0/init/body/9/argument/1/7/7/expression/right/11/3/expression/alternate/1": {
+          "type": "element",
+          "hash": "1fcd99a325974ba778080c738c71bf2b",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Click to view contact information"
+        },
+        "3/0/init/body/9/argument/1/7/7/expression/right/11/3/expression/consequent/5": {
+          "type": "element",
+          "hash": "a6bc21eed084e1192020d27fc816b37e",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Contact information is only visible to users you're actively working with on tasks."
+        },
+        "3/0/init/body/9/argument/1/7/7/expression/right/15/1": {
+          "type": "element",
+          "hash": "185853b32cb5248f22fce213e3b1b744",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:Clock></element:Clock> Recent Activity"
+        },
+        "3/0/init/body/9/argument/1/7/7/expression/right/15/3/1/1/3": {
+          "type": "element",
+          "hash": "51ed2abe62e4d97f68e0845aad2b57df",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Completed a task"
+        },
+        "3/0/init/body/9/argument/1/7/7/expression/right/15/3/1/3": {
+          "type": "element",
+          "hash": "5d7eb2cd2a18bd02679c7b4944c4942e",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "2 days ago"
+        },
+        "3/0/init/body/9/argument/1/7/7/expression/right/15/3/3/1/3": {
+          "type": "element",
+          "hash": "86c5341b3196fbb4113ab4fc3e1d02ba",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Received a 5-star review"
+        },
+        "3/0/init/body/9/argument/1/7/7/expression/right/15/3/3/3": {
+          "type": "element",
+          "hash": "619a2a15ceaa80bc7b94465a3fe957b5",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "3 days ago"
+        },
+        "3/0/init/body/9/argument/1/7/7/expression/right/15/3/5/1/3": {
+          "type": "element",
+          "hash": "0060d2ada569bd01a553abec5bbdeb45",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Earned \"Rising Star\" badge"
+        },
+        "3/0/init/body/9/argument/1/7/7/expression/right/15/3/5/3": {
+          "type": "element",
+          "hash": "2ed0e202a0fd77e0f811a8dc32baf965",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "1 week ago"
+        },
+        "3/0/init/body/9/argument/1/7/7/expression/right/7/1/3": {
+          "type": "element",
+          "hash": "d886d1e833ae03db5c92193bc5ebec04",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Tasks Completed"
+        },
+        "3/0/init/body/9/argument/1/7/7/expression/right/7/3/3": {
+          "type": "element",
+          "hash": "c9fa231054678af1362b7f9c6ab35e23",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Rating"
+        },
+        "3/0/init/body/9/argument/1/7/9/expression/right/1": {
+          "type": "element",
+          "hash": "28eb8b2d36f6b06aa33f3bd7b178d4e1",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:MessageSquare></element:MessageSquare> Reviews"
+        },
+        "3/0/init/body/9/argument/1/7/9/expression/right/3/expression/alternate/3": {
+          "type": "element",
+          "hash": "83be528202df811780934ba4e98c70e0",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "No reviews yet"
+        }
+      }
+    },
     "components/VoiceAssistant.tsx": {
       "scopes": {
         "8/declaration/body/17/argument/1/11/1/1/3": {
@@ -4775,6 +6523,34 @@
           "skip": false,
           "overrides": {},
           "content": "You said:"
+        }
+      }
+    },
+    "components/WalletBalanceDisplay.tsx": {
+      "scopes": {
+        "3/0/init/body/0/argument/1/1": {
+          "type": "element",
+          "hash": "f308d03b68b3776d88a9154d76762aae",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Available Balance"
+        },
+        "3/0/init/body/0/argument/3/1": {
+          "type": "element",
+          "hash": "ce3025799d70859c869af0b2fea2ad8a",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "$<function:balance.toFixed/>"
+        },
+        "3/0/init/body/0/argument/3/3/expression/right": {
+          "type": "element",
+          "hash": "3505a64476eec6028bab71c2ba5f349b",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<expression/> $<function:Math.abs/>"
         }
       }
     },
@@ -4979,6 +6755,106 @@
           "skip": false,
           "overrides": {},
           "content": "No transactions yet"
+        }
+      }
+    },
+    "components/WithdrawFundsModal.tsx": {
+      "scopes": {
+        "8/0/init/body/11/argument/1/1/1": {
+          "type": "element",
+          "hash": "ba0f20384c9f8e0baeca448aeec72ec4",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:ArrowDownLeft></element:ArrowDownLeft> Withdraw Funds"
+        },
+        "8/0/init/body/11/argument/1/3/1/1": {
+          "type": "element",
+          "hash": "fe49e0fdb56fc45505835a6c9e9e8b54",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Available Balance: <element:span>$<function:balance.toFixed/></element:span>"
+        },
+        "8/0/init/body/11/argument/1/3/11/1/1/expression/alternate": {
+          "type": "element",
+          "hash": "accd8b478fe072038168f45cddfacbea",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "<element:ArrowDownLeft></element:ArrowDownLeft> Request Withdrawal"
+        },
+        "8/0/init/body/11/argument/1/3/3/1": {
+          "type": "element",
+          "hash": "cfae3a47d2692f3b5567505f572b7607",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Withdrawal Amount"
+        },
+        "8/0/init/body/11/argument/1/3/3/3/3-placeholder": {
+          "type": "attribute",
+          "hash": "5d9d7db256e581afdc5ab7e5196b009e",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "0.00"
+        },
+        "8/0/init/body/11/argument/1/3/5/1": {
+          "type": "element",
+          "hash": "9610cb278b440dc41614f32eea1ee144",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Payment Method"
+        },
+        "8/0/init/body/11/argument/1/3/5/3/expression/alternate/1": {
+          "type": "element",
+          "hash": "ddc5d27ad332223c3ea30a0de09d348e",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "No payment methods available"
+        },
+        "8/0/init/body/11/argument/1/3/5/3/expression/alternate/3": {
+          "type": "element",
+          "hash": "c4b9d11092f5b4d357c14b532ae18d30",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Please add a payment method first"
+        },
+        "8/0/init/body/11/argument/1/3/5/3/expression/consequent/1/expression/0/body/5/expression/right": {
+          "type": "element",
+          "hash": "d9c6dc5c412fe94143dfd1d332ec81d4",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Default"
+        },
+        "8/0/init/body/11/argument/1/3/7/1": {
+          "type": "element",
+          "hash": "66b328f55ee116efc89159d8613bb123",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Note (Optional)"
+        },
+        "8/0/init/body/11/argument/1/3/7/3-placeholder": {
+          "type": "attribute",
+          "hash": "c912ce4325a12b68ee8dc8696d4f2fda",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Add a note for this withdrawal"
+        },
+        "8/0/init/body/11/argument/1/3/9/1": {
+          "type": "element",
+          "hash": "e5a96e90a95da3bcd7dc08e0aa92261f",
+          "context": "",
+          "skip": false,
+          "overrides": {},
+          "content": "Withdrawal requests are typically processed within 1-3 business days. You'll receive a notification when your withdrawal is complete."
         }
       }
     },

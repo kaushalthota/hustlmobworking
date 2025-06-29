@@ -101,6 +101,7 @@ const GameChat: React.FC<GameChatProps> = ({
     // Initialize chat thread
     const initializeChat = async () => {
       try {
+        setLoading(true);
         // Find or create a chat thread between the users
         const threadId = await messageService.findOrCreateChatThread(
           currentUser.uid,
@@ -125,13 +126,13 @@ const GameChat: React.FC<GameChatProps> = ({
       } catch (error) {
         console.error('Error initializing chat:', error);
         setLoading(false);
+        setConnectionStatus('disconnected');
         return () => {};
       }
     };
     
     loadOtherUserProfile();
     const unsubscribePromise = initializeChat();
-    setConnectionStatus('connected');
     
     // Handle clicks outside the menu
     const handleClickOutside = (event: MouseEvent) => {
@@ -436,7 +437,7 @@ const GameChat: React.FC<GameChatProps> = ({
     // Check if date is valid
     if (isNaN(date.getTime())) {
       console.warn('Invalid date:', timestamp);
-      return 'Invalid date';
+      return 'Unknown time';
     }
     
     const now = new Date();

@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Send, User, X, Paperclip, Loader, MessageSquare, ArrowRight, CheckCircle, Package, Clock, Truck, Flag, AlertTriangle } from 'lucide-react';
 import toast from 'react-hot-toast';
-import { collection, query, orderBy, onSnapshot, addDoc, serverTimestamp, updateDoc, doc, getDoc } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { db, storage } from '../lib/firebase';
 import { taskService, taskProgressService, messageService, notificationService } from '../lib/database';
@@ -206,7 +205,6 @@ const TaskProgressChat: React.FC<TaskProgressChatProps> = ({ taskId, currentUser
         is_read: false
       };
 
-      // Use messageService to send the message
       await messageService.sendMessage(chatThreadId, messageData);
       
       setNewMessage('');
@@ -231,7 +229,7 @@ const TaskProgressChat: React.FC<TaskProgressChatProps> = ({ taskId, currentUser
       await taskProgressService.createProgress({
         task_id: taskId,
         status,
-        notes: statusNote || `Status updated to ${formatStatus(status)}`
+        notes: statusNote.trim() || `Status updated to ${formatStatus(status)}`
       });
       
       // Update task status
@@ -245,7 +243,7 @@ const TaskProgressChat: React.FC<TaskProgressChatProps> = ({ taskId, currentUser
           user_id: taskData.created_by,
           type: 'status',
           title: 'Task Status Updated',
-          content: `Your task "${taskData.title}" is now ${formatStatus(status)}`,
+          content: `Your task "${taskData.title}" is now ${status.replace('_', ' ')}`,
           task_id: taskId,
           read: false
         });

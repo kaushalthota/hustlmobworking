@@ -191,7 +191,7 @@ const POPULAR_CATEGORIES = [
   },
   {
     id: 'print-study-pickup',
-    title: '🔖 Print & Study Pickup',
+    title: 'Print & Study Pickup',
     description: 'Print homework, practice tests, or grab textbooks from campus',
     icon: <Printer className="w-10 h-10 text-[#FF4D23]" />,
     category: 'academic_help',

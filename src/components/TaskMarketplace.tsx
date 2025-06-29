@@ -31,6 +31,7 @@ const TaskMarketplace: React.FC<TaskMarketplaceProps> = ({ userLocation }) => {
   const [selectedTaskForUpdate, setSelectedTaskForUpdate] = useState<any>(null);
   const [showFilters, setShowFilters] = useState(false);
   const [showCompletedNotification, setShowCompletedNotification] = useState(false);
+  const [taskSubscriptions, setTaskSubscriptions] = useState<Map<string, () => void>>(new Map());
 
   useEffect(() => {
     getCurrentUser();
@@ -67,8 +68,6 @@ const TaskMarketplace: React.FC<TaskMarketplaceProps> = ({ userLocation }) => {
       console.error('Error getting current user:', error);
     }
   };
-
-  const [taskSubscriptions, setTaskSubscriptions] = useState<Map<string, () => void>>(new Map());
 
   const setupTaskSubscriptions = () => {
     // Clean up existing subscriptions
@@ -111,6 +110,8 @@ const TaskMarketplace: React.FC<TaskMarketplaceProps> = ({ userLocation }) => {
 
   const enrichAndSetTasks = async (tasksData: any[]) => {
     try {
+      setLoading(true);
+      
       // Enrich tasks with creator profiles
       const enrichedTasks = await Promise.all(
         tasksData.map(async (task) => {
@@ -506,13 +507,13 @@ const TaskMarketplace: React.FC<TaskMarketplaceProps> = ({ userLocation }) => {
               placeholder="Search tasks..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0038FF]"
+              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0038FF]"
             />
             <Search className="absolute left-3 top-2.5 w-5 h-5 text-gray-400" />
           </div>
           <button
             onClick={() => setShowFilters(!showFilters)}
-            className="p-2 border border-gray-200 rounded-lg bg-white"
+            className="p-2 border border-gray-300 rounded-lg bg-white"
           >
             <Filter className="w-5 h-5 text-gray-600" />
           </button>
@@ -525,7 +526,7 @@ const TaskMarketplace: React.FC<TaskMarketplaceProps> = ({ userLocation }) => {
               <select
                 value={selectedCategory}
                 onChange={(e) => setSelectedCategory(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0038FF]"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0038FF]"
               >
                 {categories.map(category => (
                   <option key={category.id} value={category.id}>
@@ -540,7 +541,7 @@ const TaskMarketplace: React.FC<TaskMarketplaceProps> = ({ userLocation }) => {
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0038FF]"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0038FF]"
               >
                 <option value="proximity">Nearest First</option>
                 <option value="urgency">Most Urgent</option>

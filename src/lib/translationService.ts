@@ -11,7 +11,7 @@ class TranslationService {
   
   constructor() {
     // Initialize with environment variable if available
-    this.apiKey = import.meta.env.LINGODOTDEV_API_KEY || null;
+    this.apiKey = import.meta.env.VITE_LINGO_API_KEY || null;
   }
   
   /**

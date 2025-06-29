@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Send, User, X, Paperclip, Loader, MessageSquare, ArrowRight, CheckCircle, Package, Clock, Truck, Flag, AlertTriangle } from 'lucide-react';
 import toast from 'react-hot-toast';
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { db, storage } from '../lib/firebase';
 import { taskService, taskProgressService, messageService, notificationService } from '../lib/database';
 import TaskStatusMessage from './TaskStatusMessage';
 import { StarBorder } from './ui/star-border';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
 interface TaskProgressChatProps {
   taskId: string;
@@ -33,6 +33,7 @@ const TaskProgressChat: React.FC<TaskProgressChatProps> = ({ taskId, currentUser
   const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState('');
   const [loading, setLoading] = useState(false);
+  const [loadingMessages, setLoadingMessages] = useState(true);
   const [uploadingImage, setUploadingImage] = useState(false);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [imageFile, setImageFile] = useState<File | null>(null);
@@ -40,7 +41,6 @@ const TaskProgressChat: React.FC<TaskProgressChatProps> = ({ taskId, currentUser
   const [progressUpdates, setProgressUpdates] = useState<any[]>([]);
   const [showStatusOptions, setShowStatusOptions] = useState(false);
   const [statusNote, setStatusNote] = useState('');
-  const [chatThreadId, setChatThreadId] = useState<string>('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -51,7 +51,7 @@ const TaskProgressChat: React.FC<TaskProgressChatProps> = ({ taskId, currentUser
     }
     
     loadTaskData();
-    initializeChat();
+    loadChatMessages();
     loadProgressUpdates();
     
     // Subscribe to task progress updates
@@ -68,39 +68,24 @@ const TaskProgressChat: React.FC<TaskProgressChatProps> = ({ taskId, currentUser
     scrollToBottom();
   }, [messages]);
 
-  const initializeChat = async () => {
-    try {
-      // Find or create a chat thread between the users
-      const threadId = await messageService.findOrCreateChatThread(
-        currentUser.uid,
-        otherUser.id,
-        taskId
-      );
-      setChatThreadId(threadId);
-      
-      // Now load messages from this thread
-      const chatMessages = await messageService.getMessages(threadId);
-      setMessages(chatMessages);
-      
-      // Subscribe to new messages
-      const unsubscribe = messageService.subscribeToMessages(threadId, (messageData) => {
-        setMessages(messageData);
-        scrollToBottom();
-      });
-      
-      return unsubscribe;
-    } catch (error) {
-      console.error('Error initializing chat:', error);
-      return () => {};
-    }
-  };
-
   const loadTaskData = async () => {
     try {
       const task = await taskService.getTaskById(taskId);
       setTaskData(task);
     } catch (error) {
       console.error('Error loading task data:', error);
+    }
+  };
+
+  const loadChatMessages = async () => {
+    try {
+      setLoadingMessages(true);
+      const chatMessages = await messageService.getMessages(taskId);
+      setMessages(chatMessages);
+      setLoadingMessages(false);
+    } catch (error) {
+      console.error('Error loading chat messages:', error);
+      setLoadingMessages(false);
     }
   };
 
@@ -161,7 +146,7 @@ const TaskProgressChat: React.FC<TaskProgressChatProps> = ({ taskId, currentUser
 
       const fileExt = file.name.split('.').pop();
       const fileName = `${Math.random().toString(36).substring(2, 15)}.${fileExt}`;
-      const filePath = `chat/${chatThreadId}/${fileName}`;
+      const filePath = `chat/${taskId}/${fileName}`;
 
       const storageRef = ref(storage, filePath);
       await uploadBytes(storageRef, file);
@@ -181,7 +166,7 @@ const TaskProgressChat: React.FC<TaskProgressChatProps> = ({ taskId, currentUser
       return;
     }
     
-    if (!currentUser?.uid || !otherUser?.id || !chatThreadId) {
+    if (!currentUser?.uid || !otherUser?.id || !taskId) {
       toast.error('Missing required information to send message');
       return;
     }
@@ -196,7 +181,7 @@ const TaskProgressChat: React.FC<TaskProgressChatProps> = ({ taskId, currentUser
       }
 
       const messageData = {
-        task_id: taskId, // Include task ID for reference
+        task_id: taskId,
         sender_id: currentUser.uid,
         recipient_id: otherUser.id,
         content: newMessage.trim() || (imageUrl ? 'Sent an image' : ''),
@@ -205,10 +190,14 @@ const TaskProgressChat: React.FC<TaskProgressChatProps> = ({ taskId, currentUser
         is_read: false
       };
 
-      await messageService.sendMessage(chatThreadId, messageData);
+      // Use messageService to send the message
+      await messageService.sendMessage(taskId, messageData);
       
       setNewMessage('');
       removeImagePreview();
+      
+      // Reload messages to include the new one
+      loadChatMessages();
       
       // Show success feedback
       toast.success('Message sent', { duration: 1000 });
@@ -229,7 +218,7 @@ const TaskProgressChat: React.FC<TaskProgressChatProps> = ({ taskId, currentUser
       await taskProgressService.createProgress({
         task_id: taskId,
         status,
-        notes: statusNote.trim() || `Status updated to ${formatStatus(status)}`
+        notes: statusNote || `Status updated to ${formatStatus(status)}`
       });
       
       // Update task status
@@ -243,7 +232,7 @@ const TaskProgressChat: React.FC<TaskProgressChatProps> = ({ taskId, currentUser
           user_id: taskData.created_by,
           type: 'status',
           title: 'Task Status Updated',
-          content: `Your task "${taskData.title}" is now ${status.replace('_', ' ')}`,
+          content: `Your task "${taskData.title}" is now ${formatStatus(status)}`,
           task_id: taskId,
           read: false
         });
@@ -275,22 +264,7 @@ const TaskProgressChat: React.FC<TaskProgressChatProps> = ({ taskId, currentUser
   const formatTimestamp = (timestamp: any) => {
     if (!timestamp) return '';
     
-    let date;
-    if (timestamp instanceof Date) {
-      date = timestamp;
-    } else if (timestamp.toDate && typeof timestamp.toDate === 'function') {
-      date = timestamp.toDate();
-    } else {
-      // Try to parse as ISO string or timestamp
-      date = new Date(timestamp);
-    }
-    
-    // Check if date is valid
-    if (isNaN(date.getTime())) {
-      console.warn('Invalid date:', timestamp);
-      return 'Unknown time';
-    }
-    
+    const date = new Date(timestamp);
     const now = new Date();
     const diffInHours = (now.getTime() - date.getTime()) / (1000 * 60 * 60);
     
@@ -352,7 +326,7 @@ const TaskProgressChat: React.FC<TaskProgressChatProps> = ({ taskId, currentUser
     return statusFlow[currentIndex + 1];
   };
 
-  const isTaskPerformer = currentUser && taskData && taskData.accepted_by === currentUser.uid;
+  const isTaskPerformer = currentUser && taskData && taskData.accepted_by === currentUser.id;
 
   // Combine messages and progress updates into a single timeline
   const getCombinedTimeline = () => {
@@ -390,17 +364,6 @@ const TaskProgressChat: React.FC<TaskProgressChatProps> = ({ taskId, currentUser
       return dateA - dateB;
     });
   };
-
-  // Don't render if essential props are missing
-  if (!taskId || !currentUser?.uid || !otherUser?.id) {
-    return (
-      <div className="flex flex-col h-full items-center justify-center text-gray-500">
-        <p>Unable to load chat. Please refresh the page.</p>
-      </div>
-    );
-  }
-
-  const timeline = getCombinedTimeline();
 
   return (
     <div className="flex flex-col h-full bg-gray-50">
@@ -480,7 +443,11 @@ const TaskProgressChat: React.FC<TaskProgressChatProps> = ({ taskId, currentUser
 
       {/* Messages */}
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
-        {timeline.length === 0 ? (
+        {loadingMessages ? (
+          <div className="flex items-center justify-center h-full">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#0038FF]"></div>
+          </div>
+        ) : getCombinedTimeline().length === 0 ? (
           <div className="text-center text-gray-500 py-8">
             <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
               <MessageSquare className="w-8 h-8 text-gray-400" />
@@ -489,7 +456,7 @@ const TaskProgressChat: React.FC<TaskProgressChatProps> = ({ taskId, currentUser
             <p className="text-sm">Send a message to {otherUser.full_name} about the task.</p>
           </div>
         ) : (
-          timeline.map((item, index) => {
+          getCombinedTimeline().map((item, index) => {
             // Handle status update
             if (item.message_type === 'status_update') {
               return (
@@ -505,7 +472,7 @@ const TaskProgressChat: React.FC<TaskProgressChatProps> = ({ taskId, currentUser
             
             // Handle regular message
             const isOwn = isOwnMessage(item);
-            const showAvatar = index === 0 || timeline[index - 1].sender_id !== item.sender_id;
+            const showAvatar = index === 0 || getCombinedTimeline()[index - 1].sender_id !== item.sender_id;
             
             return (
               <div

@@ -18,7 +18,6 @@ interface GameChatProps {
   showTypingIndicator?: boolean;
   enableFileSharing?: boolean;
   showUserProfile?: boolean;
-  onStatusUpdate?: (status: string) => void;
 }
 
 interface Message {
@@ -67,12 +66,12 @@ const GameChat: React.FC<GameChatProps> = ({
   otherUser, 
   showTypingIndicator = true,
   enableFileSharing = true,
-  showUserProfile = true,
-  onStatusUpdate
+  showUserProfile = true
 }) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState('');
   const [loading, setLoading] = useState(true);
+  const [sendingMessage, setSendingMessage] = useState(false);
   const [uploadingFile, setUploadingFile] = useState(false);
   const [filePreview, setFilePreview] = useState<{ url: string; name: string; type: string } | null>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -85,7 +84,6 @@ const GameChat: React.FC<GameChatProps> = ({
   const [otherUserTyping, setOtherUserTyping] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
   const [translatedMessages, setTranslatedMessages] = useState<{[key: string]: string}>({});
-  const [chatThreadId, setChatThreadId] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -93,46 +91,14 @@ const GameChat: React.FC<GameChatProps> = ({
   const { currentLanguage } = useTranslation();
   
   useEffect(() => {
-    if (!currentUser?.uid || !otherUser?.id) {
-      console.warn('GameChat component missing required props:', { currentUserUid: currentUser?.uid, otherUserId: otherUser?.id });
+    if (!taskId || !currentUser?.uid || !otherUser?.id) {
+      console.warn('GameChat component missing required props:', { taskId, currentUserUid: currentUser?.uid, otherUserId: otherUser?.id });
       return;
     }
     
-    // Initialize chat thread
-    const initializeChat = async () => {
-      try {
-        setLoading(true);
-        // Find or create a chat thread between the users
-        const threadId = await messageService.findOrCreateChatThread(
-          currentUser.uid,
-          otherUser.id,
-          taskId
-        );
-        setChatThreadId(threadId);
-        
-        // Now load messages from this thread
-        const unsubscribe = messageService.subscribeToMessages(threadId, (messageData) => {
-          setMessages(messageData);
-          
-          // Mark messages as read and delivered
-          markMessagesAsReadAndDelivered(messageData);
-          
-          scrollToBottom();
-          setConnectionStatus('connected');
-          setLoading(false);
-        });
-        
-        return unsubscribe;
-      } catch (error) {
-        console.error('Error initializing chat:', error);
-        setLoading(false);
-        setConnectionStatus('disconnected');
-        return () => {};
-      }
-    };
-    
     loadOtherUserProfile();
-    const unsubscribePromise = initializeChat();
+    const unsubscribe = loadMessages();
+    setConnectionStatus('connected');
     
     // Handle clicks outside the menu
     const handleClickOutside = (event: MouseEvent) => {
@@ -144,16 +110,13 @@ const GameChat: React.FC<GameChatProps> = ({
     document.addEventListener('mousedown', handleClickOutside);
     
     return () => {
-      unsubscribePromise.then(unsubscribe => {
-        if (unsubscribe) unsubscribe();
-      });
-      
+      if (unsubscribe) unsubscribe();
       if (typingTimeoutRef.current) {
         clearTimeout(typingTimeoutRef.current);
       }
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [currentUser, otherUser, taskId]);
+  }, [taskId, currentUser, otherUser]);
 
   useEffect(() => {
     scrollToBottom();
@@ -205,8 +168,31 @@ const GameChat: React.FC<GameChatProps> = ({
     return 'New Gator';
   };
 
+  const loadMessages = () => {
+    if (!taskId || !currentUser?.uid || !otherUser?.id) {
+      console.warn('Cannot load messages: missing required data');
+      return () => {};
+    }
+    
+    setLoading(true);
+    
+    // Use the messageService to get messages for this task
+    const unsubscribe = messageService.subscribeToMessages(taskId, (messageData) => {
+      setMessages(messageData);
+      
+      // Mark messages as read and delivered
+      markMessagesAsReadAndDelivered(messageData);
+      
+      scrollToBottom();
+      setConnectionStatus('connected');
+      setLoading(false);
+    });
+
+    return unsubscribe;
+  };
+
   const markMessagesAsReadAndDelivered = async (messageList: Message[]) => {
-    if (!currentUser?.uid || !chatThreadId) return;
+    if (!currentUser?.uid || !taskId) return;
     
     const unreadMessages = messageList.filter(
       msg => msg.sender_id !== currentUser.uid && (!msg.is_read || !msg.is_delivered)
@@ -214,7 +200,7 @@ const GameChat: React.FC<GameChatProps> = ({
     
     for (const message of unreadMessages) {
       try {
-        await messageService.markAsRead(chatThreadId, message.id);
+        await messageService.markAsRead(taskId, message.id);
       } catch (error) {
         console.error('Error marking message as read:', error);
       }
@@ -301,7 +287,7 @@ const GameChat: React.FC<GameChatProps> = ({
 
       const fileExt = file.name.split('.').pop();
       const fileName = `${Math.random().toString(36).substring(2, 15)}.${fileExt}`;
-      const filePath = `chat/${chatThreadId}/${fileName}`;
+      const filePath = `chat/${taskId}/${fileName}`;
 
       const storageRef = ref(storage, filePath);
       await uploadBytes(storageRef, file);
@@ -325,14 +311,13 @@ const GameChat: React.FC<GameChatProps> = ({
       return;
     }
     
-    if (!currentUser?.uid || !otherUser?.id || !chatThreadId) {
+    if (!currentUser?.uid || !otherUser?.id || !taskId) {
       toast.error('Missing required information to send message');
       return;
     }
 
     // Optimistic UI - add message immediately
     const optimisticId = `temp-${Date.now()}`;
-    const now = new Date();
     const optimisticMessage: Message = {
       id: optimisticId,
       sender_id: currentUser.uid,
@@ -344,7 +329,7 @@ const GameChat: React.FC<GameChatProps> = ({
       file_type: filePreview?.type === 'file' ? 'file' : undefined,
       is_read: false,
       is_delivered: false,
-      created_at: now,
+      created_at: new Date(),
       reactions: {},
       message_type: filePreview?.type === 'image' ? 'image' : filePreview?.type === 'file' ? 'file' : 'text',
       task_id: taskId
@@ -355,7 +340,7 @@ const GameChat: React.FC<GameChatProps> = ({
     removeFilePreview();
     scrollToBottom();
 
-    setLoading(true);
+    setSendingMessage(true);
     try {
       let fileData = null;
       if (selectedFile) {
@@ -390,7 +375,7 @@ const GameChat: React.FC<GameChatProps> = ({
       }
 
       // Send the message using the messageService
-      await messageService.sendMessage(chatThreadId, messageData);
+      await messageService.sendMessage(taskId, messageData);
 
       // Remove optimistic message since real one will come through subscription
       setMessages(prev => prev.filter(msg => msg.id !== optimisticId));
@@ -401,15 +386,14 @@ const GameChat: React.FC<GameChatProps> = ({
       // Remove optimistic message on error
       setMessages(prev => prev.filter(msg => msg.id !== optimisticId));
     } finally {
-      setLoading(false);
+      setSendingMessage(false);
       setUploadingFile(false);
     }
   };
 
   const addReaction = async (messageId: string, emoji: string) => {
     try {
-      if (!chatThreadId) return;
-      await messageService.addReaction(chatThreadId, messageId, currentUser.uid, emoji);
+      await messageService.addReaction(taskId, messageId, currentUser.uid, emoji);
       setShowReactions(null);
     } catch (error) {
       console.error('Error adding reaction:', error);
@@ -424,22 +408,7 @@ const GameChat: React.FC<GameChatProps> = ({
   const formatTimestamp = (timestamp: any) => {
     if (!timestamp) return '';
     
-    let date;
-    if (timestamp instanceof Date) {
-      date = timestamp;
-    } else if (timestamp.toDate && typeof timestamp.toDate === 'function') {
-      date = timestamp.toDate();
-    } else {
-      // Try to parse as ISO string or timestamp
-      date = new Date(timestamp);
-    }
-    
-    // Check if date is valid
-    if (isNaN(date.getTime())) {
-      console.warn('Invalid date:', timestamp);
-      return 'Unknown time';
-    }
-    
+    const date = new Date(timestamp);
     const now = new Date();
     const diffInHours = (now.getTime() - date.getTime()) / (1000 * 60 * 60);
     
@@ -534,7 +503,7 @@ const GameChat: React.FC<GameChatProps> = ({
     setShowMenu(false);
   };
 
-  if (!currentUser?.uid || !otherUser?.id) {
+  if (!taskId || !currentUser?.uid || !otherUser?.id) {
     return (
       <div className="flex flex-col h-full items-center justify-center text-gray-500">
         <p>Unable to load chat. Please refresh the page.</p>
@@ -629,7 +598,7 @@ const GameChat: React.FC<GameChatProps> = ({
               <MessageSquare className="w-10 h-10 text-white" />
             </div>
             <p className="text-lg font-bold mb-2">Start the conversation!</p>
-            <p className="text-sm">Send a message to {otherUserProfile?.full_name}.</p>
+            <p className="text-sm">Send a message to {otherUserProfile?.full_name} about the task.</p>
           </div>
         ) : (
           messages.map((message, index) => {
@@ -832,7 +801,7 @@ const GameChat: React.FC<GameChatProps> = ({
           <button
             type="button"
             onClick={handleFileClick}
-            disabled={loading || uploadingFile}
+            disabled={sendingMessage || uploadingFile}
             className="p-3 text-[#0038FF] hover:text-[#0021A5] hover:bg-blue-50 rounded-full transition-colors disabled:opacity-50 shadow-sm"
           >
             <Paperclip className="w-5 h-5" />
@@ -854,7 +823,7 @@ const GameChat: React.FC<GameChatProps> = ({
               placeholder="Type a message..."
               className="w-full resize-none rounded-2xl border-2 border-gray-200 px-4 py-3 pr-12 focus:border-[#0038FF] focus:ring-2 focus:ring-[#0038FF] focus:ring-opacity-20 focus:outline-none max-h-32 shadow-sm"
               rows={1}
-              disabled={loading || uploadingFile}
+              disabled={sendingMessage || uploadingFile}
               style={{
                 minHeight: '48px',
                 height: 'auto'
@@ -877,10 +846,10 @@ const GameChat: React.FC<GameChatProps> = ({
           
           <button
             type="submit"
-            disabled={loading || uploadingFile || (!newMessage.trim() && !selectedFile)}
+            disabled={sendingMessage || uploadingFile || (!newMessage.trim() && !selectedFile)}
             className="p-3 bg-gradient-to-r from-[#0038FF] to-[#0021A5] text-white rounded-full hover:opacity-90 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center shadow-lg"
           >
-            {loading || uploadingFile ? (
+            {sendingMessage || uploadingFile ? (
               <Loader className="w-5 h-5 animate-spin" />
             ) : (
               <Send className="w-5 h-5" />

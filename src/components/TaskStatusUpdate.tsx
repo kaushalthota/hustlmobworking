@@ -313,16 +313,6 @@ const TaskStatusUpdate: React.FC<TaskStatusUpdateProps> = ({ task, onClose, onSt
         completed_at: new Date()
       });
       
-      // Create notification about completed tasks being in history
-      await notificationService.createNotification({
-        user_id: currentUser.id,
-        type: 'info',
-        title: 'Task Completed',
-        content: 'Completed tasks are now in your Task History.',
-        read: false,
-        action: 'view_history'
-      });
-      
     } catch (error) {
       console.error('Error handling task completion:', error);
       // Don't throw error here as the task status update should still succeed

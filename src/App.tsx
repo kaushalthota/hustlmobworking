@@ -30,7 +30,6 @@ import MobileBottomNav from './components/MobileBottomNav';
 
 // Providers
 import { TranslationProvider } from './components/TranslationProvider';
-import { LingoProvider } from 'lingo.dev/react/client';
 
 function App() {
   const [user, setUser] = useState<any>(null);
@@ -116,230 +115,228 @@ function App() {
 
   return (
     <Router>
-      <LingoProvider>
-        <TranslationProvider>
-          <div className="min-h-screen bg-gray-50">
-            {/* Top Navigation */}
-            <nav className="bg-gradient-to-r from-[#002B7F] to-[#0038FF] text-white p-4 shadow-md">
-              <div className="max-w-7xl mx-auto flex justify-between items-center">
-                <div className="flex items-center">
-                  <Zap className="w-6 h-6 mr-2" />
-                  <span className="font-bold text-xl">Hustl</span>
-                </div>
-                
-                <div className="hidden md:flex items-center space-x-6">
-                  <button 
-                    onClick={() => setActiveTab('home')}
-                    className={`nav-link ${activeTab === 'home' ? 'font-bold' : ''}`}
-                  >
-                    <Home className="w-5 h-5 inline mr-1" />
-                    Home
-                  </button>
-                  <button 
-                    onClick={() => setActiveTab('tasks')}
-                    className={`nav-link ${activeTab === 'tasks' ? 'font-bold' : ''}`}
-                  >
-                    <Package className="w-5 h-5 inline mr-1" />
-                    Tasks
-                  </button>
-                  <button 
-                    onClick={() => setActiveTab('messages')}
-                    className={`nav-link ${activeTab === 'messages' ? 'font-bold' : ''}`}
-                  >
-                    <MessageSquare className="w-5 h-5 inline mr-1" />
-                    Messages
-                  </button>
-                  <button 
-                    onClick={() => setActiveTab('profile')}
-                    className={`nav-link ${activeTab === 'profile' ? 'font-bold' : ''}`}
-                  >
-                    <User className="w-5 h-5 inline mr-1" />
-                    Profile
-                  </button>
-                </div>
-                
-                <div className="flex items-center space-x-2">
-                  {user ? (
-                    <>
-                      <button 
-                        onClick={() => setShowNotifications(true)}
-                        className="p-2 hover:bg-white/10 rounded-full transition-colors"
-                      >
-                        <Bell className="w-5 h-5" />
-                      </button>
-                      <button 
-                        onClick={() => setShowWallet(true)}
-                        className="p-2 hover:bg-white/10 rounded-full transition-colors"
-                      >
-                        <Wallet className="w-5 h-5" />
-                      </button>
-                      <button 
-                        onClick={() => setShowFAQ(true)}
-                        className="p-2 hover:bg-white/10 rounded-full transition-colors"
-                      >
-                        <HelpCircle className="w-5 h-5" />
-                      </button>
-                      <button
-                        onClick={handleSignOut}
-                        className="bg-white/10 hover:bg-white/20 px-3 py-1 rounded-lg transition-colors"
-                      >
-                        Sign Out
-                      </button>
-                    </>
-                  ) : (
-                    <>
-                      <button
-                        onClick={() => setShowAuth(true)}
-                        className="bg-white/10 hover:bg-white/20 px-3 py-1 rounded-lg transition-colors"
-                      >
-                        Sign In
-                      </button>
-                      <button
-                        onClick={() => setShowLearnMore(true)}
-                        className="bg-white text-[#002B7F] px-3 py-1 rounded-lg transition-colors font-medium"
-                      >
-                        Learn More
-                      </button>
-                    </>
-                  )}
-                </div>
+      <TranslationProvider>
+        <div className="min-h-screen bg-gray-50">
+          {/* Top Navigation */}
+          <nav className="bg-gradient-to-r from-[#002B7F] to-[#0038FF] text-white p-4 shadow-md">
+            <div className="max-w-7xl mx-auto flex justify-between items-center">
+              <div className="flex items-center">
+                <Zap className="w-6 h-6 mr-2" />
+                <span className="font-bold text-xl">Hustl</span>
               </div>
-            </nav>
+              
+              <div className="hidden md:flex items-center space-x-6">
+                <button 
+                  onClick={() => setActiveTab('home')}
+                  className={`nav-link ${activeTab === 'home' ? 'font-bold' : ''}`}
+                >
+                  <Home className="w-5 h-5 inline mr-1" />
+                  Home
+                </button>
+                <button 
+                  onClick={() => setActiveTab('tasks')}
+                  className={`nav-link ${activeTab === 'tasks' ? 'font-bold' : ''}`}
+                >
+                  <Package className="w-5 h-5 inline mr-1" />
+                  Tasks
+                </button>
+                <button 
+                  onClick={() => setActiveTab('messages')}
+                  className={`nav-link ${activeTab === 'messages' ? 'font-bold' : ''}`}
+                >
+                  <MessageSquare className="w-5 h-5 inline mr-1" />
+                  Messages
+                </button>
+                <button 
+                  onClick={() => setActiveTab('profile')}
+                  className={`nav-link ${activeTab === 'profile' ? 'font-bold' : ''}`}
+                >
+                  <User className="w-5 h-5 inline mr-1" />
+                  Profile
+                </button>
+              </div>
+              
+              <div className="flex items-center space-x-2">
+                {user ? (
+                  <>
+                    <button 
+                      onClick={() => setShowNotifications(true)}
+                      className="p-2 hover:bg-white/10 rounded-full transition-colors"
+                    >
+                      <Bell className="w-5 h-5" />
+                    </button>
+                    <button 
+                      onClick={() => setShowWallet(true)}
+                      className="p-2 hover:bg-white/10 rounded-full transition-colors"
+                    >
+                      <Wallet className="w-5 h-5" />
+                    </button>
+                    <button 
+                      onClick={() => setShowFAQ(true)}
+                      className="p-2 hover:bg-white/10 rounded-full transition-colors"
+                    >
+                      <HelpCircle className="w-5 h-5" />
+                    </button>
+                    <button
+                      onClick={handleSignOut}
+                      className="bg-white/10 hover:bg-white/20 px-3 py-1 rounded-lg transition-colors"
+                    >
+                      Sign Out
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <button
+                      onClick={() => setShowAuth(true)}
+                      className="bg-white/10 hover:bg-white/20 px-3 py-1 rounded-lg transition-colors"
+                    >
+                      Sign In
+                    </button>
+                    <button
+                      onClick={() => setShowLearnMore(true)}
+                      className="bg-white text-[#002B7F] px-3 py-1 rounded-lg transition-colors font-medium"
+                    >
+                      Learn More
+                    </button>
+                  </>
+                )}
+              </div>
+            </div>
+          </nav>
 
-            {/* Main Content */}
-            <main className="pb-16 md:pb-0">
-              {user ? (
-                <>
-                  {activeTab === 'home' && (
-                    <div className="max-w-7xl mx-auto px-4 py-6">
-                      <TaskTemplates 
-                        onSelectTemplate={(template) => {
-                          setShowCreateTask(true);
-                        }}
-                      />
-                    </div>
-                  )}
-                  
-                  {activeTab === 'tasks' && (
-                    <TaskMarketplace userLocation={location} />
-                  )}
-                  
-                  {activeTab === 'messages' && (
-                    <div className="max-w-7xl mx-auto px-4 py-6">
-                      <ChatList userId={user.uid} currentUser={user} />
-                    </div>
-                  )}
-                  
-                  {activeTab === 'profile' && (
-                    <div className="max-w-7xl mx-auto px-4 py-6">
-                      <UserProfile />
-                    </div>
-                  )}
-                </>
-              ) : (
-                <div className="max-w-7xl mx-auto px-4 py-6">
-                  <TaskTemplates 
-                    onSelectTemplate={(template) => {
-                      setShowAuth(true);
-                    }}
-                  />
-                </div>
-              )}
-            </main>
+          {/* Main Content */}
+          <main className="pb-16 md:pb-0">
+            {user ? (
+              <>
+                {activeTab === 'home' && (
+                  <div className="max-w-7xl mx-auto px-4 py-6">
+                    <TaskTemplates 
+                      onSelectTemplate={(template) => {
+                        setShowCreateTask(true);
+                      }}
+                    />
+                  </div>
+                )}
+                
+                {activeTab === 'tasks' && (
+                  <TaskMarketplace userLocation={location} />
+                )}
+                
+                {activeTab === 'messages' && (
+                  <div className="max-w-7xl mx-auto px-4 py-6">
+                    <ChatList userId={user.uid} currentUser={user} />
+                  </div>
+                )}
+                
+                {activeTab === 'profile' && (
+                  <div className="max-w-7xl mx-auto px-4 py-6">
+                    <UserProfile />
+                  </div>
+                )}
+              </>
+            ) : (
+              <div className="max-w-7xl mx-auto px-4 py-6">
+                <TaskTemplates 
+                  onSelectTemplate={(template) => {
+                    setShowAuth(true);
+                  }}
+                />
+              </div>
+            )}
+          </main>
 
-            {/* Mobile Bottom Navigation */}
-            <MobileBottomNav 
-              activeTab={activeTab} 
-              onCreateTask={() => setShowCreateTask(true)} 
+          {/* Mobile Bottom Navigation */}
+          <MobileBottomNav 
+            activeTab={activeTab} 
+            onCreateTask={() => setShowCreateTask(true)} 
+          />
+
+          {/* Modals */}
+          {showAuth && <Auth onClose={() => setShowAuth(false)} />}
+          
+          {showCreateTask && (
+            <CreateTask 
+              onClose={() => setShowCreateTask(false)} 
+              userLocation={location}
             />
+          )}
+          
+          {showWallet && <WalletModal onClose={() => setShowWallet(false)} />}
+          
+          {showNotifications && (
+            <NotificationsModal onClose={() => setShowNotifications(false)} />
+          )}
+          
+          {showFAQ && <FAQSupport onClose={() => setShowFAQ(false)} />}
+          
+          {showSafety && <SafetyFeatures onClose={() => setShowSafety(false)} />}
+          
+          {showAdmin && <AdminTools onClose={() => setShowAdmin(false)} />}
+          
+          {showQuickStart && (
+            <QuickStartGuide 
+              onClose={() => setShowQuickStart(false)} 
+              onCreateTask={() => {
+                setShowQuickStart(false);
+                setShowCreateTask(true);
+              }}
+              onBrowseTasks={() => {
+                setShowQuickStart(false);
+                setActiveTab('tasks');
+              }}
+            />
+          )}
+          
+          {showLearnMore && <LearnMoreModal onClose={() => setShowLearnMore(false)} />}
+          
+          {showVoiceAssistant && (
+            <VoiceAssistantManager 
+              onClose={() => setShowVoiceAssistant(false)}
+              userLocation={location}
+              onCreateTask={() => {
+                setShowVoiceAssistant(false);
+                setShowCreateTask(true);
+              }}
+              onBrowseTasks={() => {
+                setShowVoiceAssistant(false);
+                setActiveTab('tasks');
+              }}
+              onOpenWallet={() => {
+                setShowVoiceAssistant(false);
+                setShowWallet(true);
+              }}
+              onOpenProfile={() => {
+                setShowVoiceAssistant(false);
+                setActiveTab('profile');
+              }}
+              onOpenHelp={() => {
+                setShowVoiceAssistant(false);
+                setShowFAQ(true);
+              }}
+              onOpenSafety={() => {
+                setShowVoiceAssistant(false);
+                setShowSafety(true);
+              }}
+            />
+          )}
+          
+          {showVoiceTooltip && (
+            <VoiceCommandTooltip onClose={() => setShowVoiceTooltip(false)} />
+          )}
+          
+          {showLanguageSettings && (
+            <LanguageSettingsModal onClose={() => setShowLanguageSettings(false)} />
+          )}
 
-            {/* Modals */}
-            {showAuth && <Auth onClose={() => setShowAuth(false)} />}
-            
-            {showCreateTask && (
-              <CreateTask 
-                onClose={() => setShowCreateTask(false)} 
-                userLocation={location}
-              />
-            )}
-            
-            {showWallet && <WalletModal onClose={() => setShowWallet(false)} />}
-            
-            {showNotifications && (
-              <NotificationsModal onClose={() => setShowNotifications(false)} />
-            )}
-            
-            {showFAQ && <FAQSupport onClose={() => setShowFAQ(false)} />}
-            
-            {showSafety && <SafetyFeatures onClose={() => setShowSafety(false)} />}
-            
-            {showAdmin && <AdminTools onClose={() => setShowAdmin(false)} />}
-            
-            {showQuickStart && (
-              <QuickStartGuide 
-                onClose={() => setShowQuickStart(false)} 
-                onCreateTask={() => {
-                  setShowQuickStart(false);
-                  setShowCreateTask(true);
-                }}
-                onBrowseTasks={() => {
-                  setShowQuickStart(false);
-                  setActiveTab('tasks');
-                }}
-              />
-            )}
-            
-            {showLearnMore && <LearnMoreModal onClose={() => setShowLearnMore(false)} />}
-            
-            {showVoiceAssistant && (
-              <VoiceAssistantManager 
-                onClose={() => setShowVoiceAssistant(false)}
-                userLocation={location}
-                onCreateTask={() => {
-                  setShowVoiceAssistant(false);
-                  setShowCreateTask(true);
-                }}
-                onBrowseTasks={() => {
-                  setShowVoiceAssistant(false);
-                  setActiveTab('tasks');
-                }}
-                onOpenWallet={() => {
-                  setShowVoiceAssistant(false);
-                  setShowWallet(true);
-                }}
-                onOpenProfile={() => {
-                  setShowVoiceAssistant(false);
-                  setActiveTab('profile');
-                }}
-                onOpenHelp={() => {
-                  setShowVoiceAssistant(false);
-                  setShowFAQ(true);
-                }}
-                onOpenSafety={() => {
-                  setShowVoiceAssistant(false);
-                  setShowSafety(true);
-                }}
-              />
-            )}
-            
-            {showVoiceTooltip && (
-              <VoiceCommandTooltip onClose={() => setShowVoiceTooltip(false)} />
-            )}
-            
-            {showLanguageSettings && (
-              <LanguageSettingsModal onClose={() => setShowLanguageSettings(false)} />
-            )}
+          {/* Voice Assistant Button */}
+          {user && (
+            <VoiceAssistantButton onClick={() => setShowVoiceAssistant(true)} />
+          )}
 
-            {/* Voice Assistant Button */}
-            {user && (
-              <VoiceAssistantButton onClick={() => setShowVoiceAssistant(true)} />
-            )}
-
-            {/* Toast Notifications */}
-            <Toaster position="top-center" />
-          </div>
-        </TranslationProvider>
-      </LingoProvider>
+          {/* Toast Notifications */}
+          <Toaster position="top-center" />
+        </div>
+      </TranslationProvider>
     </Router>
   );
 }

@@ -7,7 +7,6 @@ import { db, storage } from '../lib/firebase';
 import { User as FirebaseUser } from 'firebase/auth';
 import UserProfileModal from './UserProfileModal';
 import ReportModal from './ReportModal';
-import { messageService } from '../lib/database';
 
 interface ChatProps {
   taskId: string;
@@ -35,7 +34,6 @@ const Chat: React.FC<ChatProps> = ({ taskId, otherUser, currentUser }) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState('');
   const [loading, setLoading] = useState(false);
-  const [loadingMessages, setLoadingMessages] = useState(true);
   const [uploadingImage, setUploadingImage] = useState(false);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [imageFile, setImageFile] = useState<File | null>(null);
@@ -123,25 +121,37 @@ const Chat: React.FC<ChatProps> = ({ taskId, otherUser, currentUser }) => {
       return () => {};
     }
 
-    setLoadingMessages(true);
-    
-    // Use the messageService to subscribe to messages
-    const unsubscribe = messageService.subscribeToMessages(taskId, (messageData) => {
+    const q = query(
+      collection(db, 'messages'),
+      where('task_id', '==', taskId),
+      orderBy('created_at', 'asc')
+    );
+
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const messageData = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data(),
+        created_at: doc.data().created_at?.toDate() || new Date()
+      })) as Message[];
+      
       setMessages(messageData);
-      setLoadingMessages(false);
       
       // Mark messages as read
       markMessagesAsRead(messageData);
       
       scrollToBottom();
       setConnectionStatus('connected');
+    }, (error) => {
+      console.error('Error loading messages:', error);
+      toast.error('Error loading messages');
+      setConnectionStatus('disconnected');
     });
 
     return unsubscribe;
   };
 
   const markMessagesAsRead = async (messageList: Message[]) => {
-    if (!currentUser?.uid || !taskId) return;
+    if (!currentUser?.uid) return;
     
     const unreadMessages = messageList.filter(
       msg => msg.sender_id !== currentUser.uid && !msg.is_read
@@ -149,7 +159,9 @@ const Chat: React.FC<ChatProps> = ({ taskId, otherUser, currentUser }) => {
     
     for (const message of unreadMessages) {
       try {
-        await messageService.markAsRead(taskId, message.id);
+        await updateDoc(doc(db, 'messages', message.id), {
+          is_read: true
+        });
       } catch (error) {
         console.error('Error marking message as read:', error);
       }
@@ -283,11 +295,11 @@ const Chat: React.FC<ChatProps> = ({ taskId, otherUser, currentUser }) => {
         content: newMessage.trim() || (imageUrl ? 'Sent an image' : ''),
         image_url: imageUrl || null,
         message_type: imageUrl ? 'image' : 'text',
-        is_read: false
+        is_read: false,
+        created_at: serverTimestamp()
       };
 
-      // Use messageService to send the message
-      await messageService.sendMessage(taskId, messageData);
+      await addDoc(collection(db, 'messages'), messageData);
       
       // Remove optimistic message since real one will come through subscription
       setMessages(prev => prev.filter(msg => msg.id !== optimisticId));
@@ -439,11 +451,7 @@ const Chat: React.FC<ChatProps> = ({ taskId, otherUser, currentUser }) => {
 
       {/* Messages */}
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
-        {loadingMessages ? (
-          <div className="flex items-center justify-center h-full">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#0038FF]"></div>
-          </div>
-        ) : messages.length === 0 ? (
+        {messages.length === 0 ? (
           <div className="text-center text-gray-500 py-8">
             <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
               <User className="w-8 h-8 text-gray-400" />

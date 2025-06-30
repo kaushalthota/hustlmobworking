@@ -3,6 +3,8 @@ import { MessageSquare, Clock } from 'lucide-react';
 import TaskChat from './TaskChat';
 import TaskProgressChat from './TaskProgressChat';
 import TaskProgress from './TaskProgress';
+import GameChat from './GameChat';
+import { messageService } from '../lib/database';
 
 interface TaskDetailsChatProps {
   taskId: string;
@@ -22,6 +24,27 @@ const TaskDetailsChat: React.FC<TaskDetailsChatProps> = ({
   onStatusUpdate
 }) => {
   const [activeTab, setActiveTab] = useState<'chat' | 'progress'>('chat');
+  const [chatThreadId, setChatThreadId] = useState<string | null>(null);
+
+  useEffect(() => {
+    // Initialize chat thread
+    const initializeChat = async () => {
+      if (currentUser?.id && otherUser?.id) {
+        try {
+          const threadId = await messageService.findOrCreateChatThread(
+            currentUser.id,
+            otherUser.id,
+            taskId
+          );
+          setChatThreadId(threadId);
+        } catch (error) {
+          console.error('Error initializing chat thread:', error);
+        }
+      }
+    };
+    
+    initializeChat();
+  }, [taskId, currentUser, otherUser]);
 
   const handleStatusUpdate = (status: string) => {
     if (onStatusUpdate) {
@@ -60,7 +83,7 @@ const TaskDetailsChat: React.FC<TaskDetailsChatProps> = ({
 
       <div className="flex-1 overflow-hidden">
         {activeTab === 'chat' && (
-          <TaskProgressChat
+          <GameChat
             taskId={taskId}
             currentUser={currentUser}
             otherUser={otherUser}

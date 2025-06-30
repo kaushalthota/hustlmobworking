@@ -636,8 +636,8 @@ const TaskDetails: React.FC<TaskDetailsProps> = ({ task, onClose, onAccept, onTa
                   {/* Task Creator Info and Action Buttons */}
                   <div className="flex items-center justify-between">
                     <div className="flex items-center">
-                      <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#0038FF] to-[#FF5A1F] flex items-center justify-center shadow-lg">
-                        <User className="w-6 h-6 text-white" />
+                      <div className="w-12 h-12 rounded-full flex items-center justify-center shadow-lg mr-4 overflow-hidden">
+                        <img src="/circular-logo.svg" alt="Hustl Logo" className="w-full h-full" />
                       </div>
                       <div className="ml-4">
                         <h3 className="font-bold">Task Creator</h3>

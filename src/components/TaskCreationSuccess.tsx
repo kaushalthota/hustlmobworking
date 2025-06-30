@@ -1,6 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { CheckCircle, X, Calendar, Clock, Users, MessageSquare, Star, ArrowRight, Sparkles, Volume as VolumeUp } from 'lucide-react';
-import { taskService } from '../lib/database';
+import React, { useState, useEffect, useRef } from 'react';
+import { CheckCircle, ArrowRight, MapPin, DollarSign } from 'lucide-react';
+import { doc, getDoc, updateDoc } from 'firebase/firestore';
+import { db } from '../lib/firebase';
+import toast from 'react-hot-toast';
 import { elevenLabsService } from '../lib/elevenLabsService';
 import { StarBorder } from './ui/star-border';
 
@@ -144,8 +146,8 @@ const TaskCreationSuccess: React.FC<TaskCreationSuccessProps> = ({ taskId, onClo
 
   const loadTask = async () => {
     try {
-      const taskData = await taskService.getTaskById(taskId);
-      setTask(taskData);
+      const taskDoc = await getDoc(doc(db, 'tasks', taskId));
+      setTask(taskDoc.exists() ? { id: taskDoc.id, ...taskDoc.data() } : null);
     } catch (error) {
       console.error('Error loading task:', error);
     } finally {
@@ -263,7 +265,7 @@ const TaskCreationSuccess: React.FC<TaskCreationSuccessProps> = ({ taskId, onClo
               <div>
                 <h2 className="text-2xl font-bold text-gray-900 flex items-center">
                   Task Created Successfully!
-                  <Sparkles className="w-6 h-6 text-yellow-500 ml-2 animate-pulse" />
+                  <img src="/circular-logo.svg" alt="Hustl Logo" className="w-6 h-6 ml-2 animate-pulse" />
                 </h2>
                 <p className="text-gray-600 mt-1">Your task is now live and ready for helpers</p>
               </div>
@@ -276,9 +278,6 @@ const TaskCreationSuccess: React.FC<TaskCreationSuccessProps> = ({ taskId, onClo
                 aria-label="Play audio message"
               >
                 <VolumeUp className={`w-5 h-5 ${isPlayingAudio ? 'animate-pulse' : ''}`} />
-              </button>
-              <button onClick={onClose} className="text-gray-500 hover:text-gray-700 p-2 rounded-full hover:bg-gray-100 transition-colors">
-                <X className="w-6 h-6" />
               </button>
             </div>
           </div>

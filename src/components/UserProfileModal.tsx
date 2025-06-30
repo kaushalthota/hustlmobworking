@@ -118,8 +118,8 @@ const UserProfileModal: React.FC<UserProfileModalProps> = ({ user, onClose }) =>
                   className="w-32 h-32 rounded-full object-cover border-4 border-white shadow-xl"
                 />
               ) : (
-                <div className="w-32 h-32 rounded-full bg-gradient-to-br from-[#0038FF] to-[#FF5A1F] flex items-center justify-center border-4 border-white shadow-xl">
-                  <User className="w-16 h-16 text-white" />
+                <div className="w-32 h-32 rounded-full flex items-center justify-center border-4 border-white shadow-xl overflow-hidden">
+                  <img src="/circular-logo.svg" alt="Hustl Logo" className="w-full h-full" />
                 </div>
               )}
               <div className="absolute -bottom-2 -right-2 bg-[#FF5A1F] text-white text-sm px-2 py-1 rounded-full font-bold shadow-lg">

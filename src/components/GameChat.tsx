@@ -545,8 +545,8 @@ const GameChat: React.FC<GameChatProps> = ({
                 className="w-10 h-10 rounded-full object-cover border-2 border-[#0038FF]"
               />
             ) : (
-              <div className="w-10 h-10 rounded-full flex items-center justify-center border-2 border-[#0038FF] overflow-hidden">
-                <img src="/circular-logo.svg" alt="Hustl Logo" className="w-full h-full" />
+              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#0038FF] to-[#FF5A1F] flex items-center justify-center">
+                <User className="w-5 h-5 text-white" />
               </div>
             )}
             <div className="absolute -bottom-1 -right-1 bg-[#FF5A1F] text-white text-xs px-1 py-0.5 rounded-full font-bold text-[10px]">
@@ -561,9 +561,10 @@ const GameChat: React.FC<GameChatProps> = ({
               </div>
             </div>
             <div className="flex items-center space-x-2 mt-1">
-              <div className="w-2 h-2 rounded-full bg-green-500"></div>
+              <div className={`w-2 h-2 rounded-full ${getConnectionStatusColor()}`}></div>
               <p className="text-sm text-gray-500">
-                Online
+                {connectionStatus === 'connected' ? 'Online' : 
+                 connectionStatus === 'connecting' ? 'Connecting...' : 'Offline'}
               </p>
               {otherUserProfile?.rating && (
                 <div className="flex items-center space-x-1">
@@ -614,8 +615,8 @@ const GameChat: React.FC<GameChatProps> = ({
           </div>
         ) : messages.length === 0 ? (
           <div className="text-center text-gray-500 py-8">
-            <div className="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg overflow-hidden">
-              <img src="/circular-logo.svg" alt="Hustl Logo" className="w-full h-full" />
+            <div className="w-20 h-20 bg-gradient-to-br from-[#0038FF] to-[#FF5A1F] rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
+              <MessageSquare className="w-10 h-10 text-white" />
             </div>
             <p className="text-lg font-bold mb-2">Start the conversation!</p>
             <p className="text-sm">Send a message to {otherUserProfile?.full_name}.</p>
@@ -644,8 +645,8 @@ const GameChat: React.FC<GameChatProps> = ({
                           className="w-8 h-8 rounded-full object-cover border-2 border-[#0038FF]"
                         />
                       ) : (
-                        <div className="w-8 h-8 rounded-full flex items-center justify-center border-2 border-[#0038FF] overflow-hidden">
-                          <img src="/circular-logo.svg" alt="Hustl Logo" className="w-full h-full" />
+                        <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#0038FF] to-[#FF5A1F] flex items-center justify-center">
+                          <User className="w-4 h-4 text-white" />
                         </div>
                       )}
                       <div className="absolute -bottom-1 -right-1 bg-[#FF5A1F] text-white text-xs px-1 py-0.5 rounded-full font-bold text-[10px]">
@@ -764,8 +765,8 @@ const GameChat: React.FC<GameChatProps> = ({
                   </div>
                   
                   {showAvatar && isOwn && (
-                    <div className="w-8 h-8 rounded-full flex items-center justify-center ml-3 flex-shrink-0 shadow-lg overflow-hidden">
-                      <img src="/circular-logo.svg" alt="Hustl Logo" className="w-full h-full" />
+                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#0038FF] to-[#0021A5] flex items-center justify-center ml-3 flex-shrink-0 shadow-lg">
+                      <User className="w-4 h-4 text-white" />
                     </div>
                   )}
                 </div>

@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { ArrowRight, Calendar, Clock, Users, MessageSquare, Star, ChevronLeft, ChevronRight, Volume as VolumeUp } from 'lucide-react';
+import { ArrowRight, Package, Star, DollarSign, Shield, X, Coffee, Book, Dog, Car, GraduationCap, Users, Printer, ChevronLeft, ChevronRight, Volume2, VolumeX } from 'lucide-react';
 import { elevenLabsService } from '../lib/elevenLabsService';
-import { StarBorder } from './ui/star-border';
 
 interface QuickStartGuideProps {
   onClose: () => void;
@@ -9,20 +8,51 @@ interface QuickStartGuideProps {
   onBrowseTasks?: () => void;
 }
 
-interface ConfettiPiece {
-  id: number;
-  x: number;
-  y: number;
-  color: string;
-  rotation: number;
-  velocity: { x: number; y: number };
-  size: number;
-}
+const CATEGORIES = [
+  {
+    name: 'Food Delivery',
+    icon: <Coffee className="w-4 h-4 mr-2" />,
+    template: 'meal-delivery'
+  },
+  {
+    name: 'Academic Help',
+    icon: <Book className="w-4 h-4 mr-2" />,
+    template: 'study-materials'
+  },
+  {
+    name: 'Pet Care',
+    icon: <Dog className="w-4 h-4 mr-2" />,
+    template: 'dog-walking'
+  },
+  {
+    name: 'Coffee Runs',
+    icon: <Coffee className="w-4 h-4 mr-2" />,
+    template: 'coffee-run'
+  },
+  {
+    name: 'Meal Swipes',
+    icon: <Users className="w-4 h-4 mr-2" />,
+    template: 'meal-exchange'
+  },
+  {
+    name: 'Study Groups',
+    icon: <GraduationCap className="w-4 h-4 mr-2" />,
+    template: 'study-group'
+  },
+  {
+    name: 'Quick Rides',
+    icon: <Car className="w-4 h-4 mr-2" />,
+    template: 'campus-rides'
+  },
+  {
+    name: 'Print & Pickup',
+    icon: <Printer className="w-4 h-4 mr-2" />,
+    template: 'print-pickup'
+  }
+];
 
-const CONFETTI_COLORS = ['#FA4616', '#0F2557', '#FFD700', '#FF69B4', '#00CED1', '#32CD32', '#FF6347'];
-
-// Audio manager singleton for TaskCreationSuccess
-const taskCreationAudioManager = {
+// Audio manager singleton for QuickStartGuide
+const quickStartAudioManager = {
   isPlaying: false,
   currentAudio: null as HTMLAudioElement | null,
   
@@ -70,12 +100,17 @@ const taskCreationAudioManager = {
   }
 };
 
-const QuickStartGuide: React.FC<QuickStartGuideProps> = ({ onClose, onCreateTask, onBrowseTasks }) => {
+const QuickStartGuide: React.FC<QuickStartGuideProps> = ({
+  onClose,
+  onCreateTask,
+  onBrowseTasks
+}) => {
   const [hasShown, setHasShown] = useState(false);
   const [currentStep, setCurrentStep] = useState(1);
+  const [isAudioEnabled, setIsAudioEnabled] = useState(true);
   const [isPlayingAudio, setIsPlayingAudio] = useState(false);
-  const [hasPlayedAudio, setHasPlayedAudio] = useState(false);
-
+  const [hasPlayedWelcome, setHasPlayedWelcome] = useState(false);
+  
   useEffect(() => {
     // Check if the guide has been shown before
     const guideShown = localStorage.getItem('quickStartGuideShown');
@@ -84,18 +119,20 @@ const QuickStartGuide: React.FC<QuickStartGuideProps> = ({ onClose, onCreateTask
     }
     
     // Play welcome message only once
-    if (!hasPlayedAudio) {
+    if (!hasPlayedWelcome) {
       playWelcomeMessage();
-      setHasPlayedAudio(true);
+      setHasPlayedWelcome(true);
     }
     
     return () => {
       // Clean up any playing audio when component unmounts
-      taskCreationAudioManager.stopAudio();
+      quickStartAudioManager.stopAudio();
     };
   }, []);
-
+  
   const playWelcomeMessage = async () => {
+    if (!isAudioEnabled) return;
+    
     // Check if we've already played this message in this session
     const messageKey = 'quickstart_welcome';
     if (sessionStorage.getItem(messageKey) === 'played') {
@@ -107,7 +144,7 @@ const QuickStartGuide: React.FC<QuickStartGuideProps> = ({ onClose, onCreateTask
       await elevenLabsService.speakText(
         "Welcome to Hustl! I'm your campus task assistant. I'll help you get started with creating and finding tasks around campus.",
         undefined,
-        taskCreationAudioManager
+        quickStartAudioManager
       );
       // Mark this message as played in this session
       sessionStorage.setItem(messageKey, 'played');
@@ -144,7 +181,12 @@ const QuickStartGuide: React.FC<QuickStartGuideProps> = ({ onClose, onCreateTask
   };
   
   const toggleAudio = () => {
-    setIsPlayingAudio(!isPlayingAudio);
+    setIsAudioEnabled(!isAudioEnabled);
+    
+    // If turning off audio, stop any playing audio
+    if (isAudioEnabled) {
+      quickStartAudioManager.stopAudio();
+    }
   };
 
   return (
@@ -153,7 +195,7 @@ const QuickStartGuide: React.FC<QuickStartGuideProps> = ({ onClose, onCreateTask
         <div className="flex justify-between items-center mb-6">
           <div className="flex items-center justify-center">
             <div className="w-16 h-16 mr-2">
-              <img src="/circular-logo.svg" alt="Hustl Logo" className="w-full h-full object-contain" />
+              <img src="/public/image copy copy copy copy.png" alt="Hustl Logo" className="w-full h-full object-contain" />
             </div>
             <div>
               <h2 className="text-2xl font-bold text-[#0F2557]">Welcome to Hustl</h2>
@@ -165,10 +207,24 @@ const QuickStartGuide: React.FC<QuickStartGuideProps> = ({ onClose, onCreateTask
           <div className="flex items-center">
             <button
               onClick={toggleAudio}
-              className={`p-2 rounded-full mr-2 ${isPlayingAudio ? 'bg-blue-100 text-[#0038FF]' : 'text-gray-500 hover:text-[#0038FF] hover:bg-blue-50'} transition-colors`}
-              aria-label={isPlayingAudio ? "Disable audio" : "Enable audio"}
+              className={`p-2 rounded-full mr-2 ${isAudioEnabled ? 'bg-blue-100 text-[#0038FF]' : 'text-gray-500 hover:text-[#0038FF] hover:bg-blue-50'} transition-colors`}
+              aria-label={isAudioEnabled ? "Disable audio" : "Enable audio"}
             >
-              <VolumeUp className={`w-5 h-5 ${isPlayingAudio ? 'animate-pulse' : ''}`} />
+              {isAudioEnabled ? (
+                <Volume2 className={`w-5 h-5 ${isPlayingAudio ? 'animate-pulse' : ''}`} />
+              ) : (
+                <VolumeX className="w-5 h-5" />
+              )}
+            </button>
+            <button 
+              onClick={() => {
+                markGuideAsShown();
+                onClose();
+              }}
+              className="text-gray-500 hover:text-gray-700 p-2 rounded-full hover:bg-gray-100 transition-colors"
+              aria-label="Close guide"
+            >
+              <X className="w-6 h-6" />
             </button>
           </div>
         </div>
@@ -196,7 +252,7 @@ const QuickStartGuide: React.FC<QuickStartGuideProps> = ({ onClose, onCreateTask
                   className="btn-gradient-secondary btn-shine p-4 sm:p-5 rounded-lg group w-full"
                 >
                   <div className="flex items-center justify-between mb-3">
-                    <img src="/circular-logo.svg" alt="Hustl Logo" className="w-6 h-6 sm:w-7 sm:h-7" />
+                    <Package className="w-6 h-6 sm:w-7 sm:h-7" />
                     <ArrowRight className="w-5 h-5 transform group-hover:translate-x-2 transition-transform" />
                   </div>
                   <h3 className="text-lg font-semibold text-left mb-2">Post a Task</h3>
@@ -213,7 +269,7 @@ const QuickStartGuide: React.FC<QuickStartGuideProps> = ({ onClose, onCreateTask
                   className="btn-gradient-primary btn-shine p-4 sm:p-5 rounded-lg group w-full"
                 >
                   <div className="flex items-center justify-between mb-3">
-                    <img src="/circular-logo.svg" alt="Hustl Logo" className="w-6 h-6 sm:w-7 sm:h-7" />
+                    <DollarSign className="w-6 h-6 sm:w-7 sm:h-7" />
                     <ArrowRight className="w-5 h-5 transform group-hover:translate-x-2 transition-transform" />
                   </div>
                   <h3 className="text-lg font-semibold text-left mb-2">Browse Tasks</h3>
@@ -230,14 +286,16 @@ const QuickStartGuide: React.FC<QuickStartGuideProps> = ({ onClose, onCreateTask
               <h3 className="text-xl font-semibold text-center">Popular Task Categories</h3>
               
               <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                {['Coffee Runs', 'Academic Help', 'Pet Care', 'Campus Rides', 'Meal Swipes', 'Study Groups', 'Quick Rides', 'Print & Pickup'].map((category) => (
+                {CATEGORIES.map((category) => (
                   <button
-                    key={category}
-                    onClick={() => handleCategoryClick(category.toLowerCase().replace(' ', '-'))}
+                    key={category.name}
+                    onClick={() => handleCategoryClick(category.template)}
                     className="bg-white px-3 py-2 rounded-xl text-sm hover:bg-[#0F2557] hover:text-white transition-colors flex items-center justify-center group shadow-sm border border-gray-200"
                   >
-                    <img src="/circular-logo.svg" alt="Hustl Logo" className="w-4 h-4 mr-2 group-hover:filter group-hover:brightness-0 group-hover:invert" />
-                    {category}
+                    <span className="group-hover:text-white text-[#0F2557]">
+                      {category.icon}
+                    </span>
+                    {category.name}
                   </button>
                 ))}
               </div>
@@ -250,7 +308,7 @@ const QuickStartGuide: React.FC<QuickStartGuideProps> = ({ onClose, onCreateTask
               
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div className="bg-blue-50 p-4 rounded-xl shadow-sm border border-blue-100">
-                  <img src="/circular-logo.svg" alt="Hustl Logo" className="w-8 h-8 mb-2" />
+                  <Shield className="w-6 h-6 text-[#0F2557] mb-2" />
                   <h3 className="font-bold mb-1 text-sm text-[#0F2557]">Safe & Secure</h3>
                   <p className="text-gray-600 text-sm">
                     Verified UF students only with built-in safety features.
@@ -266,7 +324,7 @@ const QuickStartGuide: React.FC<QuickStartGuideProps> = ({ onClose, onCreateTask
                 </div>
 
                 <div className="bg-blue-50 p-4 rounded-xl shadow-sm border border-blue-100">
-                  <img src="/circular-logo.svg" alt="Hustl Logo" className="w-8 h-8 mb-2" />
+                  <DollarSign className="w-6 h-6 text-[#0F2557] mb-2" />
                   <h3 className="font-bold mb-1 text-sm text-[#0F2557]">Flexible Earnings</h3>
                   <p className="text-gray-600 text-sm">
                     Set your schedule and earn between classes.
@@ -276,7 +334,7 @@ const QuickStartGuide: React.FC<QuickStartGuideProps> = ({ onClose, onCreateTask
               
               <div className="bg-blue-50 p-4 rounded-xl shadow-sm border border-blue-100">
                 <div className="flex items-center mb-2">
-                  <VolumeUp className="w-5 h-5 text-[#0F2557] mr-2" />
+                  <Volume2 className="w-5 h-5 text-[#0F2557] mr-2" />
                   <h3 className="font-bold text-sm text-[#0F2557]">Voice Assistant</h3>
                 </div>
                 <p className="text-gray-600 text-sm">

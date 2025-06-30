@@ -885,22 +885,14 @@ export const messageService = {
       // Check if a chat thread already exists between these users
       const q = query(
         collection(db, 'user_chats'),
-        where('participants', 'array-contains', user1Id)
+        where('participants', '==', participants)
       );
       
       const querySnapshot = await getDocs(q);
       
-      // Find a chat thread that contains both users
-      const existingThread = querySnapshot.docs.find(doc => {
-        const data = doc.data();
-        return data.participants && 
-               Array.isArray(data.participants) && 
-               data.participants.includes(user2Id);
-      });
-      
       // If a chat thread exists, update it with the task ID if provided
-      if (existingThread) {
-        const chatThreadId = existingThread.id;
+      if (!querySnapshot.empty) {
+        const chatThreadId = querySnapshot.docs[0].id;
         
         // If a taskId is provided, update the chat thread with this task ID
         if (taskId) {
@@ -997,17 +989,11 @@ export const messageService = {
       
       const messagesSnapshot = await getDocs(messagesQuery);
       
-      return messagesSnapshot.docs.map(doc => {
-        const data = doc.data();
-        // Convert Firestore timestamp to JS Date
-        const created_at = data.created_at?.toDate ? data.created_at.toDate() : new Date();
-        
-        return {
-          id: doc.id,
-          ...data,
-          created_at
-        };
-      });
+      return messagesSnapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data(),
+        created_at: doc.data().created_at?.toDate() || new Date()
+      }));
     } catch (error) {
       captureException(error, {
         tags: { action: 'get_messages' },
@@ -1060,17 +1046,11 @@ export const messageService = {
       const messagesQuery = query(messagesRef, orderBy('created_at', 'asc'));
       
       const unsubscribe = onSnapshot(messagesQuery, (snapshot) => {
-        const messages = snapshot.docs.map(doc => {
-          const data = doc.data();
-          // Convert Firestore timestamp to JS Date
-          const created_at = data.created_at?.toDate ? data.created_at.toDate() : new Date();
-          
-          return {
-            id: doc.id,
-            ...data,
-            created_at
-          };
-        });
+        const messages = snapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data(),
+          created_at: doc.data().created_at?.toDate() || new Date()
+        }));
         callback(messages);
       }, (error) => {
         captureException(error, {

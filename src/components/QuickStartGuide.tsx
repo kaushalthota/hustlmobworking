@@ -202,7 +202,7 @@ const QuickStartGuide: React.FC<QuickStartGuideProps> = ({
       <div className="bg-white rounded-2xl w-full max-w-3xl p-4 sm:p-6 mx-auto shadow-2xl">
         <div className="flex justify-between items-center mb-6">
           <div className="flex items-center justify-center">
-            <div className="w-16 h-16 mr-2 circular-logo">
+            <div className="w-16 h-16 mr-2">
               <img src="/image.png" alt="Hustl Logo" className="w-full h-full object-contain" />
             </div>
             <div>

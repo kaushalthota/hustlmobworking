@@ -32,7 +32,6 @@ const ChatList: React.FC<ChatListProps> = ({ userId, currentUser }) => {
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedChat, setSelectedChat] = useState<string | null>(null);
-  const [selectedChatData, setSelectedChatData] = useState<ChatItem | null>(null);
   const [showUserProfile, setShowUserProfile] = useState(false);
   const [showReportModal, setShowReportModal] = useState(false);
   const [selectedUser, setSelectedUser] = useState<any>(null);
@@ -41,6 +40,7 @@ const ChatList: React.FC<ChatListProps> = ({ userId, currentUser }) => {
   const menuRef = useRef<HTMLDivElement>(null);
   const [isMobile, setIsMobile] = useState(false);
   const [unsubscribeFunction, setUnsubscribeFunction] = useState<(() => void) | null>(null);
+  const [selectedChatData, setSelectedChatData] = useState<ChatItem | null>(null);
   
   useEffect(() => {
     loadChats();
@@ -146,16 +146,6 @@ const ChatList: React.FC<ChatListProps> = ({ userId, currentUser }) => {
     setShowMenu(null);
   };
 
-  const handleSelectChat = (chat: ChatItem) => {
-    setSelectedChat(chat.id);
-    setSelectedChatData(chat);
-  };
-
-  const handleBackToList = () => {
-    setSelectedChat(null);
-    setSelectedChatData(null);
-  };
-
   const filteredChats = chats.filter(chat =>
     chat.other_user.full_name.toLowerCase().includes(searchQuery.toLowerCase())
   );
@@ -202,6 +192,16 @@ const ChatList: React.FC<ChatListProps> = ({ userId, currentUser }) => {
     return message.content || 'No messages yet';
   };
 
+  const handleSelectChat = (chat: ChatItem) => {
+    setSelectedChat(chat.id);
+    setSelectedChatData(chat);
+  };
+
+  const handleBackToList = () => {
+    setSelectedChat(null);
+    setSelectedChatData(null);
+  };
+
   return (
     <div className="h-[calc(100vh-4rem)] flex flex-col md:flex-row">
       {/* Chat List Sidebar - Hidden on mobile when a chat is selected */}
@@ -244,13 +244,11 @@ const ChatList: React.FC<ChatListProps> = ({ userId, currentUser }) => {
                 >
                   <div className="flex-shrink-0">
                     {chat.other_user.avatar_url ? (
-                      <div className="w-10 h-10 rounded-full overflow-hidden">
-                        <img
-                          src={chat.other_user.avatar_url}
-                          alt={chat.other_user.full_name}
-                          className="w-full h-full object-cover"
-                        />
-                      </div>
+                      <img
+                        src={chat.other_user.avatar_url}
+                        alt={chat.other_user.full_name}
+                        className="w-10 h-10 rounded-full object-cover"
+                      />
                     ) : (
                       <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center">
                         <User className="w-6 h-6 text-gray-400" />

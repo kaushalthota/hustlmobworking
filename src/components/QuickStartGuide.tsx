@@ -8,18 +8,24 @@ interface QuickStartGuideProps {
   onBrowseTasks?: () => void;
 }
 
+interface LanguageSelectorProps {
+  value: string;
+  onChange: (languageCode: string) => void;
+  className?: string;
+}
+
 const CATEGORIES = [
   {
     id: 'coffee-run',
-    name: 'Food Delivery',
+    name: 'Coffee Runs',
     icon: <Coffee className="w-4 h-4 mr-2" />,
-    template: 'meal-delivery'
+    template: 'coffee-run'
   },
   {
     id: 'academic-help',
     name: 'Academic Help',
     icon: <Book className="w-4 h-4 mr-2" />,
-    template: 'study-materials'
+    template: 'academic-help'
   },
   {
     id: 'pet-care',
@@ -206,7 +212,7 @@ const QuickStartGuide: React.FC<QuickStartGuideProps> = ({
               <img src="/image.png" alt="Hustl Logo" className="w-full h-full object-contain" />
             </div>
             <div>
-              <h2 className="text-3xl font-extrabold text-gray-900">Welcome to Hustl</h2>
+              <h2 className="text-2xl font-bold text-[#0F2557]">Welcome to Hustl</h2>
               <p className="text-gray-600 mt-1">
                 Your campus task marketplace - get help or earn money helping others
               </p>
@@ -316,7 +322,7 @@ const QuickStartGuide: React.FC<QuickStartGuideProps> = ({
               
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div className="bg-blue-50 p-4 rounded-xl shadow-sm border border-blue-100">
-                  <Shield className="w-5 h-5 text-[#0F2557] mb-2" />
+                  <Shield className="w-6 h-6 text-[#0F2557] mb-2" />
                   <h3 className="font-bold mb-1 text-sm text-[#0F2557]">Safe & Secure</h3>
                   <p className="text-gray-600 text-sm">
                     Verified UF students only with built-in safety features.
@@ -324,7 +330,7 @@ const QuickStartGuide: React.FC<QuickStartGuideProps> = ({
                 </div>
 
                 <div className="bg-blue-50 p-4 rounded-xl shadow-sm border border-blue-100">
-                  <Star className="w-5 h-5 text-[#0F2557] mb-2" />
+                  <Star className="w-6 h-6 text-[#0F2557] mb-2" />
                   <h3 className="font-bold mb-1 text-sm text-[#0F2557]">Earn Points</h3>
                   <p className="text-gray-600 text-sm">
                     Complete tasks to earn points and unlock rewards.
@@ -332,7 +338,7 @@ const QuickStartGuide: React.FC<QuickStartGuideProps> = ({
                 </div>
 
                 <div className="bg-blue-50 p-4 rounded-xl shadow-sm border border-blue-100">
-                  <DollarSign className="w-5 h-5 text-[#0F2557] mb-2" />
+                  <DollarSign className="w-6 h-6 text-[#0F2557] mb-2" />
                   <h3 className="font-bold mb-1 text-sm text-[#0F2557]">Flexible Earnings</h3>
                   <p className="text-gray-600 text-sm">
                     Set your schedule and earn between classes.

@@ -123,12 +123,6 @@
   .btn-shine:hover::after {
     transform: rotate(30deg) translate(100%, 100%);
   }
-  
-  /* Circular logo style */
-  .circular-logo {
-    border-radius: 50%;
-    overflow: hidden;
-  }
 }
 
 /* Custom color overrides */

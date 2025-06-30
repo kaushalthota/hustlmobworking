@@ -112,13 +112,11 @@ const UserProfileModal: React.FC<UserProfileModalProps> = ({ user, onClose }) =>
           <div className="absolute -bottom-16 left-1/2 transform -translate-x-1/2">
             <div className="relative">
               {user.avatar_url ? (
-                <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-white shadow-xl">
-                  <img
-                    src={user.avatar_url}
-                    alt={user.full_name}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
+                <img
+                  src={user.avatar_url}
+                  alt={user.full_name}
+                  className="w-32 h-32 rounded-full object-cover border-4 border-white shadow-xl"
+                />
               ) : (
                 <div className="w-32 h-32 rounded-full bg-gradient-to-br from-[#0038FF] to-[#FF5A1F] flex items-center justify-center border-4 border-white shadow-xl">
                   <User className="w-16 h-16 text-white" />

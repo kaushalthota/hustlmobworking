@@ -262,7 +262,7 @@ const Auth: React.FC<AuthProps> = ({ initialMode = 'signin', onClose }) => {
           {!onClose && (
             <div className="text-center mb-6">
               <div className="flex justify-center mb-4">
-                <div className="w-20 h-20 mx-auto circular-logo">
+                <div className="w-20 h-20 mx-auto">
                   <img src="/image.png" alt="Hustl Logo" className="w-full h-full object-contain" />
                 </div>
               </div>
@@ -397,7 +397,7 @@ const Auth: React.FC<AuthProps> = ({ initialMode = 'signin', onClose }) => {
         {!onClose && (
           <div className="text-center mb-6">
             <div className="flex justify-center mb-4">
-              <div className="w-20 h-20 mx-auto circular-logo">
+              <div className="w-20 h-20 mx-auto">
                 <img src="/image.png" alt="Hustl Logo" className="w-full h-full object-contain" />
               </div>
             </div>

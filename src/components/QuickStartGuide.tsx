@@ -11,9 +11,9 @@ interface QuickStartGuideProps {
 const CATEGORIES = [
   {
     id: 'coffee-run',
-    name: 'Coffee Runs',
+    name: 'Food Delivery',
     icon: <Coffee className="w-4 h-4 mr-2" />,
-    template: 'coffee-run'
+    template: 'meal-delivery'
   },
   {
     id: 'academic-help',

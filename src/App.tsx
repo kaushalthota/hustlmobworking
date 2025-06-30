@@ -800,7 +800,7 @@ const App: React.FC = () => {
                   <div className="text-center max-w-3xl mx-auto mb-16">
                     <div className="flex items-center justify-center mb-6">
                       <div className="w-16 h-16 flex items-center justify-center">
-                        <img src="/public/image.png" alt="Hustl Logo" className="w-full h-full object-contain" />
+                        <img src="/public/image .png" alt="Hustl Logo" className="w-full h-full object-contain" />
                       </div>
                     </div>
                     <h1 className="text-4xl sm:text-5xl font-bold mb-6 leading-tight">How Hustl Works</h1>

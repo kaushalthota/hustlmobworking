@@ -10,7 +10,7 @@ interface MobileBottomNavProps {
 
 const MobileBottomNav: React.FC<MobileBottomNavProps> = ({ activeTab, onCreateTask }) => {
   return (
-    <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-40 shadow-lg flex justify-between">
+    <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-40 shadow-lg flex justify-between md:hidden">
       <Link 
         to="/" 
         className={`flex-1 flex flex-col items-center justify-center py-2 ${

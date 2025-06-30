@@ -380,7 +380,12 @@ const App: React.FC = () => {
     }
     action();
   };
+return (
+    <div className="min-h-screen bg-gray-50">
+      {/* Injected Bolt Logo in top-right */}
+      {boltLogo}
 
+      <Toaster position="top-center" />
   const handleSignIn = () => {
     setAuthMode('signin');
     setShowAuth(true);

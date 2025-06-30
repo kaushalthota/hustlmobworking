@@ -455,7 +455,7 @@ const App: React.FC = () => {
                 <div className="flex items-center space-x-8">
                   <div className="flex items-center space-x-3 cursor-pointer group" onClick={() => setCurrentView('templates')}>
                     <div className="w-10 h-10 flex items-center justify-center flex-shrink-0">
-                      <img src="/public/image copy copy copy copy.png" alt="Hustl Logo" className="w-full h-full object-contain" />
+                      <img src="/files_5770123-1751251303321-image.png" alt="Hustl Logo" className="w-full h-full object-contain" />
                     </div>
                     <div>
                       <span className="text-xl font-bold text-gray-900 group-hover:text-[#0038FF] transition-colors">Hustl</span>

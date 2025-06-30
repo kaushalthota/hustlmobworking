@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { MessageSquare, Search, User, ChevronRight, Clock, Eye, Info, Flag, MoreVertical } from 'lucide-react';
-import Chat from './Chat';
 import GameChat from './GameChat';
 import { db } from '../lib/firebase';
 import { taskService, messageService, profileService } from '../lib/database';

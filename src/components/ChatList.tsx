@@ -40,6 +40,7 @@ const ChatList: React.FC<ChatListProps> = ({ userId, currentUser }) => {
   const menuRef = useRef<HTMLDivElement>(null);
   const [isMobile, setIsMobile] = useState(false);
   const [unsubscribeFunction, setUnsubscribeFunction] = useState<(() => void) | null>(null);
+  const [selectedChatData, setSelectedChatData] = useState<ChatItem | null>(null);
   
   useEffect(() => {
     loadChats();
@@ -78,8 +79,18 @@ const ChatList: React.FC<ChatListProps> = ({ userId, currentUser }) => {
         unsubscribeFunction();
       }
       
+      if (!userId) {
+        console.warn('No user ID provided to ChatList');
+        setLoading(false);
+        return;
+      }
+      
+      console.log('Loading chats for user:', userId);
+      
       // Subscribe to user chat threads
       const unsubscribe = messageService.subscribeToUserChatThreads(userId, (chatThreads) => {
+        console.log('Received chat threads:', chatThreads.length);
+        
         // Process chat threads to get the right format
         const chatItems: ChatItem[] = chatThreads.map(thread => {
           return {
@@ -181,10 +192,14 @@ const ChatList: React.FC<ChatListProps> = ({ userId, currentUser }) => {
     return message.content || 'No messages yet';
   };
 
-  const selectedChatData = selectedChat ? chats.find(chat => chat.id === selectedChat) : null;
+  const handleSelectChat = (chat: ChatItem) => {
+    setSelectedChat(chat.id);
+    setSelectedChatData(chat);
+  };
 
   const handleBackToList = () => {
     setSelectedChat(null);
+    setSelectedChatData(null);
   };
 
   return (
@@ -222,7 +237,7 @@ const ChatList: React.FC<ChatListProps> = ({ userId, currentUser }) => {
             filteredChats.map((chat) => (
               <div key={chat.id} className="relative">
                 <button
-                  onClick={() => setSelectedChat(chat.id)}
+                  onClick={() => handleSelectChat(chat)}
                   className={`w-full p-4 border-b hover:bg-gray-50 transition-colors flex items-start text-left ${
                     selectedChat === chat.id ? 'bg-gray-50' : ''
                   }`}

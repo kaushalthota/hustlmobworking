@@ -26,8 +26,7 @@ import LanguageSettingsModal from './components/LanguageSettingsModal';
 
 // Import hooks and services
 import { useGeolocation } from './hooks/useGeolocation';
-import { auth } from './lib/firebase';
-import { subscribeToAuthChanges } from './lib/auth';
+import { auth, subscribeToAuthChanges } from './lib/auth';
 
 function App() {
   // State for authentication and user

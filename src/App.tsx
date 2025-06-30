@@ -441,7 +441,7 @@ const App: React.FC = () => {
         <div className="min-h-screen flex items-center justify-center bg-white">
           <div className="flex flex-col items-center">
             <div className="w-24 h-24 mb-4">
-              <img src="/public/image copy copy copy copy.png" alt="Hustl Logo" className="w-full h-full object-contain" />
+              <img src="/files_5770123-1751251303321-image.png" alt="Hustl Logo" className="w-full h-full object-contain" />
             </div>
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#0F2557]"></div>
           </div>

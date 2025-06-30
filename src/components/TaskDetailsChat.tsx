@@ -29,12 +29,14 @@ const TaskDetailsChat: React.FC<TaskDetailsChatProps> = ({
     const initializeChat = async () => {
       if (currentUser?.id && otherUser?.id) {
         try {
+          console.log('TaskDetailsChat: Initializing chat thread between', currentUser.id, 'and', otherUser.id);
           const threadId = await messageService.findOrCreateChatThread(
             currentUser.id,
             otherUser.id,
             taskId
           );
           setChatThreadId(threadId);
+          console.log('TaskDetailsChat: Chat thread initialized with ID', threadId);
         } catch (error) {
           console.error('Error initializing chat thread:', error);
         }

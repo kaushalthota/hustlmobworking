@@ -879,6 +879,8 @@ export const messageService = {
   // Find or create a chat thread between two users
   async findOrCreateChatThread(user1Id: string, user2Id: string, taskId?: string): Promise<string> {
     try {
+      console.log('Finding or creating chat thread between users:', user1Id, user2Id, 'for task:', taskId);
+      
       // Sort user IDs to ensure consistent chat ID regardless of who initiates
       const participants = [user1Id, user2Id].sort();
       
@@ -889,6 +891,7 @@ export const messageService = {
       );
       
       const querySnapshot = await getDocs(q);
+      console.log('Found', querySnapshot.size, 'chat threads for user', user1Id);
       
       // Find the chat thread with both participants
       const existingThread = querySnapshot.docs.find(doc => {
@@ -901,9 +904,11 @@ export const messageService = {
       // If a chat thread exists, update it with the task ID if provided
       if (existingThread) {
         const chatThreadId = existingThread.id;
+        console.log('Found existing chat thread:', chatThreadId);
         
         // If a taskId is provided, update the chat thread with this task ID
         if (taskId) {
+          console.log('Updating chat thread with task ID:', taskId);
           await updateDoc(doc(db, 'user_chats', chatThreadId), {
             last_task_id: taskId,
             updated_at: serverTimestamp()
@@ -914,6 +919,7 @@ export const messageService = {
       }
       
       // Otherwise, create a new chat thread
+      console.log('Creating new chat thread for users:', participants);
       const chatRef = await addDoc(collection(db, 'user_chats'), {
         participants,
         created_at: serverTimestamp(),
@@ -923,8 +929,10 @@ export const messageService = {
         last_task_id: taskId || null
       });
       
+      console.log('Created new chat thread:', chatRef.id);
       return chatRef.id;
     } catch (error) {
+      console.error('Error in findOrCreateChatThread:', error);
       captureException(error, {
         tags: { action: 'find_or_create_chat_thread' },
         extra: { user1Id, user2Id, taskId }
@@ -935,6 +943,8 @@ export const messageService = {
 
   async sendMessage(chatThreadId: string, messageData: any): Promise<string> {
     try {
+      console.log('Sending message to chat thread:', chatThreadId, messageData);
+      
       // Add the message to the chat thread
       const messagesRef = collection(db, 'user_chats', chatThreadId, 'messages');
       const docRef = await addDoc(messagesRef, {
@@ -974,8 +984,10 @@ export const messageService = {
         }
       }
       
+      console.log('Message sent successfully, ID:', docRef.id);
       return docRef.id;
     } catch (error) {
+      console.error('Error in sendMessage:', error);
       captureException(error, {
         tags: { action: 'send_message' },
         extra: { chatThreadId, messageData }
@@ -986,8 +998,11 @@ export const messageService = {
 
   async getMessages(chatThreadId: string): Promise<any[]> {
     try {
+      console.log('Getting messages for chat thread:', chatThreadId);
+      
       // Return empty array if no chatThreadId provided
       if (!chatThreadId || chatThreadId.trim() === '') {
+        console.warn('No chat thread ID provided to getMessages');
         return [];
       }
       
@@ -996,6 +1011,7 @@ export const messageService = {
       const messagesQuery = query(messagesRef, orderBy('created_at', 'asc'));
       
       const messagesSnapshot = await getDocs(messagesQuery);
+      console.log('Found', messagesSnapshot.size, 'messages');
       
       return messagesSnapshot.docs.map(doc => {
         const data = doc.data();
@@ -1017,6 +1033,7 @@ export const messageService = {
         };
       });
     } catch (error) {
+      console.error('Error in getMessages:', error);
       captureException(error, {
         tags: { action: 'get_messages' },
         extra: { chatThreadId }
@@ -1057,8 +1074,11 @@ export const messageService = {
 
   subscribeToMessages(chatThreadId: string, callback: (messages: any[]) => void) {
     try {
+      console.log('Subscribing to messages for chat thread:', chatThreadId);
+      
       // If no chatThreadId provided, return early with empty messages
       if (!chatThreadId || chatThreadId.trim() === '') {
+        console.warn('No chat thread ID provided to subscribeToMessages');
         callback([]);
         return () => {};
       }
@@ -1068,6 +1088,8 @@ export const messageService = {
       const messagesQuery = query(messagesRef, orderBy('created_at', 'asc'));
       
       const unsubscribe = onSnapshot(messagesQuery, (snapshot) => {
+        console.log('Received message snapshot with', snapshot.docs.length, 'messages');
+        
         const messages = snapshot.docs.map(doc => {
           const data = doc.data();
           let createdAt;
@@ -1089,6 +1111,7 @@ export const messageService = {
         });
         callback(messages);
       }, (error) => {
+        console.error('Error in subscribeToMessages onSnapshot:', error);
         captureException(error, {
           tags: { action: 'subscribe_to_messages' },
           extra: { chatThreadId }
@@ -1097,6 +1120,7 @@ export const messageService = {
       
       return unsubscribe;
     } catch (error) {
+      console.error('Error setting up subscribeToMessages:', error);
       captureException(error, {
         tags: { action: 'subscribe_to_messages_setup' },
         extra: { chatThreadId }

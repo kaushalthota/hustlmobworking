@@ -93,25 +93,37 @@ const GameChat: React.FC<GameChatProps> = ({
   const { currentLanguage } = useTranslation();
   
   useEffect(() => {
-    if (!currentUser?.id || !otherUser?.id) {
-      console.warn('GameChat component missing required props:', { currentUserUid: currentUser?.id, otherUserId: otherUser?.id });
+    if (!currentUser || !otherUser) {
+      console.warn('GameChat component missing required props:', { currentUser, otherUser });
       return;
     }
+    
+    console.log('GameChat initializing with:', { 
+      taskId, 
+      currentUserId: currentUser.id, 
+      otherUserId: otherUser.id 
+    });
     
     // Initialize chat thread
     const initializeChat = async () => {
       try {
         setLoading(true);
+        console.log('Finding or creating chat thread...');
+        
         // Find or create a chat thread between the users
         const threadId = await messageService.findOrCreateChatThread(
           currentUser.id,
           otherUser.id,
           taskId
         );
+        
+        console.log('Chat thread ID:', threadId);
         setChatThreadId(threadId);
         
         // Now load messages from this thread
+        console.log('Subscribing to messages...');
         const unsubscribe = messageService.subscribeToMessages(threadId, (messageData) => {
+          console.log('Received messages:', messageData.length);
           setMessages(messageData);
           
           // Mark messages as read and delivered
@@ -126,6 +138,8 @@ const GameChat: React.FC<GameChatProps> = ({
       } catch (error) {
         console.error('Error initializing chat:', error);
         setLoading(false);
+        setConnectionStatus('disconnected');
+        toast.error('Error loading chat messages');
         return () => {};
       }
     };

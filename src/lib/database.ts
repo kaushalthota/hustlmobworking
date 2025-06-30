@@ -195,6 +195,27 @@ export const taskService = {
         id: doc.id,
         ...doc.data()
       }));
+      
+      // Sort tasks to prioritize SafeWalk and high priority tasks
+      tasks.sort((a, b) => {
+        // First prioritize SafeWalk requests
+        if (a.safewalk_request_id && !b.safewalk_request_id) return -1;
+        if (!a.safewalk_request_id && b.safewalk_request_id) return 1;
+        
+        // Then prioritize high priority tasks
+        if (a.isHighPriority && !b.isHighPriority) return -1;
+        if (!a.isHighPriority && b.isHighPriority) return 1;
+        
+        // Then prioritize by urgency
+        if (a.urgency === 'high' && b.urgency !== 'high') return -1;
+        if (a.urgency !== 'high' && b.urgency === 'high') return 1;
+        
+        // Finally sort by creation date (newest first)
+        const aDate = a.created_at?.toDate?.() || new Date(a.created_at || 0);
+        const bDate = b.created_at?.toDate?.() || new Date(b.created_at || 0);
+        return bDate.getTime() - aDate.getTime();
+      });
+      
       callback(tasks);
     }, (error) => {
       captureException(error, {
@@ -666,6 +687,157 @@ export const notificationService = {
       captureException(error, {
         tags: { action: 'subscribe_to_user_notifications_setup' },
         extra: { userId }
+      });
+      return () => {}; // Return empty function as fallback
+    }
+  }
+};
+
+// SafeWalk service object
+export const safeWalkService = {
+  async createSafeWalkRequest(requestData: any): Promise<string> {
+    try {
+      const docRef = await addDoc(collection(db, 'safewalk_requests'), {
+        ...requestData,
+        created_at: serverTimestamp(),
+        updated_at: serverTimestamp()
+      });
+      
+      // Log SafeWalk request creation in Sentry
+      Sentry.addBreadcrumb({
+        category: 'safewalk',
+        message: `SafeWalk request created from ${requestData.current_location?.address || 'unknown'} to ${requestData.destination?.address || 'unknown'}`,
+        level: 'info'
+      });
+      
+      return docRef.id;
+    } catch (error) {
+      captureException(error, {
+        tags: { action: 'create_safewalk_request' },
+        extra: { requestData }
+      });
+      throw error;
+    }
+  },
+  
+  async getSafeWalkRequests(): Promise<any[]> {
+    try {
+      const q = query(
+        collection(db, 'safewalk_requests'),
+        where('status', '==', 'pending'),
+        orderBy('created_at', 'desc')
+      );
+      
+      const querySnapshot = await getDocs(q);
+      return querySnapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
+    } catch (error) {
+      captureException(error, {
+        tags: { action: 'get_safewalk_requests' }
+      });
+      throw error;
+    }
+  },
+  
+  async acceptSafeWalkRequest(requestId: string, userId: string): Promise<void> {
+    try {
+      const docRef = doc(db, 'safewalk_requests', requestId);
+      await updateDoc(docRef, {
+        status: 'accepted',
+        accepted_by: userId,
+        accepted_at: serverTimestamp(),
+        updated_at: serverTimestamp()
+      });
+      
+      // Log SafeWalk request acceptance in Sentry
+      Sentry.addBreadcrumb({
+        category: 'safewalk',
+        message: `SafeWalk request ${requestId} accepted by user ${userId}`,
+        level: 'info'
+      });
+    } catch (error) {
+      captureException(error, {
+        tags: { action: 'accept_safewalk_request' },
+        extra: { requestId, userId }
+      });
+      throw error;
+    }
+  },
+  
+  async completeSafeWalkRequest(requestId: string): Promise<void> {
+    try {
+      const docRef = doc(db, 'safewalk_requests', requestId);
+      await updateDoc(docRef, {
+        status: 'completed',
+        completed_at: serverTimestamp(),
+        updated_at: serverTimestamp()
+      });
+      
+      // Log SafeWalk request completion in Sentry
+      Sentry.addBreadcrumb({
+        category: 'safewalk',
+        message: `SafeWalk request ${requestId} completed`,
+        level: 'info'
+      });
+    } catch (error) {
+      captureException(error, {
+        tags: { action: 'complete_safewalk_request' },
+        extra: { requestId }
+      });
+      throw error;
+    }
+  },
+  
+  async cancelSafeWalkRequest(requestId: string): Promise<void> {
+    try {
+      const docRef = doc(db, 'safewalk_requests', requestId);
+      await updateDoc(docRef, {
+        status: 'cancelled',
+        cancelled_at: serverTimestamp(),
+        updated_at: serverTimestamp()
+      });
+      
+      // Log SafeWalk request cancellation in Sentry
+      Sentry.addBreadcrumb({
+        category: 'safewalk',
+        message: `SafeWalk request ${requestId} cancelled`,
+        level: 'info'
+      });
+    } catch (error) {
+      captureException(error, {
+        tags: { action: 'cancel_safewalk_request' },
+        extra: { requestId }
+      });
+      throw error;
+    }
+  },
+  
+  subscribeToSafeWalkRequests(callback: (requests: any[]) => void) {
+    try {
+      const q = query(
+        collection(db, 'safewalk_requests'),
+        where('status', '==', 'pending'),
+        orderBy('created_at', 'desc')
+      );
+      
+      const unsubscribe = onSnapshot(q, (querySnapshot) => {
+        const requests = querySnapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        }));
+        callback(requests);
+      }, (error) => {
+        captureException(error, {
+          tags: { action: 'subscribe_to_safewalk_requests' }
+        });
+      });
+
+      return unsubscribe;
+    } catch (error) {
+      captureException(error, {
+        tags: { action: 'subscribe_to_safewalk_requests_setup' }
       });
       return () => {}; // Return empty function as fallback
     }

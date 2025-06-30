@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Search, Filter, MapPin, Clock, DollarSign, Tag, User, Map as MapIcon, List, AlertCircle, CheckCircle, X as XIcon, Package, PlusCircle, Flame, ArrowRight, MessageSquare, Briefcase, History } from 'lucide-react';
+import { Search, Filter, MapPin, Clock, DollarSign, Tag, User, Map as MapIcon, List, AlertCircle, CheckCircle, X as XIcon, Package, PlusCircle, Flame, ArrowRight, MessageSquare, Briefcase, History, Shield } from 'lucide-react';
 import InteractiveCampusMap from './InteractiveCampusMap';
 import TaskDetails from './TaskDetails';
 import { Location } from '../lib/locationService';
@@ -164,6 +164,24 @@ const TaskMarketplace: React.FC<TaskMarketplaceProps> = ({ userLocation }) => {
         }
       }
 
+      // Prioritize SafeWalk requests and high priority tasks
+      sortedTasks.sort((a, b) => {
+        // First prioritize SafeWalk requests
+        if (a.safewalk_request_id && !b.safewalk_request_id) return -1;
+        if (!a.safewalk_request_id && b.safewalk_request_id) return 1;
+        
+        // Then prioritize high priority tasks
+        if (a.isHighPriority && !b.isHighPriority) return -1;
+        if (!a.isHighPriority && b.isHighPriority) return 1;
+        
+        // Then prioritize by urgency
+        if (a.urgency === 'high' && b.urgency !== 'high') return -1;
+        if (a.urgency !== 'high' && b.urgency === 'high') return 1;
+        
+        // Keep the existing sort order for other criteria
+        return 0;
+      });
+
       setTasks(sortedTasks);
       setLoading(false);
     } catch (error) {
@@ -189,7 +207,24 @@ const TaskMarketplace: React.FC<TaskMarketplaceProps> = ({ userLocation }) => {
     const createdAt = new Date(task.created_at).getTime();
     const now = new Date().getTime();
     const hoursSinceCreation = (now - createdAt) / (1000 * 60 * 60);
-    return Math.max(0, 100 - hoursSinceCreation); // Higher score for newer tasks
+    
+    // Base score based on recency
+    let score = Math.max(0, 100 - hoursSinceCreation);
+    
+    // Add bonus for high urgency tasks
+    if (task.urgency === 'high') score += 50;
+    if (task.urgency === 'medium') score += 25;
+    
+    // Add bonus for SafeWalk requests
+    if (task.safewalk_request_id) score += 100;
+    
+    // Add bonus for high priority tasks
+    if (task.isHighPriority) score += 75;
+    
+    // Add bonus for safety category
+    if (task.category === 'safety') score += 50;
+    
+    return score;
   };
 
   const handleAcceptTask = async (taskId: string) => {
@@ -319,6 +354,7 @@ const TaskMarketplace: React.FC<TaskMarketplaceProps> = ({ userLocation }) => {
     { id: 'pet_care', name: 'Pet Care' },
     { id: 'meal_exchange', name: 'Meal Exchange' },
     { id: 'transportation', name: 'Transportation' },
+    { id: 'safety', name: 'Safety' },
     { id: 'other', name: 'Other' }
   ];
 
@@ -650,7 +686,9 @@ const TaskMarketplace: React.FC<TaskMarketplaceProps> = ({ userLocation }) => {
           {filteredTasks.map((task) => (
             <div
               key={task.id}
-              className="premium-card hover:shadow-xl transition-all duration-300 hover:-translate-y-1 cursor-pointer transform hover:scale-[1.02]"
+              className={`premium-card hover:shadow-xl transition-all duration-300 hover:-translate-y-1 cursor-pointer transform hover:scale-[1.02] ${
+                task.safewalk_request_id || task.isHighPriority ? 'border-2 border-red-500' : ''
+              }`}
               onClick={() => {
                 setSelectedTask(task);
                 setSelectedTaskInitialTab('details');
@@ -658,11 +696,21 @@ const TaskMarketplace: React.FC<TaskMarketplaceProps> = ({ userLocation }) => {
               }}
             >
               {/* Task Header - Urgent Badge */}
-              {task.urgencyScore > 70 && (
+              {(task.urgencyScore > 70 || task.urgency === 'high' || task.isHighPriority || task.safewalk_request_id) && (
                 <div className="bg-gradient-to-r from-red-500 to-orange-500 h-1.5 w-full"></div>
               )}
               
               <div className="p-5">
+                {/* SafeWalk or High Priority Indicator */}
+                {(task.safewalk_request_id || task.isHighPriority) && (
+                  <div className="mb-2">
+                    <span className="bg-red-100 text-red-800 text-xs font-semibold px-2.5 py-0.5 rounded-full border border-red-200 flex items-center w-fit">
+                      <Shield className="w-3 h-3 mr-1" />
+                      {task.safewalk_request_id ? 'URGENT: SAFEWALK REQUEST' : 'HIGH PRIORITY'}
+                    </span>
+                  </div>
+                )}
+                
                 {/* Task Title with Status Badge */}
                 <div className="flex items-start justify-between mb-3">
                   <h3 className="text-xl font-bold text-gray-900 flex-1 mr-2">{task.title}</h3>

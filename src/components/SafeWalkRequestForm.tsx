@@ -21,6 +21,7 @@ const SafeWalkRequestForm: React.FC<SafeWalkRequestFormProps> = ({ onClose }) =>
   const [requestId, setRequestId] = useState<string | null>(null);
   const [estimatedWaitTime, setEstimatedWaitTime] = useState('5-10 minutes');
   const [loadingLocation, setLoadingLocation] = useState(false);
+  const [urgencyLevel, setUrgencyLevel] = useState<'low' | 'medium' | 'high'>('high'); // Default to high urgency
 
   useEffect(() => {
     fetchCurrentLocation();
@@ -64,6 +65,9 @@ const SafeWalkRequestForm: React.FC<SafeWalkRequestFormProps> = ({ onClose }) =>
     
     setLoading(true);
     try {
+      const user = auth.currentUser;
+      if (!user) throw new Error('Not authenticated');
+
       // Generate a unique request ID
       const uniqueId = Math.random().toString(36).substring(2, 10).toUpperCase();
       
@@ -77,10 +81,32 @@ const SafeWalkRequestForm: React.FC<SafeWalkRequestFormProps> = ({ onClose }) =>
         status: 'pending',
         created_at: serverTimestamp(),
         expires_at: new Date(Date.now() + 30 * 60 * 1000), // 30 minutes from now
-        is_anonymous: true
+        is_anonymous: true,
+        urgency_level: urgencyLevel
       };
       
-      const docRef = await addDoc(collection(db, 'safewalk_requests'), requestData);
+      // Create the SafeWalk request document
+      const safeWalkRef = await addDoc(collection(db, 'safewalk_requests'), requestData);
+      
+      // Also create a task for this SafeWalk request to make it visible to all users
+      await addDoc(collection(db, 'tasks'), {
+        title: 'URGENT: SafeWalk Companion Needed',
+        description: `SafeWalk request from ${currentLocation?.address || 'campus'} to ${destination}. ${notes ? `Additional notes: ${notes}` : ''}`,
+        category: 'safety',
+        location: currentLocation?.address || 'University of Florida',
+        location_coords: currentLocation,
+        destination: destination,
+        destination_coords: destinationCoords,
+        estimated_time: '15-30 minutes',
+        price: 10.00, // Offering payment for SafeWalk companions
+        urgency: 'high',
+        created_by: user.uid,
+        status: 'open',
+        safewalk_request_id: uniqueId,
+        created_at: serverTimestamp(),
+        updated_at: serverTimestamp(),
+        isHighPriority: true // Mark as high priority
+      });
       
       // Set request ID for confirmation
       setRequestId(uniqueId);
@@ -320,6 +346,47 @@ const SafeWalkRequestForm: React.FC<SafeWalkRequestFormProps> = ({ onClose }) =>
 
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
+            Urgency Level
+          </label>
+          <div className="grid grid-cols-3 gap-2">
+            <button
+              type="button"
+              onClick={() => setUrgencyLevel('low')}
+              className={`py-2 px-4 rounded-lg border ${
+                urgencyLevel === 'low'
+                  ? 'bg-blue-100 text-blue-800 border-blue-300'
+                  : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'
+              }`}
+            >
+              Low
+            </button>
+            <button
+              type="button"
+              onClick={() => setUrgencyLevel('medium')}
+              className={`py-2 px-4 rounded-lg border ${
+                urgencyLevel === 'medium'
+                  ? 'bg-yellow-100 text-yellow-800 border-yellow-300'
+                  : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'
+              }`}
+            >
+              Medium
+            </button>
+            <button
+              type="button"
+              onClick={() => setUrgencyLevel('high')}
+              className={`py-2 px-4 rounded-lg border ${
+                urgencyLevel === 'high'
+                  ? 'bg-red-100 text-red-800 border-red-300'
+                  : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'
+              }`}
+            >
+              High
+            </button>
+          </div>
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
             Special Requirements (Optional)
           </label>
           <textarea
@@ -340,6 +407,7 @@ const SafeWalkRequestForm: React.FC<SafeWalkRequestFormProps> = ({ onClose }) =>
                 <li>• Your identity will remain anonymous throughout the process</li>
                 <li>• Request expires automatically after 30 minutes if unmatched</li>
                 <li>• For immediate emergencies, call Campus Police at (352) 392-1111</li>
+                <li>• Your request will be posted as a high-priority task visible to all users</li>
               </ul>
             </div>
           </div>

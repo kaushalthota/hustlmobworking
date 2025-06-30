@@ -386,6 +386,9 @@ return (
       {boltLogo}
 
       <Toaster position="top-center" />
+      {/* ...rest of your JSX as before (not modified here for brevity) */}
+    </div>
+  );
   const handleSignIn = () => {
     setAuthMode('signin');
     setShowAuth(true);

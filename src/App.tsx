@@ -26,7 +26,6 @@ import VoiceAssistantButton from './components/VoiceAssistantButton';
 import VoiceAssistantManager from './components/VoiceAssistantManager';
 import VoiceCommandTooltip from './components/VoiceCommandTooltip';
 import LanguageSettingsModal from './components/LanguageSettingsModal';
-import MobileBottomNav from './components/MobileBottomNav';
 
 // Providers
 import { TranslationProvider } from './components/TranslationProvider';
@@ -125,7 +124,7 @@ function App() {
                 <span className="font-bold text-xl">Hustl</span>
               </div>
               
-              <div className="hidden md:flex items-center space-x-6">
+              <div className="flex items-center space-x-6">
                 <button 
                   onClick={() => setActiveTab('home')}
                   className={`nav-link ${activeTab === 'home' ? 'font-bold' : ''}`}
@@ -205,7 +204,7 @@ function App() {
           </nav>
 
           {/* Main Content */}
-          <main className="pb-16 md:pb-0">
+          <main>
             {user ? (
               <>
                 {activeTab === 'home' && (
@@ -244,12 +243,6 @@ function App() {
               </div>
             )}
           </main>
-
-          {/* Mobile Bottom Navigation */}
-          <MobileBottomNav 
-            activeTab={activeTab} 
-            onCreateTask={() => setShowCreateTask(true)} 
-          />
 
           {/* Modals */}
           {showAuth && <Auth onClose={() => setShowAuth(false)} />}

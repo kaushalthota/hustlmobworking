@@ -23,6 +23,7 @@ const TaskMarketplace: React.FC<TaskMarketplaceProps> = ({ userLocation }) => {
   const [viewMode, setViewMode] = useState<'list' | 'map'>('list');
   const [selectedTask, setSelectedTask] = useState<any>(null);
   const [selectedTaskInitialTab, setSelectedTaskInitialTab] = useState<'details' | 'chat' | 'tracker'>('details');
+  const [selectedTaskViewMode, setSelectedTaskViewMode] = useState<'normal' | 'progress-tracking'>('normal');
   const [currentLocation, setCurrentLocation] = useState<Location | null>(userLocation || null);
   const [selectedBundle, setSelectedBundle] = useState<any>(null);
   const [currentUser, setCurrentUser] = useState<any>(null);
@@ -251,6 +252,7 @@ const TaskMarketplace: React.FC<TaskMarketplaceProps> = ({ userLocation }) => {
         if (acceptedTask) {
           setSelectedTask(acceptedTask);
           setSelectedTaskInitialTab('details');
+          setSelectedTaskViewMode('normal');
         }
       }, 500);
       
@@ -272,17 +274,20 @@ const TaskMarketplace: React.FC<TaskMarketplaceProps> = ({ userLocation }) => {
     // Open task details with progress controls and chat visible
     setSelectedTask(task);
     setSelectedTaskInitialTab('details');
+    setSelectedTaskViewMode('progress-tracking');
   };
 
   const handleViewTracker = (task: any) => {
     setSelectedTask(task);
     setSelectedTaskInitialTab('tracker');
+    setSelectedTaskViewMode('progress-tracking');
   };
 
   const handleUpdateStatus = (task: any) => {
     // Instead of opening the status update modal, open the task details page
     setSelectedTask(task);
     setSelectedTaskInitialTab('details');
+    setSelectedTaskViewMode('progress-tracking');
   };
 
   const handleStatusUpdateComplete = () => {
@@ -615,6 +620,7 @@ const TaskMarketplace: React.FC<TaskMarketplaceProps> = ({ userLocation }) => {
             onTaskSelect={(task) => {
               setSelectedTask(task);
               setSelectedTaskInitialTab('details');
+              setSelectedTaskViewMode('normal');
             }}
             onBundleSelect={setSelectedBundle}
             onLocationUpdate={setCurrentLocation}
@@ -648,6 +654,7 @@ const TaskMarketplace: React.FC<TaskMarketplaceProps> = ({ userLocation }) => {
               onClick={() => {
                 setSelectedTask(task);
                 setSelectedTaskInitialTab('details');
+                setSelectedTaskViewMode('normal');
               }}
             >
               {/* Task Header - Urgent Badge */}
@@ -813,6 +820,7 @@ const TaskMarketplace: React.FC<TaskMarketplaceProps> = ({ userLocation }) => {
             setupTaskSubscriptions();
           }}
           initialTab={selectedTaskInitialTab}
+          viewMode={selectedTaskViewMode}
         />
       )}
 

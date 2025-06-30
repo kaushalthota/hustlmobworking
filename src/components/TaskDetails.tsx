@@ -27,9 +27,17 @@ interface TaskDetailsProps {
   onAccept?: () => void;
   onTaskCompleted?: () => void;
   initialTab?: 'details' | 'chat' | 'tracker';
+  viewMode?: 'normal' | 'progress-tracking';
 }
 
-const TaskDetails: React.FC<TaskDetailsProps> = ({ task, onClose, onAccept, onTaskCompleted, initialTab = 'details' }) => {
+const TaskDetails: React.FC<TaskDetailsProps> = ({ 
+  task, 
+  onClose, 
+  onAccept, 
+  onTaskCompleted, 
+  initialTab = 'details',
+  viewMode = 'normal'
+}) => {
   const [loading, setLoading] = useState(false);
   const [showChat, setShowChat] = useState(false);
   const [currentUser, setCurrentUser] = useState<any>(null);
@@ -583,7 +591,8 @@ const TaskDetails: React.FC<TaskDetailsProps> = ({ task, onClose, onAccept, onTa
               <div className="p-4 border-b flex justify-between items-center bg-gradient-to-r from-[#0038FF] to-[#0021A5] text-white rounded-tl-2xl">
                 <div className="flex items-center">
                   <h2 className="text-xl font-bold">Task Details</h2>
-                  {isTaskParticipant && (
+                  {/* Only show tabs in normal view mode, not in progress tracking mode */}
+                  {viewMode === 'normal' && isTaskParticipant && (
                     <div className="ml-4 flex space-x-2">
                       <button
                         onClick={() => setActiveTab('details')}

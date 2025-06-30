@@ -19,7 +19,6 @@ import TranslateButton from './TranslateButton';
 import { useTranslation } from './TranslationProvider';
 import TaskStatusUpdate from './TaskStatusUpdate';
 import TaskCancelModal from './TaskCancelModal';
-import TaskProgressChat from './TaskProgressChat';
 import TaskDetailsChat from './TaskDetailsChat';
 
 interface TaskDetailsProps {
@@ -50,7 +49,6 @@ const TaskDetails: React.FC<TaskDetailsProps> = ({ task, onClose, onAccept, onTa
   const [translatedTitle, setTranslatedTitle] = useState<string | null>(null);
   const [translatedDescription, setTranslatedDescription] = useState<string | null>(null);
   const { currentLanguage } = useTranslation();
-  const [messages, setMessages] = useState<any[]>([]);
   const [chatLoading, setChatLoading] = useState(true);
   const [showCancelModal, setShowCancelModal] = useState(false);
   const [chatThreadId, setChatThreadId] = useState<string | null>(null);
@@ -140,10 +138,6 @@ const TaskDetails: React.FC<TaskDetailsProps> = ({ task, onClose, onAccept, onTa
         taskData.id
       );
       setChatThreadId(threadId);
-      
-      // Load messages from this thread
-      const chatMessages = await messageService.getMessages(threadId);
-      setMessages(chatMessages);
     } catch (error) {
       console.error('Error initializing chat:', error);
       toast.error('Error loading chat');

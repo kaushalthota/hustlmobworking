@@ -885,14 +885,22 @@ export const messageService = {
       // Check if a chat thread already exists between these users
       const q = query(
         collection(db, 'user_chats'),
-        where('participants', '==', participants)
+        where('participants', 'array-contains', user1Id)
       );
       
       const querySnapshot = await getDocs(q);
       
+      // Find the chat thread with both participants
+      const existingThread = querySnapshot.docs.find(doc => {
+        const data = doc.data();
+        return data.participants && 
+               Array.isArray(data.participants) && 
+               data.participants.includes(user2Id);
+      });
+      
       // If a chat thread exists, update it with the task ID if provided
-      if (!querySnapshot.empty) {
-        const chatThreadId = querySnapshot.docs[0].id;
+      if (existingThread) {
+        const chatThreadId = existingThread.id;
         
         // If a taskId is provided, update the chat thread with this task ID
         if (taskId) {
@@ -989,11 +997,25 @@ export const messageService = {
       
       const messagesSnapshot = await getDocs(messagesQuery);
       
-      return messagesSnapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data(),
-        created_at: doc.data().created_at?.toDate() || new Date()
-      }));
+      return messagesSnapshot.docs.map(doc => {
+        const data = doc.data();
+        let createdAt;
+        
+        // Handle different timestamp formats
+        if (data.created_at && typeof data.created_at.toDate === 'function') {
+          createdAt = data.created_at.toDate();
+        } else if (data.created_at) {
+          createdAt = new Date(data.created_at);
+        } else {
+          createdAt = new Date();
+        }
+        
+        return {
+          id: doc.id,
+          ...data,
+          created_at: createdAt
+        };
+      });
     } catch (error) {
       captureException(error, {
         tags: { action: 'get_messages' },
@@ -1046,11 +1068,25 @@ export const messageService = {
       const messagesQuery = query(messagesRef, orderBy('created_at', 'asc'));
       
       const unsubscribe = onSnapshot(messagesQuery, (snapshot) => {
-        const messages = snapshot.docs.map(doc => ({
-          id: doc.id,
-          ...doc.data(),
-          created_at: doc.data().created_at?.toDate() || new Date()
-        }));
+        const messages = snapshot.docs.map(doc => {
+          const data = doc.data();
+          let createdAt;
+          
+          // Handle different timestamp formats
+          if (data.created_at && typeof data.created_at.toDate === 'function') {
+            createdAt = data.created_at.toDate();
+          } else if (data.created_at) {
+            createdAt = new Date(data.created_at);
+          } else {
+            createdAt = new Date();
+          }
+          
+          return {
+            id: doc.id,
+            ...data,
+            created_at: createdAt
+          };
+        });
         callback(messages);
       }, (error) => {
         captureException(error, {

@@ -1,10 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
-import { MessageSquare, Map, Clock } from 'lucide-react';
-import TaskChat from './TaskChat';
-import TaskProgressChat from './TaskProgressChat';
-import TaskProgress from './TaskProgress';
+import { MessageSquare, Clock } from 'lucide-react';
 import GameChat from './GameChat';
+import TaskProgress from './TaskProgress';
 import { messageService } from '../lib/database';
 
 interface TaskDetailsChatProps {

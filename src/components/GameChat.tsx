@@ -93,17 +93,18 @@ const GameChat: React.FC<GameChatProps> = ({
   const { currentLanguage } = useTranslation();
   
   useEffect(() => {
-    if (!currentUser?.uid || !otherUser?.id) {
-      console.warn('GameChat component missing required props:', { currentUserUid: currentUser?.uid, otherUserId: otherUser?.id });
+    if (!currentUser?.id || !otherUser?.id) {
+      console.warn('GameChat component missing required props:', { currentUserUid: currentUser?.id, otherUserId: otherUser?.id });
       return;
     }
     
     // Initialize chat thread
     const initializeChat = async () => {
       try {
+        setLoading(true);
         // Find or create a chat thread between the users
         const threadId = await messageService.findOrCreateChatThread(
-          currentUser.uid,
+          currentUser.id,
           otherUser.id,
           taskId
         );
@@ -205,10 +206,10 @@ const GameChat: React.FC<GameChatProps> = ({
   };
 
   const markMessagesAsReadAndDelivered = async (messageList: Message[]) => {
-    if (!currentUser?.uid || !chatThreadId) return;
+    if (!currentUser?.id || !chatThreadId) return;
     
     const unreadMessages = messageList.filter(
-      msg => msg.sender_id !== currentUser.uid && (!msg.is_read || !msg.is_delivered)
+      msg => msg.sender_id !== currentUser.id && (!msg.is_read || !msg.is_delivered)
     );
     
     for (const message of unreadMessages) {
@@ -294,7 +295,7 @@ const GameChat: React.FC<GameChatProps> = ({
 
   const uploadFile = async (file: File): Promise<{url: string, name: string, type: string}> => {
     try {
-      if (!currentUser?.uid) {
+      if (!currentUser?.id) {
         throw new Error('User not authenticated');
       }
 
@@ -324,7 +325,7 @@ const GameChat: React.FC<GameChatProps> = ({
       return;
     }
     
-    if (!currentUser?.uid || !otherUser?.id || !chatThreadId) {
+    if (!currentUser?.id || !otherUser?.id || !chatThreadId) {
       toast.error('Missing required information to send message');
       return;
     }
@@ -334,7 +335,7 @@ const GameChat: React.FC<GameChatProps> = ({
     const now = new Date();
     const optimisticMessage: Message = {
       id: optimisticId,
-      sender_id: currentUser.uid,
+      sender_id: currentUser.id,
       recipient_id: otherUser.id,
       content: newMessage.trim() || (selectedFile ? `Sending ${selectedFile.name}...` : ''),
       image_url: filePreview?.type === 'image' ? filePreview.url : undefined,
@@ -364,7 +365,7 @@ const GameChat: React.FC<GameChatProps> = ({
       }
 
       const messageData: any = {
-        sender_id: currentUser.uid,
+        sender_id: currentUser.id,
         recipient_id: otherUser.id,
         content: newMessage.trim() || (fileData ? `Sent ${fileData.name}` : ''),
         is_read: false,
@@ -408,7 +409,7 @@ const GameChat: React.FC<GameChatProps> = ({
   const addReaction = async (messageId: string, emoji: string) => {
     try {
       if (!chatThreadId) return;
-      await messageService.addReaction(chatThreadId, messageId, currentUser.uid, emoji);
+      await messageService.addReaction(chatThreadId, messageId, currentUser.id, emoji);
       setShowReactions(null);
     } catch (error) {
       console.error('Error adding reaction:', error);
@@ -458,7 +459,7 @@ const GameChat: React.FC<GameChatProps> = ({
   };
 
   const isOwnMessage = (message: Message) => {
-    return currentUser?.uid && message.sender_id === currentUser.uid;
+    return currentUser?.id && message.sender_id === currentUser.id;
   };
 
   const getMessageStatus = (message: Message) => {
@@ -501,7 +502,7 @@ const GameChat: React.FC<GameChatProps> = ({
             key={emoji}
             onClick={() => addReaction(messages.find(m => m.reactions === reactions)?.id || '', emoji)}
             className={`px-2 py-1 rounded-full text-xs flex items-center space-x-1 transition-colors ${
-              reactions[currentUser.uid] === emoji
+              reactions[currentUser.id] === emoji
                 ? 'bg-[#0038FF] text-white'
                 : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
             }`}
@@ -524,7 +525,8 @@ const GameChat: React.FC<GameChatProps> = ({
     setShowMenu(false);
   };
 
-  if (!currentUser?.uid || !otherUser?.id) {
+  // Don't render if essential props are missing
+  if (!currentUser?.id || !otherUser?.id) {
     return (
       <div className="flex flex-col h-full items-center justify-center text-gray-500">
         <p>Unable to load chat. Please refresh the page.</p>

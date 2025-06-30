@@ -4,8 +4,7 @@ import App from './App.tsx';
 import './index.css';
 import StripeProvider from './components/StripeProvider.tsx';
 import { TranslationProvider } from './components/TranslationProvider.tsx';
-import { LingoProviderWrapper } from "lingo.dev/react/client";
-import dictionary from './lingo/dictionary.js';
+import { LingoProviderWrapper, loadDictionary } from "lingo.dev/react/client";
 import * as Sentry from "@sentry/react";
 
 // Initialize Sentry
@@ -50,15 +49,10 @@ Sentry.init({
   release: import.meta.env.VITE_APP_VERSION || "hustl@dev",
 });
 
-// Custom loadDictionary function that returns the imported dictionary
-const loadDictionary = async (locale: string) => {
-  return Promise.resolve(dictionary);
-};
-
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <Sentry.ErrorBoundary fallback={<p>An error has occurred. Our team has been notified.</p>}>
-      <LingoProviderWrapper loadDictionary={loadDictionary}>
+      <LingoProviderWrapper loadDictionary={(locale) => loadDictionary(locale)}>
         <TranslationProvider>
           <StripeProvider>
             <App />

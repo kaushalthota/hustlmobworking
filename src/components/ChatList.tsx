@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { MessageSquare, Search, User, ChevronRight, Clock, Eye, MoreVertical, Info, Flag } from 'lucide-react';
+import { MessageSquare, Search, User, ChevronRight, Clock, Eye, Info, Flag, MoreVertical } from 'lucide-react';
 import Chat from './Chat';
 import GameChat from './GameChat';
-import { messageService, profileService } from '../lib/database';
+import { db } from '../lib/firebase';
+import { taskService, messageService, profileService } from '../lib/database';
 import UserProfileModal from './UserProfileModal';
 import ReportModal from './ReportModal';
 import toast from 'react-hot-toast';
@@ -40,7 +41,7 @@ const ChatList: React.FC<ChatListProps> = ({ userId, currentUser }) => {
   const menuRef = useRef<HTMLDivElement>(null);
   const [isMobile, setIsMobile] = useState(false);
   const [unsubscribeFunction, setUnsubscribeFunction] = useState<(() => void) | null>(null);
-
+  
   useEffect(() => {
     loadChats();
     

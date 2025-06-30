@@ -6,6 +6,7 @@ import { auth } from './lib/firebase';
 import { useGeolocation } from './hooks/useGeolocation';
 import { Location } from './lib/locationService';
 import { subscribeToAuthChanges } from './lib/auth';
+import * as Sentry from "@sentry/react";
 
 // Components
 import Auth from './components/Auth';
@@ -27,6 +28,19 @@ import AdminTools from './components/AdminTools';
 import LanguageSettingsModal from './components/LanguageSettingsModal';
 import MobileBottomNav from './components/MobileBottomNav';
 import ResponsiveWrapper from './components/ResponsiveWrapper';
+
+// Initialize Sentry
+Sentry.init({
+  dsn: import.meta.env.VITE_SENTRY_DSN,
+  integrations: [
+    new Sentry.BrowserTracing(),
+    new Sentry.Replay()
+  ],
+  tracesSampleRate: 0.5,
+  replaysSessionSampleRate: 0.1,
+  replaysOnErrorSampleRate: 1.0,
+  release: import.meta.env.VITE_APP_VERSION
+});
 
 const App: React.FC = () => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);

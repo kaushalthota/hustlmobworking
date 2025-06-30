@@ -209,7 +209,7 @@ const QuickStartGuide: React.FC<QuickStartGuideProps> = ({
         <div className="flex justify-between items-center mb-6">
           <div className="flex items-center justify-center">
             <div className="w-16 h-16 mr-2">
-              <img src="https://cdn.jsdelivr.net/gh/asayini2/hustlmobworking@a6d86f3e87074914e5e46f154babe0d69f2412eb/public/image%20copy.png" alt="Hustl Logo" className="w-full h-full object-contain" />
+              <img src=/home/project/public/image0 (3).webp" alt="Hustl Logo" className="w-full h-full object-contain" />
             </div>
             <div>
               <h2 className="text-2xl font-bold text-[#0F2557]">Welcome to Hustl</h2>

@@ -471,3 +471,109 @@
 .subscription-btn:hover::after {
   transform: rotate(30deg) translate(100%, 100%);
 }
+
+/* Mobile Bottom Navigation */
+.mobile-bottom-nav {
+  @apply fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-40 shadow-lg;
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .mobile-bottom-nav {
+    display: flex;
+  }
+  
+  .main-content {
+    padding-bottom: 4rem;
+  }
+  
+  /* Hide desktop navigation on mobile */
+  .desktop-nav {
+    display: none;
+  }
+  
+  /* Adjust modal sizes for mobile */
+  .modal-container {
+    width: 95%;
+    max-height: 90vh;
+  }
+  
+  /* Make cards full width on mobile */
+  .card-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  /* Adjust spacing for mobile */
+  .mobile-p-4 {
+    padding: 1rem;
+  }
+  
+  .mobile-my-2 {
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  /* Improve touch targets */
+  .touch-target {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  /* Adjust font sizes for mobile */
+  .mobile-text-lg {
+    font-size: 1.125rem;
+  }
+  
+  .mobile-text-base {
+    font-size: 1rem;
+  }
+  
+  /* Improve form elements on mobile */
+  input, select, textarea, button {
+    font-size: 16px !important; /* Prevents iOS zoom on focus */
+  }
+  
+  /* Fix for iOS safe areas */
+  .safe-area-bottom {
+    padding-bottom: env(safe-area-inset-bottom, 0);
+  }
+  
+  /* Adjust modal positioning for mobile */
+  .modal-mobile-full {
+    width: 100%;
+    height: 100%;
+    border-radius: 0;
+    margin: 0;
+  }
+}
+
+/* Mobile-specific animations */
+@media (max-width: 768px) {
+  .mobile-slide-in {
+    animation: slide-in-bottom 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+  }
+  
+  @keyframes slide-in-bottom {
+    0% {
+      transform: translateY(20px);
+      opacity: 0;
+    }
+    100% {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+  
+  .mobile-fade-in {
+    animation: fade-in 0.3s ease-in-out both;
+  }
+  
+  @keyframes fade-in {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+}

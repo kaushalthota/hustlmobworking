@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { MessageSquare, Search, User, ChevronRight, Clock, Eye, Info, Flag, MoreVertical } from 'lucide-react';
+import { MessageSquare, Search, User, ChevronRight, Clock, Eye, Info, Flag, MoreVertical, ArrowLeft } from 'lucide-react';
 import GameChat from './GameChat';
 import { db } from '../lib/firebase';
 import { taskService, messageService, profileService } from '../lib/database';
@@ -238,7 +238,7 @@ const ChatList: React.FC<ChatListProps> = ({ userId, currentUser }) => {
               <div key={chat.id} className="relative">
                 <button
                   onClick={() => handleSelectChat(chat)}
-                  className={`w-full p-4 border-b hover:bg-gray-50 transition-colors flex items-start text-left ${
+                  className={`w-full p-4 border-b hover:bg-gray-50 transition-colors flex items-start text-left touch-target ${
                     selectedChat === chat.id ? 'bg-gray-50' : ''
                   }`}
                 >
@@ -274,7 +274,7 @@ const ChatList: React.FC<ChatListProps> = ({ userId, currentUser }) => {
                 
                 <button 
                   onClick={() => setShowMenu(showMenu === chat.id ? null : chat.id)}
-                  className="absolute top-4 right-10 p-1 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full"
+                  className="absolute top-4 right-10 p-1 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full touch-target"
                 >
                   <MoreVertical className="w-4 h-4" />
                 </button>
@@ -286,20 +286,20 @@ const ChatList: React.FC<ChatListProps> = ({ userId, currentUser }) => {
                   >
                     <button
                       onClick={() => handleViewProfile(chat)}
-                      className="flex items-center w-full px-4 py-2 text-left text-gray-700 hover:bg-gray-100"
+                      className="flex items-center w-full px-4 py-2 text-left text-gray-700 hover:bg-gray-100 touch-target"
                     >
                       <Eye className="w-4 h-4 mr-2" />
                       View Profile
                     </button>
                     <button
-                      className="flex items-center w-full px-4 py-2 text-left text-gray-700 hover:bg-gray-100"
+                      className="flex items-center w-full px-4 py-2 text-left text-gray-700 hover:bg-gray-100 touch-target"
                     >
                       <Info className="w-4 h-4 mr-2" />
                       Task Details
                     </button>
                     <button
                       onClick={() => handleReportIssue(chat)}
-                      className="flex items-center w-full px-4 py-2 text-left text-red-600 hover:bg-red-50"
+                      className="flex items-center w-full px-4 py-2 text-left text-red-600 hover:bg-red-50 touch-target"
                     >
                       <Flag className="w-4 h-4 mr-2" />
                       Report Issue
@@ -321,9 +321,9 @@ const ChatList: React.FC<ChatListProps> = ({ userId, currentUser }) => {
               <div className="bg-white p-2 border-b">
                 <button 
                   onClick={handleBackToList}
-                  className="flex items-center text-gray-600 hover:text-gray-900"
+                  className="flex items-center text-gray-600 hover:text-gray-900 touch-target"
                 >
-                  <ChevronRight className="w-5 h-5 transform rotate-180 mr-1" />
+                  <ArrowLeft className="w-5 h-5 mr-1" />
                   <span>Back to messages</span>
                 </button>
               </div>

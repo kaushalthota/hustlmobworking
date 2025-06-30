@@ -60,6 +60,7 @@ const TaskDetails: React.FC<TaskDetailsProps> = ({
   const [chatLoading, setChatLoading] = useState(true);
   const [showCancelModal, setShowCancelModal] = useState(false);
   const [chatThreadId, setChatThreadId] = useState<string | null>(null);
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
     getCurrentUser();
@@ -67,6 +68,14 @@ const TaskDetails: React.FC<TaskDetailsProps> = ({
     loadProgressUpdates();
     loadWalletBalance();
     checkReviewStatus();
+    
+    // Check if mobile
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
     
     // Subscribe to task progress updates
     const unsubscribe = taskProgressService.subscribeToTaskProgress(task.id, (progress) => {
@@ -76,6 +85,7 @@ const TaskDetails: React.FC<TaskDetailsProps> = ({
     
     return () => {
       if (unsubscribe) unsubscribe();
+      window.removeEventListener('resize', checkMobile);
     };
   }, []);
 
@@ -560,7 +570,7 @@ const TaskDetails: React.FC<TaskDetailsProps> = ({
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 backdrop-blur-sm">
-      <div className={`bg-white rounded-2xl w-full max-w-6xl h-[90vh] flex shadow-2xl ${activeTab === 'tracker' ? 'flex-col' : ''}`}>
+      <div className={`bg-white rounded-2xl w-full ${isMobile ? 'h-full max-w-full' : 'max-w-6xl h-[90vh]'} flex shadow-2xl ${activeTab === 'tracker' || isMobile ? 'flex-col' : ''}`}>
         {activeTab === 'tracker' ? (
           <>
             {/* Full-width tracker view */}
@@ -587,7 +597,7 @@ const TaskDetails: React.FC<TaskDetailsProps> = ({
         ) : (
           <>
             {/* Split view for details and chat */}
-            <div className={`${showChat || activeTab === 'chat' ? 'w-1/2' : 'w-full'} overflow-y-auto border-r flex flex-col`}>
+            <div className={`${(showChat || activeTab === 'chat') && !isMobile ? 'w-1/2' : 'w-full'} overflow-y-auto border-r flex flex-col`}>
               <div className="p-4 border-b flex justify-between items-center bg-gradient-to-r from-[#0038FF] to-[#0021A5] text-white rounded-tl-2xl">
                 <div className="flex items-center">
                   <h2 className="text-xl font-bold">Task Details</h2>
@@ -637,7 +647,7 @@ const TaskDetails: React.FC<TaskDetailsProps> = ({
               {activeTab === 'details' && (
                 <div className="p-6 space-y-6 flex-1 overflow-y-auto">
                   {/* Task Creator Info and Action Buttons */}
-                  <div className="flex items-center justify-between">
+                  <div className="flex items-center justify-between flex-wrap gap-2">
                     <div className="flex items-center">
                       <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#0038FF] to-[#FF5A1F] flex items-center justify-center shadow-lg">
                         <User className="w-6 h-6 text-white" />
@@ -650,12 +660,12 @@ const TaskDetails: React.FC<TaskDetailsProps> = ({
                       </div>
                     </div>
                     
-                    <div className="flex space-x-2">
+                    <div className="flex space-x-2 flex-wrap gap-2">
                       {/* Cancel Task Button - Added here */}
                       {isTaskParticipant && taskData.status !== 'completed' && taskData.status !== 'cancelled' && (
                         <button
                           onClick={handleCancelTask}
-                          className="bg-red-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-red-600 transition-colors flex items-center"
+                          className="bg-red-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-red-600 transition-colors flex items-center touch-target"
                         >
                           <Trash2 className="w-4 h-4 mr-2" />
                           Cancel Task
@@ -667,7 +677,7 @@ const TaskDetails: React.FC<TaskDetailsProps> = ({
                         <StarBorder color="#0038FF">
                           <button
                             onClick={() => setShowStatusUpdateForm(true)}
-                            className="bg-gradient-to-r from-[#0038FF] to-[#0021A5] text-white px-4 py-2 rounded-lg font-semibold hover:opacity-90 transition duration-200 flex items-center justify-center"
+                            className="bg-gradient-to-r from-[#0038FF] to-[#0021A5] text-white px-4 py-2 rounded-lg font-semibold hover:opacity-90 transition duration-200 flex items-center justify-center touch-target"
                           >
                             <ArrowRight className="w-5 h-5 mr-2" />
                             Update Status
@@ -680,7 +690,7 @@ const TaskDetails: React.FC<TaskDetailsProps> = ({
                         <StarBorder color="#10B981">
                           <button
                             onClick={() => updateTaskProgress('completed', 'Task completed')}
-                            className="bg-gradient-to-r from-green-600 to-green-500 text-white px-4 py-2 rounded-lg font-semibold hover:opacity-90 transition duration-200 flex items-center justify-center"
+                            className="bg-gradient-to-r from-green-600 to-green-500 text-white px-4 py-2 rounded-lg font-semibold hover:opacity-90 transition duration-200 flex items-center justify-center touch-target"
                           >
                             <CheckCircle className="w-5 h-5 mr-2" />
                             Mark Complete
@@ -693,14 +703,14 @@ const TaskDetails: React.FC<TaskDetailsProps> = ({
                   {/* Unified Tracker Button - Only show for in-progress tasks */}
                   {shouldShowUnifiedTracker() && (
                     <div className="bg-gradient-to-r from-[#0038FF] to-[#0021A5] text-white rounded-2xl p-4 shadow-lg">
-                      <div className="flex items-center justify-between">
+                      <div className="flex items-center justify-between flex-wrap gap-3">
                         <div>
                           <h3 className="font-bold text-lg mb-1">Live Task Tracking</h3>
                           <p className="text-blue-100">Track location, chat, and progress in real-time</p>
                         </div>
                         <button
                           onClick={() => setActiveTab('tracker')}
-                          className="bg-white text-[#0038FF] px-4 py-2 rounded-lg font-semibold hover:bg-gray-100 transition-colors flex items-center"
+                          className="bg-white text-[#0038FF] px-4 py-2 rounded-lg font-semibold hover:bg-gray-100 transition-colors flex items-center touch-target"
                         >
                           <Map className="w-5 h-5 mr-2" />
                           Open Tracker
@@ -771,7 +781,7 @@ const TaskDetails: React.FC<TaskDetailsProps> = ({
                       </div>
                     )}
 
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div className="flex items-center">
                         <MapPin className="w-5 h-5 text-[#FF5A1F] mr-2" />
                         <span>{taskData.location}</span>
@@ -800,7 +810,7 @@ const TaskDetails: React.FC<TaskDetailsProps> = ({
                     {/* Payment Options Modal */}
                     {showPaymentOptions && (
                       <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 backdrop-blur-sm">
-                        <div className="bg-white rounded-2xl p-6 max-w-md w-full shadow-2xl">
+                        <div className={`bg-white rounded-2xl p-6 ${isMobile ? 'w-[95%]' : 'max-w-md w-full'} shadow-2xl`}>
                           <h3 className="text-xl font-bold mb-4">Choose Payment Method</h3>
                           <p className="text-gray-600 mb-4">
                             This task costs ${taskData.price}. How would you like to pay?
@@ -875,7 +885,7 @@ const TaskDetails: React.FC<TaskDetailsProps> = ({
                           <StarBorder color="#0038FF">
                             <button
                               onClick={handleLeaveReview}
-                              className="w-full bg-gradient-to-r from-[#0038FF] to-[#0021A5] text-white px-4 py-3 rounded-lg font-bold hover:opacity-90 transition duration-200 flex items-center justify-center"
+                              className="w-full bg-gradient-to-r from-[#0038FF] to-[#0021A5] text-white px-4 py-3 rounded-lg font-bold hover:opacity-90 transition duration-200 flex items-center justify-center touch-target"
                             >
                               <Star className="w-5 h-5 mr-2" />
                               Leave a Review
@@ -885,7 +895,7 @@ const TaskDetails: React.FC<TaskDetailsProps> = ({
                         
                         <button
                           onClick={handleViewReviews}
-                          className="w-full bg-gray-100 text-gray-700 px-4 py-3 rounded-lg font-bold hover:bg-gray-200 transition duration-200 flex items-center justify-center"
+                          className="w-full bg-gray-100 text-gray-700 px-4 py-3 rounded-lg font-bold hover:bg-gray-200 transition duration-200 flex items-center justify-center touch-target"
                         >
                           <MessageSquare className="w-5 h-5 mr-2" />
                           View Reviews
@@ -895,12 +905,12 @@ const TaskDetails: React.FC<TaskDetailsProps> = ({
 
                     {/* Action Buttons */}
                     {currentUser && !isTaskCreator && taskData.status === 'open' && (
-                      <div className="flex space-x-4">
+                      <div className="flex space-x-4 flex-wrap gap-2">
                         <StarBorder color="#0038FF" className="flex-1">
                           <button
                             onClick={handleAcceptTask}
                             disabled={acceptLoading}
-                            className="w-full bg-gradient-to-r from-[#0038FF] to-[#0021A5] text-white px-4 py-3 rounded-lg font-bold hover:opacity-90 transition duration-200 flex items-center justify-center"
+                            className="w-full bg-gradient-to-r from-[#0038FF] to-[#0021A5] text-white px-4 py-3 rounded-lg font-bold hover:opacity-90 transition duration-200 flex items-center justify-center touch-target"
                           >
                             {acceptLoading ? (
                               <Loader className="w-5 h-5 animate-spin" />
@@ -915,7 +925,7 @@ const TaskDetails: React.FC<TaskDetailsProps> = ({
                         <button
                           onClick={handleDeclineTask}
                           disabled={declineLoading}
-                          className="flex-1 bg-gray-100 text-gray-700 px-4 py-3 rounded-xl font-bold hover:bg-gray-200 transition duration-200 flex items-center justify-center shadow-sm"
+                          className="flex-1 bg-gray-100 text-gray-700 px-4 py-3 rounded-xl font-bold hover:bg-gray-200 transition duration-200 flex items-center justify-center shadow-sm touch-target"
                         >
                           {declineLoading ? (
                             <Loader className="w-5 h-5 animate-spin" />
@@ -933,7 +943,7 @@ const TaskDetails: React.FC<TaskDetailsProps> = ({
                     {currentUser && !isTaskCreator && (
                       <button
                         onClick={handleReport}
-                        className="w-full px-4 py-3 border border-gray-300 rounded-xl text-gray-700 hover:bg-gray-50 transition duration-200 flex items-center justify-center shadow-sm"
+                        className="w-full px-4 py-3 border border-gray-300 rounded-xl text-gray-700 hover:bg-gray-50 transition duration-200 flex items-center justify-center shadow-sm touch-target"
                       >
                         <AlertTriangle className="w-5 h-5 mr-2" />
                         Report Task
@@ -945,7 +955,7 @@ const TaskDetails: React.FC<TaskDetailsProps> = ({
                       <StarBorder color="#0038FF">
                         <button
                           onClick={() => setActiveTab('chat')}
-                          className="w-full bg-gradient-to-r from-[#0038FF] to-[#0021A5] text-white px-4 py-3 rounded-lg font-bold hover:opacity-90 transition duration-200 flex items-center justify-center"
+                          className="w-full bg-gradient-to-r from-[#0038FF] to-[#0021A5] text-white px-4 py-3 rounded-lg font-bold hover:opacity-90 transition duration-200 flex items-center justify-center touch-target"
                         >
                           <MessageSquare className="w-5 h-5 mr-2" />
                           Open Chat
@@ -984,8 +994,8 @@ const TaskDetails: React.FC<TaskDetailsProps> = ({
               )}
             </div>
 
-            {/* Chat Panel (when not in tab mode) */}
-            {showChat && otherUserProfile && currentUser && activeTab === 'details' && (
+            {/* Chat Panel (when not in tab mode) - Only show on desktop */}
+            {showChat && otherUserProfile && currentUser && activeTab === 'details' && !isMobile && (
               <div className="w-1/2 flex flex-col">
                 <div className="p-4 border-b bg-gradient-to-r from-[#0021A5] to-[#0038FF] flex justify-between items-center rounded-tr-2xl">
                   <h3 className="font-bold text-white flex items-center">

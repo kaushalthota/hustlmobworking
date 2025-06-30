@@ -209,7 +209,7 @@ const QuickStartGuide: React.FC<QuickStartGuideProps> = ({
         <div className="flex justify-between items-center mb-6">
           <div className="flex items-center justify-center">
             <div className="w-16 h-16 mr-2">
-              <img src="/image.png" alt="Hustl Logo" className="w-full h-full object-contain" />
+              <img src="https://raw.githubusercontent.com/kickiniteasy/bolt-hackathon-badge/main/src/public/bolt-badge/black_circle_360x360/black_circle_360x360.svg" alt="Hustl Logo" className="w-full h-full object-contain" />
             </div>
             <div>
               <h2 className="text-2xl font-bold text-[#0F2557]">Welcome to Hustl</h2>

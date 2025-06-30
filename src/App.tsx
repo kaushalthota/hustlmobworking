@@ -436,6 +436,20 @@ const App: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
+       {/* 🔽 Bolt Logo in top-right corner */}
+    <a
+      href="https://bolt.new"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="fixed top-4 right-4 z-50"
+      style={{ pointerEvents: 'auto' }}
+    >
+      <img
+        src="/bolt-powered.png"
+        alt="Powered by Bolt"
+        className="w-16 h-16 sm:w-20 sm:h-20 object-contain hover:scale-105 transition-transform"
+      />
+    </a>
       <Toaster position="top-center" />
       {isInitializing ? (
         <div className="min-h-screen flex items-center justify-center bg-white">

@@ -8,43 +8,57 @@ interface QuickStartGuideProps {
   onBrowseTasks?: () => void;
 }
 
+interface LanguageSelectorProps {
+  value: string;
+  onChange: (languageCode: string) => void;
+  className?: string;
+}
+
 const CATEGORIES = [
   {
-    name: 'Food Delivery',
-    icon: <Coffee className="w-4 h-4 mr-2" />,
-    template: 'meal-delivery'
-  },
-  {
-    name: 'Academic Help',
-    icon: <Book className="w-4 h-4 mr-2" />,
-    template: 'study-materials'
-  },
-  {
-    name: 'Pet Care',
-    icon: <Dog className="w-4 h-4 mr-2" />,
-    template: 'dog-walking'
-  },
-  {
+    id: 'coffee-run',
     name: 'Coffee Runs',
     icon: <Coffee className="w-4 h-4 mr-2" />,
     template: 'coffee-run'
   },
   {
+    id: 'academic-help',
+    name: 'Academic Help',
+    icon: <Book className="w-4 h-4 mr-2" />,
+    template: 'academic-help'
+  },
+  {
+    id: 'pet-care',
+    name: 'Pet Care',
+    icon: <Dog className="w-4 h-4 mr-2" />,
+    template: 'dog-walking'
+  },
+  {
+    id: 'coffee-runs',
+    name: 'Coffee Runs',
+    icon: <Coffee className="w-4 h-4 mr-2" />,
+    template: 'coffee-run'
+  },
+  {
+    id: 'meal-swipes',
     name: 'Meal Swipes',
     icon: <Users className="w-4 h-4 mr-2" />,
     template: 'meal-exchange'
   },
   {
+    id: 'study-groups',
     name: 'Study Groups',
     icon: <GraduationCap className="w-4 h-4 mr-2" />,
     template: 'study-group'
   },
   {
+    id: 'quick-rides',
     name: 'Quick Rides',
     icon: <Car className="w-4 h-4 mr-2" />,
     template: 'campus-rides'
   },
   {
+    id: 'print-pickup',
     name: 'Print & Pickup',
     icon: <Printer className="w-4 h-4 mr-2" />,
     template: 'print-pickup'
@@ -195,7 +209,7 @@ const QuickStartGuide: React.FC<QuickStartGuideProps> = ({
         <div className="flex justify-between items-center mb-6">
           <div className="flex items-center justify-center">
             <div className="w-16 h-16 mr-2">
-              <img src="/public/image copy copy copy copy.png" alt="Hustl Logo" className="w-full h-full object-contain" />
+              <img src="/image.png" alt="Hustl Logo" className="w-full h-full object-contain" />
             </div>
             <div>
               <h2 className="text-2xl font-bold text-[#0F2557]">Welcome to Hustl</h2>

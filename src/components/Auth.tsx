@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Mail, Lock, AlertCircle, Loader, User, X, KeyRound, CheckCircle } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { 
@@ -263,7 +263,7 @@ const Auth: React.FC<AuthProps> = ({ initialMode = 'signin', onClose }) => {
             <div className="text-center mb-6">
               <div className="flex justify-center mb-4">
                 <div className="w-20 h-20 mx-auto">
-                  <img src="/public/image copy copy copy copy.png" alt="Hustl Logo" className="w-full h-full object-contain" />
+                  <img src="/image.png" alt="Hustl Logo" className="w-full h-full object-contain" />
                 </div>
               </div>
               <h2 className="text-3xl font-extrabold text-gray-900">Reset Password</h2>
@@ -398,7 +398,7 @@ const Auth: React.FC<AuthProps> = ({ initialMode = 'signin', onClose }) => {
           <div className="text-center mb-6">
             <div className="flex justify-center mb-4">
               <div className="w-20 h-20 mx-auto">
-                <img src="/public/image copy copy copy copy.png" alt="Hustl Logo" className="w-full h-full object-contain" />
+                <img src="/image.png" alt="Hustl Logo" className="w-full h-full object-contain" />
               </div>
             </div>
             <h2 className="text-3xl font-extrabold text-gray-900">

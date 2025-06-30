@@ -8,12 +8,6 @@ interface QuickStartGuideProps {
   onBrowseTasks?: () => void;
 }
 
-interface LanguageSelectorProps {
-  value: string;
-  onChange: (languageCode: string) => void;
-  className?: string;
-}
-
 const CATEGORIES = [
   {
     id: 'coffee-run',

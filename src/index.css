@@ -369,66 +369,6 @@
   background: linear-gradient(to right, rgba(0, 43, 127, 0.3), transparent);
 }
 
-/* Mobile-specific styles */
-@media (max-width: 768px) {
-  .premium-card {
-    @apply rounded-lg;
-  }
-  
-  .btn-gradient-primary, 
-  .btn-gradient-secondary {
-    @apply px-3 py-2 text-sm;
-  }
-  
-  .hero-section {
-    height: 300px;
-  }
-  
-  /* Add bottom padding to account for mobile navigation */
-  .pb-mobile-nav {
-    padding-bottom: 5rem;
-  }
-  
-  /* Adjust modal padding for mobile */
-  .mobile-modal {
-    @apply p-4;
-  }
-  
-  /* Make tables responsive */
-  .responsive-table {
-    @apply block w-full overflow-x-auto;
-  }
-  
-  /* Adjust font sizes for mobile */
-  .mobile-text-sm {
-    @apply text-sm;
-  }
-  
-  .mobile-text-xs {
-    @apply text-xs;
-  }
-  
-  /* Ensure logo displays properly on mobile */
-  .logo-container img {
-    max-width: 100%;
-    height: auto;
-    object-fit: contain;
-  }
-}
-
-/* Fix for mobile bottom navigation spacing */
-.has-bottom-nav {
-  padding-bottom: 5rem;
-}
-
-/* Ensure proper logo sizing across all devices */
-.logo-img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  max-width: 100%;
-}
-
 /* Subscription plan card animation */
 .plan-card {
   transition: all 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);

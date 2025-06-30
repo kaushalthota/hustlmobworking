@@ -5,6 +5,7 @@ import TaskChat from './TaskChat';
 import TaskProgressChat from './TaskProgressChat';
 import TaskProgress from './TaskProgress';
 import GameChat from './GameChat';
+import { messageService } from '../lib/database';
 
 interface TaskDetailsChatProps {
   taskId: string;

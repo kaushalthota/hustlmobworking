@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Search, Filter, MapPin, Clock, DollarSign, Tag, User, Map as MapIcon, List, AlertCircle, CheckCircle, X as XIcon, Package, PlusCircle, Flame, ArrowRight, MessageSquare, Briefcase, History, Shield } from 'lucide-react';
+import { Search, Filter, MapPin, Clock, DollarSign, Tag, User, Map as MapIcon, List, AlertCircle, CheckCircle, X as XIcon, Package, PlusCircle, Flame, ArrowRight, MessageSquare, Briefcase, History, Shield, Navigation, Loader } from 'lucide-react';
 import InteractiveCampusMap from './InteractiveCampusMap';
 import TaskDetails from './TaskDetails';
-import { Location } from '../lib/locationService';
+import { Location, getCurrentLocation } from '../lib/locationService';
 import toast from 'react-hot-toast';
 import { taskService, profileService, notificationService, taskProgressService } from '../lib/database';
 import { auth, db } from '../lib/firebase';
@@ -33,6 +33,11 @@ const TaskMarketplace: React.FC<TaskMarketplaceProps> = ({ userLocation }) => {
   const [showFilters, setShowFilters] = useState(false);
   const [showCompletedNotification, setShowCompletedNotification] = useState(false);
   const [taskSubscriptions, setTaskSubscriptions] = useState<Map<string, () => void>>(new Map());
+  const [locationLoading, setLocationLoading] = useState(false);
+  const [locationError, setLocationError] = useState<string | null>(null);
+  const [manualLocationInput, setManualLocationInput] = useState('');
+  const [showLocationInput, setShowLocationInput] = useState(false);
+  const [maxDistance, setMaxDistance] = useState<number>(10); // Default 10 miles
 
   useEffect(() => {
     getCurrentUser();
@@ -200,7 +205,7 @@ const TaskMarketplace: React.FC<TaskMarketplaceProps> = ({ userLocation }) => {
       Math.cos(loc1.lat * Math.PI / 180) * Math.cos(loc2.lat * Math.PI / 180) * 
       Math.sin(dLon/2) * Math.sin(dLon/2);
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-    return R * c;
+    return R * c * 0.621371; // Convert to miles
   };
 
   const calculateUrgencyScore = (task: any): number => {
@@ -225,6 +230,66 @@ const TaskMarketplace: React.FC<TaskMarketplaceProps> = ({ userLocation }) => {
     if (task.category === 'safety') score += 50;
     
     return score;
+  };
+
+  const handleGetCurrentLocation = async () => {
+    setLocationLoading(true);
+    setLocationError(null);
+    
+    try {
+      const location = await getCurrentLocation();
+      setCurrentLocation(location);
+      toast.success('Location updated successfully');
+    } catch (error) {
+      console.error('Error getting location:', error);
+      setLocationError('Could not get your current location');
+      toast.error('Could not get your current location');
+    } finally {
+      setLocationLoading(false);
+    }
+  };
+
+  const handleManualLocationSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!manualLocationInput.trim()) return;
+    
+    setLocationLoading(true);
+    setLocationError(null);
+    
+    try {
+      // Use Google Maps Geocoding to convert address to coordinates
+      const response = await fetch(
+        `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(manualLocationInput)}&key=${import.meta.env.VITE_GOOGLE_MAPS_API_KEY}`
+      );
+      
+      if (!response.ok) {
+        throw new Error('Geocoding service unavailable');
+      }
+      
+      const data = await response.json();
+      
+      if (data.status === 'OK' && data.results.length > 0) {
+        const result = data.results[0];
+        const location: Location = {
+          lat: result.geometry.location.lat,
+          lng: result.geometry.location.lng,
+          address: result.formatted_address
+        };
+        
+        setCurrentLocation(location);
+        setShowLocationInput(false);
+        setManualLocationInput('');
+        toast.success('Location set successfully');
+      } else {
+        throw new Error('Location not found');
+      }
+    } catch (error) {
+      console.error('Error geocoding address:', error);
+      setLocationError('Could not find the specified location');
+      toast.error('Could not find the specified location');
+    } finally {
+      setLocationLoading(false);
+    }
   };
 
   const handleAcceptTask = async (taskId: string) => {
@@ -344,7 +409,13 @@ const TaskMarketplace: React.FC<TaskMarketplaceProps> = ({ userLocation }) => {
   const filteredTasks = tasks.filter(task =>
     task.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
     task.description.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  ).filter(task => {
+    // Filter by distance if location is available
+    if (currentLocation && task.distance !== undefined) {
+      return task.distance <= maxDistance;
+    }
+    return true;
+  });
 
   const categories = [
     { id: 'all', name: 'All Categories' },
@@ -360,7 +431,7 @@ const TaskMarketplace: React.FC<TaskMarketplaceProps> = ({ userLocation }) => {
 
   const formatDistance = (distance: number): string => {
     if (distance < 1) {
-      return `${(distance * 1000).toFixed(0)} m`;
+      return `${(distance * 1000 * 3.28084).toFixed(0)} ft`;
     }
     return `${distance.toFixed(1)} mi`;
   };
@@ -461,6 +532,101 @@ const TaskMarketplace: React.FC<TaskMarketplaceProps> = ({ userLocation }) => {
               Live
             </div>
           )}
+          {/* Location Section for Mobile */}
+          <div className="mb-4">
+            {currentLocation ? (
+              <div className="flex items-center justify-between bg-green-50 border border-green-200 rounded-lg p-3">
+                <div className="flex items-center">
+                  <MapPin className="w-4 h-4 text-green-600 mr-2" />
+                  <span className="text-sm text-green-800 truncate max-w-48">
+                    {currentLocation.address || `${currentLocation.lat.toFixed(4)}, ${currentLocation.lng.toFixed(4)}`}
+                  </span>
+                </div>
+                <button
+                  onClick={() => setShowLocationInput(!showLocationInput)}
+                  className="text-green-600 hover:text-green-800"
+                >
+                  <Search className="w-4 h-4" />
+                </button>
+              </div>
+            ) : (
+              <button
+                onClick={handleGetCurrentLocation}
+                disabled={locationLoading}
+                className="w-full flex items-center justify-center bg-blue-50 border border-blue-200 rounded-lg p-3 hover:bg-blue-100 transition-colors"
+              >
+                {locationLoading ? (
+                  <Loader className="w-4 h-4 text-blue-600 mr-2 animate-spin" />
+                ) : (
+                  <Navigation className="w-4 h-4 text-blue-600 mr-2" />
+                )}
+                <span className="text-sm text-blue-800">Get My Location</span>
+              </button>
+            )}
+            
+            {showLocationInput && (
+              <div className="mt-3 bg-white border border-gray-200 rounded-lg shadow-sm p-4">
+                <form onSubmit={handleManualLocationSubmit}>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Enter your location
+                  </label>
+                  <div className="flex space-x-2 mb-2">
+                    <input
+                      type="text"
+                      value={manualLocationInput}
+                      onChange={(e) => setManualLocationInput(e.target.value)}
+                      placeholder="Enter address or location"
+                      className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0038FF]"
+                    />
+                    <button
+                      type="submit"
+                      disabled={locationLoading || !manualLocationInput.trim()}
+                      className="bg-[#0038FF] text-white px-3 py-2 rounded-lg hover:bg-[#0021A5] transition-colors disabled:opacity-50"
+                    >
+                      Set
+                    </button>
+                  </div>
+                  <div className="flex justify-between">
+                    <button
+                      type="button"
+                      onClick={handleGetCurrentLocation}
+                      disabled={locationLoading}
+                      className="text-sm text-[#0038FF] hover:text-[#0021A5]"
+                    >
+                      Use current location
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setShowLocationInput(false)}
+                      className="text-sm text-gray-500 hover:text-gray-700"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </form>
+              </div>
+            )}
+            
+            {/* Distance Filter for Mobile */}
+            {currentLocation && (
+              <div className="mt-3 flex items-center justify-between">
+                <span className="text-sm text-gray-600">Show tasks within:</span>
+                <select
+                  value={maxDistance}
+                  onChange={(e) => setMaxDistance(Number(e.target.value))}
+                  className="px-3 py-1 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0038FF] text-sm"
+                >
+                  <option value={1}>1 mile</option>
+                  <option value={2}>2 miles</option>
+                  <option value={5}>5 miles</option>
+                  <option value={10}>10 miles</option>
+                  <option value={25}>25 miles</option>
+                  <option value={100}>Any distance</option>
+                </select>
+              </div>
+            )}
+          </div>
+          
           <div className="flex space-x-2">
             <button
               onClick={() => setViewMode('list')}
@@ -609,6 +775,101 @@ const TaskMarketplace: React.FC<TaskMarketplaceProps> = ({ userLocation }) => {
       
       {/* Desktop Search and Filters */}
       <div className="hidden md:flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4 mb-6">
+        {/* Location Section */}
+        <div className="flex items-center space-x-2">
+          <div className="relative">
+            {currentLocation ? (
+              <div className="flex items-center bg-green-50 border border-green-200 rounded-lg px-3 py-2">
+                <MapPin className="w-4 h-4 text-green-600 mr-2" />
+                <span className="text-sm text-green-800 max-w-32 truncate">
+                  {currentLocation.address || `${currentLocation.lat.toFixed(4)}, ${currentLocation.lng.toFixed(4)}`}
+                </span>
+                <button
+                  onClick={() => setShowLocationInput(!showLocationInput)}
+                  className="ml-2 text-green-600 hover:text-green-800"
+                >
+                  <Search className="w-4 h-4" />
+                </button>
+              </div>
+            ) : (
+              <button
+                onClick={handleGetCurrentLocation}
+                disabled={locationLoading}
+                className="flex items-center bg-blue-50 border border-blue-200 rounded-lg px-3 py-2 hover:bg-blue-100 transition-colors"
+              >
+                {locationLoading ? (
+                  <Loader className="w-4 h-4 text-blue-600 mr-2 animate-spin" />
+                ) : (
+                  <Navigation className="w-4 h-4 text-blue-600 mr-2" />
+                )}
+                <span className="text-sm text-blue-800">Get Location</span>
+              </button>
+            )}
+            
+            {showLocationInput && (
+              <div className="absolute top-full left-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-lg p-4 z-10 w-80">
+                <form onSubmit={handleManualLocationSubmit}>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Enter your location
+                  </label>
+                  <div className="flex space-x-2">
+                    <input
+                      type="text"
+                      value={manualLocationInput}
+                      onChange={(e) => setManualLocationInput(e.target.value)}
+                      placeholder="Enter address or location"
+                      className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0038FF]"
+                    />
+                    <button
+                      type="submit"
+                      disabled={locationLoading || !manualLocationInput.trim()}
+                      className="bg-[#0038FF] text-white px-3 py-2 rounded-lg hover:bg-[#0021A5] transition-colors disabled:opacity-50"
+                    >
+                      Set
+                    </button>
+                  </div>
+                  <div className="flex justify-between mt-2">
+                    <button
+                      type="button"
+                      onClick={handleGetCurrentLocation}
+                      disabled={locationLoading}
+                      className="text-sm text-[#0038FF] hover:text-[#0021A5]"
+                    >
+                      Use current location
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setShowLocationInput(false)}
+                      className="text-sm text-gray-500 hover:text-gray-700"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </form>
+              </div>
+            )}
+          </div>
+          
+          {/* Distance Filter */}
+          {currentLocation && (
+            <div className="flex items-center space-x-2">
+              <span className="text-sm text-gray-600">Within:</span>
+              <select
+                value={maxDistance}
+                onChange={(e) => setMaxDistance(Number(e.target.value))}
+                className="px-2 py-1 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0038FF] text-sm"
+              >
+                <option value={1}>1 mile</option>
+                <option value={2}>2 miles</option>
+                <option value={5}>5 miles</option>
+                <option value={10}>10 miles</option>
+                <option value={25}>25 miles</option>
+                <option value={100}>Any distance</option>
+              </select>
+            </div>
+          )}
+        </div>
+        
         <div className="relative">
           <input
             type="text"
@@ -767,10 +1028,37 @@ const TaskMarketplace: React.FC<TaskMarketplaceProps> = ({ userLocation }) => {
                     </div>
                   </div>
                   
-                  {task.distance && (
-                    <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full">
-                      {formatDistance(task.distance)} away
-                    </span>
+                  <div className="flex flex-col items-end space-y-1">
+                    {task.distance !== undefined && (
+                      <span className={`text-xs font-medium px-2 py-1 rounded-full ${
+                        task.distance <= 1 ? 'bg-green-100 text-green-800' :
+                        task.distance <= 3 ? 'bg-yellow-100 text-yellow-800' :
+                        'bg-gray-100 text-gray-600'
+                      }`}>
+                        <MapPin className="w-3 h-3 inline mr-1" />
+                        {formatDistance(task.distance)}
+                      </span>
+                    )}
+                    {!currentLocation && (
+                      <button
+                        onClick={handleGetCurrentLocation}
+                        className="text-xs text-[#0038FF] hover:text-[#0021A5] flex items-center"
+                      >
+                        <Navigation className="w-3 h-3 mr-1" />
+                        Get distance
+                      </button>
+                    )}
+                  </div>
+                </div>
+                
+                {/* Location Error Display */}
+                {locationError && !currentLocation && (
+                  <div className="mb-4 p-2 bg-yellow-50 border border-yellow-200 rounded-lg">
+                    <div className="flex items-start">
+                      <AlertTriangle className="w-4 h-4 text-yellow-500 mt-0.5 mr-2 flex-shrink-0" />
+                      <p className="text-xs text-yellow-700">{locationError}</p>
+                    </div>
+                  </div>
                   )}
                 </div>
                 

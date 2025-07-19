@@ -1,5 +1,5 @@
 import React from 'react';
-import { Clock, MapPin, DollarSign, User, Star } from 'lucide-react';
+import { Clock, MapPin, DollarSign, User, Star, Navigation } from 'lucide-react';
 
 interface TaskCardProps {
   task: {
@@ -17,12 +17,17 @@ interface TaskCardProps {
     status?: string;
   };
   onClick: () => void;
+  showDistance?: boolean;
+  onGetDistance?: () => void;
 }
 
-const TaskCard: React.FC<TaskCardProps> = ({ task, onClick }) => {
+const TaskCard: React.FC<TaskCardProps> = ({ task, onClick, showDistance = true, onGetDistance }) => {
   const formatDistance = (distance?: number) => {
     if (!distance) return '';
-    return distance < 1 ? `${(distance * 1000).toFixed(0)}m away` : `${distance.toFixed(1)}mi away`;
+    if (distance < 1) {
+      return `${(distance * 1000 * 3.28084).toFixed(0)} ft`;
+    }
+    return `${distance.toFixed(1)} mi`;
   };
 
   return (
@@ -66,11 +71,31 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, onClick }) => {
             <span className="text-sm font-medium">{task.creator?.full_name || 'Anonymous'}</span>
           </div>
           
-          {task.distance !== undefined && (
-            <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full">
-              {formatDistance(task.distance)}
-            </span>
-          )}
+          <div className="flex items-center space-x-2">
+            {showDistance && task.distance !== undefined && (
+              <span className={`text-xs font-medium px-2 py-1 rounded-full flex items-center ${
+                task.distance <= 1 ? 'bg-green-100 text-green-800' :
+                task.distance <= 3 ? 'bg-yellow-100 text-yellow-800' :
+                'bg-gray-100 text-gray-600'
+              }`}>
+                <MapPin className="w-3 h-3 mr-1" />
+                {formatDistance(task.distance)}
+              </span>
+            )}
+            
+            {showDistance && task.distance === undefined && onGetDistance && (
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onGetDistance();
+                }}
+                className="text-xs text-[#0038FF] hover:text-[#0021A5] flex items-center px-2 py-1 rounded-full bg-blue-50 hover:bg-blue-100 transition-colors"
+              >
+                <Navigation className="w-3 h-3 mr-1" />
+                Get distance
+              </button>
+            )}
+          </div>
           
           {task.status && (
             <span className={`text-xs px-2 py-1 rounded-full font-medium ${

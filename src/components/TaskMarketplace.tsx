@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Search, Filter, MapPin, Clock, DollarSign, Tag, User, Map as MapIcon, List, AlertCircle, CheckCircle, X as XIcon, Package, PlusCircle, Flame, ArrowRight, MessageSquare, Briefcase, History, Shield, Navigation, Loader } from 'lucide-react';
+import { Search, Filter, MapPin, Clock, DollarSign, Tag, User, Map as MapIcon, List, AlertCircle, CheckCircle, X as XIcon, Package, PlusCircle, Flame, ArrowRight, MessageSquare, Briefcase, History, Shield, Navigation, Loader, AlertTriangle } from 'lucide-react';
 import InteractiveCampusMap from './InteractiveCampusMap';
 import TaskDetails from './TaskDetails';
 import { Location, getCurrentLocation } from '../lib/locationService';
@@ -1059,8 +1059,7 @@ const TaskMarketplace: React.FC<TaskMarketplaceProps> = ({ userLocation }) => {
                       <p className="text-xs text-yellow-700">{locationError}</p>
                     </div>
                   </div>
-                  )}
-                </div>
+                )}
                 
                 {/* Action Buttons */}
                 <div className="flex space-x-2">

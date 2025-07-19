@@ -7,6 +7,7 @@ import toast from 'react-hot-toast';
 import GameChat from './GameChat';
 import { StarBorder } from './ui/star-border';
 import { elevenLabsService } from '../lib/elevenLabsService';
+import RouteTaskSuggestions from './RouteTaskSuggestions';
 
 // Audio manager singleton for TaskStatusUpdate
 const taskStatusAudioManager = {
@@ -74,6 +75,7 @@ const TaskStatusUpdate: React.FC<TaskStatusUpdateProps> = ({ task, onClose, onSt
   const [isPlayingAudio, setIsPlayingAudio] = useState(false);
   const [hasPlayedAudio, setHasPlayedAudio] = useState<{[key: string]: boolean}>({});
   const [openChatAfterUpdate, setOpenChatAfterUpdate] = useState(false);
+  const [showRouteTasks, setShowRouteTasks] = useState(false);
   
   useEffect(() => {
     const user = auth.currentUser;
@@ -386,6 +388,28 @@ const TaskStatusUpdate: React.FC<TaskStatusUpdateProps> = ({ task, onClose, onSt
               </div>
               
               <div className="flex justify-between items-center relative z-10">
+                {/* Route-based task suggestions toggle */}
+                <div className="bg-blue-50 p-4 rounded-xl border border-blue-100">
+                  <div className="flex items-center justify-between mb-3">
+                    <label className="flex items-center">
+                      <input
+                        type="checkbox"
+                        checked={showRouteTasks}
+                        onChange={(e) => setShowRouteTasks(e.target.checked)}
+                        className="h-4 w-4 text-[#0038FF] focus:ring-[#0038FF] border-gray-300 rounded mr-2"
+                      />
+                      <span className="text-sm font-medium text-blue-800">Show Tasks On My Route</span>
+                    </label>
+                  </div>
+                  
+                  {showRouteTasks && (
+                    <RouteTaskSuggestions
+                      currentTask={task}
+                      userLocation={currentLocation}
+                    />
+                  )}
+                </div>
+
                 <h2 className="text-xl font-bold">Update Task Status</h2>
                 <button onClick={onClose} className="text-white hover:text-gray-200 transition-colors">
                   <X className="w-6 h-6" />

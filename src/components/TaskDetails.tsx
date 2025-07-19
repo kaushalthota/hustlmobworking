@@ -20,6 +20,7 @@ import { useTranslation } from './TranslationProvider';
 import TaskStatusUpdate from './TaskStatusUpdate';
 import TaskCancelModal from './TaskCancelModal';
 import TaskDetailsChat from './TaskDetailsChat';
+import RouteTaskSuggestions from './RouteTaskSuggestions';
 
 interface TaskDetailsProps {
   task: any;
@@ -60,6 +61,7 @@ const TaskDetails: React.FC<TaskDetailsProps> = ({
   const [chatLoading, setChatLoading] = useState(true);
   const [showCancelModal, setShowCancelModal] = useState(false);
   const [chatThreadId, setChatThreadId] = useState<string | null>(null);
+  const [showRouteTasks, setShowRouteTasks] = useState(false);
 
   useEffect(() => {
     getCurrentUser();
@@ -979,6 +981,30 @@ const TaskDetails: React.FC<TaskDetailsProps> = ({
                         When someone accepts this task, you'll be able to chat with them directly here.
                       </p>
                     </div>
+                  )}
+                </div>
+              )}
+
+              {/* Route-based task suggestions for task performers */}
+              {isTaskPerformer && taskData.status !== 'open' && taskData.status !== 'completed' && taskData.status !== 'cancelled' && (
+                <div className="mt-6">
+                  <div className="flex items-center justify-between mb-4">
+                    <label className="flex items-center">
+                      <input
+                        type="checkbox"
+                        checked={showRouteTasks}
+                        onChange={(e) => setShowRouteTasks(e.target.checked)}
+                        className="h-4 w-4 text-[#0038FF] focus:ring-[#0038FF] border-gray-300 rounded mr-2"
+                      />
+                      <span className="text-sm font-medium text-gray-700">Show Tasks On My Route</span>
+                    </label>
+                  </div>
+                  
+                  {showRouteTasks && (
+                    <RouteTaskSuggestions
+                      currentTask={taskData}
+                      userLocation={currentLocation}
+                    />
                   )}
                 </div>
               )}
